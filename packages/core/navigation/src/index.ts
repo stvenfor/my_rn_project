@@ -1,0 +1,125 @@
+import type {ComponentType} from 'react';
+import type {Reducer} from '@reduxjs/toolkit';
+import type {StackScreenProps} from '@react-native-ohos/stack';
+import type {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import type {CompositeScreenProps} from '@react-navigation/native';
+
+export const RoutePath = {
+  splash: 'Splash',
+  main: 'Main',
+  login: 'Login',
+  loginPassword: 'LoginPassword',
+  loginOtp: 'LoginOtp',
+  register: 'Register',
+  homeLearningReport: 'HomeLearningReport',
+  homeCheckInMall: 'HomeCheckInMall',
+  homeAllServices: 'HomeAllServices',
+  chatDetail: 'ChatDetail',
+  communityPublish: 'CommunityPublish',
+  communityVideoPlay: 'CommunityVideoPlay',
+  imagePreview: 'ImagePreview',
+  settings: 'Settings',
+  mineHttpTest: 'MineHttpTest',
+  dialogDemo: 'DialogDemo',
+  dealInvoiceDemo: 'DealInvoiceDemo',
+  dealInvoiceUpload: 'DealInvoiceUpload',
+  web: 'Web',
+  friend: 'Friend',
+  live: 'Live',
+  liveRoom: 'LiveRoom',
+  pay: 'Pay',
+  video: 'Video',
+  shortVideo: 'ShortVideo',
+  shortVideoPlay: 'ShortVideoPlay',
+  musicList: 'MusicList',
+  musicNowPlaying: 'MusicNowPlaying',
+  bfuiGallery: 'BfuiGallery',
+  bfuiTemplate: 'BfuiTemplate',
+  debugBle: 'DebugBle',
+  debugLinking: 'DebugLinking',
+  debugRealtime: 'DebugRealtime',
+  debugIm: 'DebugIm',
+} as const;
+
+export type RootStackParamList = {
+  Splash: undefined;
+  Main: undefined;
+  Login: undefined;
+  LoginPassword: {email: string};
+  LoginOtp: {phone: string};
+  Register: undefined;
+  HomeLearningReport: undefined;
+  HomeCheckInMall: undefined;
+  HomeAllServices: undefined;
+  ChatDetail: {conversationId: string; title: string};
+  CommunityPublish: undefined;
+  CommunityVideoPlay: {url: string; title?: string};
+  ImagePreview: {uris: string[]; initialIndex?: number};
+  Settings: undefined;
+  MineHttpTest: undefined;
+  DialogDemo: undefined;
+  DealInvoiceDemo: undefined;
+  DealInvoiceUpload: undefined;
+  Web: {title?: string; url?: string; params?: Record<string, unknown>};
+  Friend: undefined;
+  Live: undefined;
+  LiveRoom: {roomId: string};
+  Pay: undefined;
+  Video: undefined;
+  ShortVideo: undefined;
+  ShortVideoPlay: {videoId: string; url?: string; title?: string};
+  MusicList: undefined;
+  MusicNowPlaying: {trackId: string};
+  BfuiGallery: undefined;
+  BfuiTemplate: {templateId: string};
+  DebugBle: undefined;
+  DebugLinking: undefined;
+  DebugRealtime: undefined;
+  DebugIm: undefined;
+};
+
+export type MainTabParamList = {
+  HomeTab: undefined;
+  ChatTab: undefined;
+  CommunityTab: undefined;
+  MineTab: undefined;
+};
+
+export type RootStackScreenProps<T extends keyof RootStackParamList> =
+  StackScreenProps<RootStackParamList, T>;
+
+export type MainTabScreenProps<T extends keyof MainTabParamList> =
+  CompositeScreenProps<
+    BottomTabScreenProps<MainTabParamList, T>,
+    StackScreenProps<RootStackParamList>
+  >;
+
+export interface TabRegistration {
+  moduleId: string;
+  name: keyof MainTabParamList;
+  labelKey: string;
+  icon: string;
+  order: number;
+}
+
+export type StackScreenComponent = ComponentType<{
+  navigation?: object;
+  route?: {params?: object; key?: string; name?: string};
+}>;
+
+/** Bridges typed screen components into the feature route registry. */
+export function stackScreen(
+  component: StackScreenComponent,
+): StackScreenComponent {
+  return component;
+}
+
+export interface FeatureRegistration {
+  moduleId: string;
+  tab?: TabRegistration;
+  routes?: Array<{
+    name: keyof RootStackParamList;
+    component: StackScreenComponent;
+  }>;
+  reducer?: {key: string; reducer: Reducer};
+}

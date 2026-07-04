@@ -5,15 +5,23 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+const path = require('path');
 const {mergeConfig, getDefaultConfig} = require('@react-native/metro-config');
 const {
   createHarmonyMetroConfig,
 } = require('@react-native-oh/react-native-harmony/metro.config');
 
+const projectRoot = __dirname;
+const monorepoRoots = [path.resolve(projectRoot, 'packages')];
+
 /**
  * @type {import("metro-config").MetroConfig}
  */
 const config = {
+  watchFolders: monorepoRoots,
+  resolver: {
+    nodeModulesPaths: [path.resolve(projectRoot, 'node_modules')],
+  },
   transformer: {
     getTransformOptions: async () => ({
       transform: {
@@ -25,7 +33,7 @@ const config = {
 };
 
 module.exports = mergeConfig(
-  getDefaultConfig(__dirname),
+  getDefaultConfig(projectRoot),
   createHarmonyMetroConfig({
     reactNativeHarmonyPackageName: '@react-native-oh/react-native-harmony',
   }),

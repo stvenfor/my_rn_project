@@ -12,7 +12,7 @@
 | @react-native-oh/react-native-harmony | 0.72.140 |
 | @react-native-oh/react-native-harmony-cli | 0.72.140 |
 | @rnoh/react-native-openharmony (ohpm) | 0.72.140 |
-| TypeScript | 4.8.4 |
+| TypeScript | 5.3.3 |
 
 ## 已安装三方库
 
@@ -25,7 +25,12 @@
 | 安全区 (Harmony 适配) | @react-native-ohos/react-native-safe-area-context | 4.7.5 |
 | iOS/Android 手势 | react-native-gesture-handler | 2.14.1 |
 | iOS/Android 原生屏 | react-native-screens | 3.34.0 |
-| iOS/Android 安全区 | react-native-safe-area-context | 4.7.4 |
+| 底部 Tab | @react-navigation/bottom-tabs | 6.5.20 |
+| 状态管理 | @reduxjs/toolkit + react-redux | 2.2.7 / 9.1.2 |
+| 持久化 | @react-native-async-storage/async-storage | 1.21.0 |
+| 持久化 (Harmony) | @react-native-ohos/async-storage | 1.21.1 |
+| WebView | react-native-webview | 13.10.5 |
+| WebView (Harmony) | @react-native-ohos/react-native-webview | 13.10.5 |
 
 Harmony 端原生库通过 `react-native link-harmony` 自动链接（Autolinking）。
 
@@ -44,21 +49,44 @@ Harmony 端原生库通过 `react-native link-harmony` 自动链接（Autolinkin
 
 ## 项目结构
 
+Flutter → RN 模块化迁移（LEGO monorepo），详见 `docs/rn-migration/`。
+
 ```
 MyRnProject/
-├── android/              # Android Gradle 工程
-├── ios/                  # iOS Xcode 工程
-├── harmony/              # DevEco OpenHarmony 工程
-│   ├── AppScope/
-│   └── entry/
-│       ├── oh-package.json5
-│       └── src/main/
-│           ├── cpp/              # PackageProvider, autolinking.cmake
-│           ├── ets/              # EntryAbility, Index.ets
-│           └── resources/rawfile/  # bundle.harmony.js
-├── App.tsx               # 导航示例 (Home / Detail)
-├── metro.config.js       # 含 Harmony Metro 配置
-└── package.json
+├── App.tsx                    # 入口，挂载 AppProviders
+├── src/
+│   ├── app/AppProviders.tsx   # Redux / i18n / Navigation / Loading
+│   ├── config/moduleManifest.ts
+│   ├── navigation/            # RootNavigator + MainTabs
+│   └── store/                 # auth / env / app slices
+├── packages/
+│   ├── core/                  # domain, config, api-client, storage, supabase, i18n, navigation, webview
+│   ├── ui/design-system/      # theme, ScreenContainer, PrimaryButton…
+│   └── features/              # home, chat, community, settings, auth, music, bfui, …
+├── android/
+├── ios/
+├── harmony/
+├── metro.config.js            # monorepo watchFolders + Harmony Metro
+└── docs/rn-migration/         # 迁移计划与验收清单
+```
+
+### 当前迁移进度
+
+| 模块 | 状态 |
+|------|------|
+| home / chat / community / settings | Phase 1 MVP（Mock + WanAndroid API） |
+| auth | Mock OTP（默认 `USE_MOCK_AUTH=true`，验证码 `123456`） |
+| friend / live / pay / video | 占位页 |
+| music / bfui | 入口壳页 |
+| WebView | 已集成（ICSJavascriptBridge + Core handlers） |
+| 音频播放 | `react-native-track-player` + `@react-native-ohos/react-native-track-player` 4.1.x |
+
+### 环境变量
+
+复制 `.env.example` 并按需修改（Mock 模式无需 Supabase 密钥）：
+
+```bash
+cp .env.example .env
 ```
 
 ## 快速开始
@@ -114,6 +142,8 @@ npm run harmony
 | `npm run harmony` | 构建并运行 Harmony |
 | `npm run codegen` | 运行 Harmony codegen |
 | `npm run link:harmony` | 重新链接 Harmony 原生库 |
+| `npm run typecheck` | TypeScript 类型检查 |
+| `npm test` | Jest 单元测试 |
 
 ## 新增 Harmony 三方库
 
@@ -132,9 +162,12 @@ cd harmony && ohpm install
 ## 关键配置说明
 
 - **AppRegistry 名称**: `MyRnProject`（见 `app.json`）
+- **统一包名 / Bundle ID**: `com.example.myrnproject`
+  - Android `applicationId` / `namespace`（见 `android/app/build.gradle`）
+  - iOS `PRODUCT_BUNDLE_IDENTIFIER`（见 `ios/MyRnProject.xcodeproj/project.pbxproj`）
+  - Harmony `bundleName`（见 `harmony/AppScope/app.json5`）
 - **Harmony appKey**: `MyRnProject`（见 `harmony/entry/src/main/ets/pages/Index.ets`）
-- **Harmony bundleName**: `com.example.myrnproject`（见 `harmony/AppScope/app.json5`）
-- 三者必须保持一致，否则 Harmony 端会出现白屏
+- 以上名称必须保持一致，否则各端会出现白屏或启动失败
 
 ## 常见问题
 
@@ -167,16 +200,25 @@ npm install --registry=https://registry.npmmirror.com
 
 ### iOS pod install 失败 (boost checksum)
 
-RN 0.72 常见 boost 校验和问题，可尝试：
+RN 0.72 常见 boost 校验和问题。项目已内置 `scripts/patch-boost-podspec.js`，`npm install` 后会自动将 jfrog 源切换为 `archives.boost.io`。
 
 ```bash
-cd ios
-pod cache clean boost --all
-pod install --repo-update
+npm run pod:install
+```
+
+### iOS pod install 失败 (SwiftAudioEx / GitHub 超时)
+
+`react-native-track-player` 依赖 `SwiftAudioEx`，CocoaPods 默认从 GitHub 拉取 git 源，国内网络易超时。Podfile 已支持镜像覆盖：
+
+```bash
+npm run pod:install
+# 或指定镜像
+SWIFT_AUDIO_EX_GIT=https://ghproxy.net/https://github.com/DoubleSymmetry/SwiftAudioEx.git npm run pod:install
 ```
 
 或参考 [React Native 0.72 iOS 环境文档](https://reactnative.cn/docs/environment-setup) 排查 CocoaPods 配置。
 
+## 参考链接
 
 - [React Native 中文网](https://reactnative.cn/)
 - [CPF-RN 组织仓库](https://gitcode.com/org/CPF-RN/repos)

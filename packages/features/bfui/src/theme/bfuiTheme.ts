@@ -1,0 +1,15 @@
+export const bfuiColors = {
+  nearlyWhite: '#FEFEFE',
+  nearlyBlack: '#213333',
+  darkText: '#253840',
+  darkerText: '#17262A',
+  lightText: '#4A6572',
+  chipBackground: '#EEF1F3',
+  spacer: '#F2F2F2',
+  fitnessBg: '#F2F3F8',
+  introBg: '#F7EBE1',
+  hotelPrimary: '#54D3C2',
+  coursePrimary: '#00BFA6',
+  chartBar: '#6C63FF',
+  white: '#FFFFFF',
+};

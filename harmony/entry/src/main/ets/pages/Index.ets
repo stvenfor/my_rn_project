@@ -69,6 +69,7 @@ struct Index {
           },
           jsBundleProvider: new TraceJSBundleProviderDecorator(
             new AnyJSBundleProvider([
+              MetroJSBundleProvider.fromServerIp("localhost", 8082),
               new MetroJSBundleProvider(),
               // NOTE: to load the bundle from file, place it in
               // `/data/app/el2/100/base/com.rnoh.tester/files/bundle.harmony.js`

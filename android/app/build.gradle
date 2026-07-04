@@ -73,9 +73,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.helloworld"
+    namespace "com.example.myrnproject"
     defaultConfig {
-        applicationId "com.helloworld"
+        applicationId "com.example.myrnproject"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

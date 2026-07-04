@@ -8,6 +8,10 @@ require Pod::Executable.execute_command('node', ['-p',
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
+# react-native-track-player 依赖 SwiftAudioEx；国内直连 GitHub 易超时，可用镜像覆盖。
+# 自定义镜像：SWIFT_AUDIO_EX_GIT=https://your-mirror/.../SwiftAudioEx.git
+swift_audio_ex_git = ENV['SWIFT_AUDIO_EX_GIT'] || 'https://ghproxy.net/https://github.com/DoubleSymmetry/SwiftAudioEx.git'
+
 # If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
 # because `react-native-flipper` depends on (FlipperKit,...) that will be excluded
 #
@@ -25,8 +29,12 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'HelloWorld' do
+target 'MyRnProject' do
   config = use_native_modules!
+
+  pod 'SwiftAudioEx',
+      :git => swift_audio_ex_git,
+      :tag => '1.1.0'
 
   # Flags change depending on the env values.
   flags = get_default_flags()
@@ -45,7 +53,7 @@ target 'HelloWorld' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'HelloWorldTests' do
+  target 'MyRnProjectTests' do
     inherit! :complete
     # Pods for testing
   end
@@ -58,5 +66,45 @@ target 'HelloWorld' do
       :mac_catalyst_enabled => false
     )
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
+
+    # 压制 C++20 deprecated UDL 警告（Yoga/Folly/fmt 等三方库旧语法）
+    # 详见 docs/ios/deprecated-literal-operator-suppression.md
+    deprecated_literal_operator_flag = '-Wno-deprecated-literal-operator'
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        cxx_flags = config.build_settings['OTHER_CPLUSPLUSFLAGS']
+        cxx_flags = ['$(inherited)'] if cxx_flags.nil?
+        cxx_flags = [cxx_flags] if cxx_flags.is_a?(String)
+        unless cxx_flags.include?(deprecated_literal_operator_flag)
+          cxx_flags << deprecated_literal_operator_flag
+        end
+        config.build_settings['OTHER_CPLUSPLUSFLAGS'] = cxx_flags
+
+        warn_flags = config.build_settings['WARNING_CFLAGS']
+        warn_flags = ['$(inherited)'] if warn_flags.nil?
+        warn_flags = [warn_flags] if warn_flags.is_a?(String)
+        unless warn_flags.include?(deprecated_literal_operator_flag)
+          warn_flags << deprecated_literal_operator_flag
+        end
+        config.build_settings['WARNING_CFLAGS'] = warn_flags
+      end
+    end
+
+    # Flipper 0.182 + Xcode 15.3+ 缺少 #include <functional>，导致 std::function 未定义
+    flipper_transport_types = File.join(
+      installer.sandbox.root,
+      'Flipper/xplat/Flipper/FlipperTransportTypes.h'
+    )
+    if File.exist?(flipper_transport_types)
+      contents = File.read(flipper_transport_types)
+      unless contents.include?('#include <functional>')
+        File.chmod(0o644, flipper_transport_types)
+        File.open(flipper_transport_types, 'w') do |file|
+          file.puts('#include <functional>')
+          file.puts(contents)
+        end
+        Pod::UI.puts '[patch-flipper] FlipperTransportTypes.h ← #include <functional>'.green
+      end
+    end
   end
 end
