@@ -1,12 +1,12 @@
 import React from 'react';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Platform, Pressable, StyleSheet, Text, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import type {StackNavigationProp} from '@react-native-ohos/stack';
 import {RoutePath, type RootStackParamList} from '@core/navigation';
-import {formatDuration} from '@core/media-player';
-import {colors} from '@ui/design-system';
+import {formatMusicDuration} from './utils/formatMusicDuration';
+import {MusicCoverAvatar} from './components/MusicCoverAvatar';
 import {
   selectCurrentSong,
   selectHasActiveSession,
@@ -17,6 +17,7 @@ import {
   togglePlayPause,
   type MusicDispatch,
 } from './musicSlice';
+import {musicTheme} from './theme/musicTheme';
 
 export function MusicMiniPlayerBar() {
   const {t} = useTranslation();
@@ -36,24 +37,30 @@ export function MusicMiniPlayerBar() {
   const playing = playerState === 'playing';
 
   return (
-    <View style={styles.wrap}>
-      <View style={[styles.progress, {width: `${progress * 100}%`}]} />
+    <View
+      style={[
+        styles.wrap,
+        Platform.select({
+          ios: {
+            shadowColor: '#000',
+            shadowOpacity: 0.3,
+            shadowRadius: musicTheme.miniPlayerElevation,
+            shadowOffset: {width: 0, height: -2},
+          },
+          android: {elevation: musicTheme.miniPlayerElevation},
+          default: {elevation: musicTheme.miniPlayerElevation},
+        }),
+      ]}>
+      <View style={styles.progressTrack}>
+        <View style={[styles.progressFill, {width: `${progress * 100}%`}]} />
+      </View>
       <View style={styles.row}>
         <Pressable
           onPress={() => dispatch(togglePlayPause())}
           style={styles.artWrap}>
-          {song.albumArtUrl ? (
-            <Image source={{uri: song.albumArtUrl}} style={styles.art} />
-          ) : (
-            <View
-              style={[
-                styles.art,
-                {backgroundColor: song.accentColor ?? colors.surfaceElevated},
-              ]}
-            />
-          )}
+          <MusicCoverAvatar song={song} radius={musicTheme.miniCoverRadius} />
           <View style={styles.playOverlay}>
-            <Text style={styles.playIcon}>{playing ? '❚❚' : '▶'}</Text>
+            <Text style={styles.playIcon}>{playing ? '⏸' : '▶'}</Text>
           </View>
         </Pressable>
         <Pressable
@@ -69,13 +76,16 @@ export function MusicMiniPlayerBar() {
           </Text>
           {durationMs > 0 ? (
             <Text style={styles.time}>
-              {formatDuration(positionMs)} / {formatDuration(durationMs)}
+              {formatMusicDuration(positionMs)} /{' '}
+              {formatMusicDuration(durationMs)}
             </Text>
           ) : null}
         </Pressable>
         <Pressable
           onPress={() => dispatch(stopPlayback())}
-          style={styles.close}>
+          style={styles.close}
+          accessibilityRole="button"
+          accessibilityLabel={t('musicClosePlayer')}>
           <Text style={styles.closeText}>×</Text>
         </Pressable>
       </View>
@@ -85,34 +95,59 @@ export function MusicMiniPlayerBar() {
 
 const styles = StyleSheet.create({
   wrap: {
-    backgroundColor: colors.surfaceDark,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.surfaceElevated,
+    backgroundColor: musicTheme.miniPlayerBackground,
   },
-  progress: {
+  progressTrack: {
     height: 2,
-    backgroundColor: colors.accentTeal,
+    backgroundColor: musicTheme.miniPlayerProgressTrack,
+  },
+  progressFill: {
+    height: 2,
+    backgroundColor: musicTheme.miniPlayerProgressFill,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 8,
     paddingVertical: 8,
+    minHeight: musicTheme.miniPlayerBarHeight - 2,
   },
-  artWrap: {width: 44, height: 44, marginRight: 12},
-  art: {width: 44, height: 44, borderRadius: 22},
+  artWrap: {
+    width: 44,
+    height: 44,
+    marginRight: 12,
+  },
   playOverlay: {
     ...StyleSheet.absoluteFillObject,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.overlayDark,
-    borderRadius: 22,
+    backgroundColor: musicTheme.playOverlay,
+    borderRadius: musicTheme.miniCoverRadius,
   },
-  playIcon: {color: colors.onDark, fontSize: 14},
+  playIcon: {
+    color: musicTheme.titleColor,
+    fontSize: 22,
+  },
   meta: {flex: 1},
-  title: {color: colors.onDark, fontWeight: '600', fontSize: 14},
-  artist: {color: colors.overlayLight, fontSize: 12, marginTop: 2},
-  time: {color: colors.overlayMuted, fontSize: 11, marginTop: 2},
+  title: {
+    color: musicTheme.titleColor,
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  artist: {
+    color: musicTheme.subtitleColor,
+    fontSize: 12,
+    marginTop: 2,
+  },
+  time: {
+    color: musicTheme.timeMutedColor,
+    fontSize: 11,
+    marginTop: 2,
+  },
   close: {padding: 8},
-  closeText: {color: colors.overlayLight, fontSize: 22, lineHeight: 22},
+  closeText: {
+    color: 'rgba(255,255,255,0.7)',
+    fontSize: 22,
+    lineHeight: 22,
+  },
 });

@@ -1,20 +1,34 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import {
-  HomeLearningReportScreen,
-  HomeCheckInMallScreen,
-  HomeAllServicesScreen,
-} from '../screens/HomeScreens';
+import {HomeLearningReportScreen} from '../screens/HomeLearningReportScreen';
+import {HomeCheckInMallScreen} from '../screens/HomeCheckInMallScreen';
+import {HomeAllServicesScreen} from '../screens/HomeAllServicesScreen';
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({t: (key: string) => key}),
+}));
+
+jest.mock('@react-navigation/native', () => ({
+  useNavigation: () => ({goBack: jest.fn()}),
+}));
+
+jest.mock('react-native-safe-area-context', () => ({
+  useSafeAreaInsets: () => ({top: 0, bottom: 0, left: 0, right: 0}),
+}));
+
+jest.mock('react-redux', () => ({
+  useDispatch: () => jest.fn(),
+  useSelector: (fn: (s: unknown) => unknown) =>
+    fn({
+      allServices: {favoriteItems: [], isEditing: false},
+    }),
 }));
 
 jest.mock('@core/navigation', () => ({
   RoutePath: {
     bfuiTemplate: 'BfuiTemplate',
     musicList: 'MusicList',
-    shortVideo: 'ShortVideo',
+    homeAllServices: 'HomeAllServices',
   },
 }));
 
@@ -30,7 +44,7 @@ describe('HomeScreens smoke', () => {
   });
 
   it('renders all services', () => {
-    const navigation = {navigate: jest.fn()};
+    const navigation = {navigate: jest.fn(), goBack: jest.fn()};
     const tree = renderer
       .create(
         <HomeAllServicesScreen

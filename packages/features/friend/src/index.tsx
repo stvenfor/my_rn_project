@@ -1,17 +1,32 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
-import {ScreenContainer, SectionTitle, typography} from '@ui/design-system';
+import {
+  AppNavBar,
+  AppPageScaffold,
+  spacing,
+  typography,
+} from '@ui/design-system';
 
 export function FriendScreen() {
   const {t} = useTranslation();
+  const navigation = useNavigation();
+
   return (
-    <ScreenContainer>
-      <SectionTitle title={t('friendTitle')} />
+    <AppPageScaffold
+      contentStyle={{padding: spacing.md}}
+      navBar={
+        <AppNavBar
+          title={t('friendTitle')}
+          showBackButton
+          onBack={() => navigation.goBack()}
+        />
+      }>
       <View style={styles.center}>
         <Text style={styles.body}>{t('friendModuleLabel')}</Text>
       </View>
-    </ScreenContainer>
+    </AppPageScaffold>
   );
 }
 

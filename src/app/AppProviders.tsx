@@ -7,11 +7,13 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {initI18n} from '@core/i18n';
 import {configureAuthService} from '@core/supabase';
 import {configureLinkingService} from '@core/linking';
+import {bootstrapMediaPickerService} from '@core/media-picker';
 import {createApiClient} from '@core/api-client';
 import {ENV_CONFIGS} from '@core/config';
 import {LoadingPortal, ToastPortal} from '@ui/design-system';
 import {registerHomeWebHandlers} from '@features/home';
 import {initMusicPlayer} from '@features/music';
+import {loadAuthSession} from '@features/auth';
 import {store} from '@app/store';
 import {loadEnv} from '@app/store/envSlice';
 import {RootNavigator} from '@app/navigation/RootNavigator';
@@ -24,9 +26,11 @@ function AppBootstrap({children}: {children: React.ReactNode}) {
     initI18n();
     configureAuthService();
     configureLinkingService();
+    bootstrapMediaPickerService();
     createApiClient(ENV_CONFIGS.test.baseUrl);
     registerHomeWebHandlers(store.dispatch);
     dispatch(loadEnv());
+    dispatch(loadAuthSession());
     dispatch(initMusicPlayer());
   }, [dispatch]);
 
@@ -39,11 +43,11 @@ export function AppProviders() {
       <Provider store={store}>
         <SafeAreaProvider>
           <AppBootstrap>
+            <LoadingPortal />
+            <ToastPortal />
             <NavigationContainer>
               <RootNavigator />
             </NavigationContainer>
-            <LoadingPortal />
-            <ToastPortal />
           </AppBootstrap>
         </SafeAreaProvider>
       </Provider>

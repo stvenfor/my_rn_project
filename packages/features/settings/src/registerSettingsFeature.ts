@@ -1,7 +1,9 @@
 import type {FeatureRegistration, StackScreenComponent} from '@core/navigation';
 import {RoutePath} from '@core/navigation';
+import {mineReducer} from './store/mineSlice';
+import {MineScreen} from './screens/MineScreen';
+import {MineHttpTestScreen} from './screens/MineHttpTestScreen';
 import {
-  MineHttpTestScreen,
   DialogDemoScreen,
   DealInvoiceDemoScreen,
   DealInvoiceUploadScreen,
@@ -15,8 +17,10 @@ export function registerSettingsFeature(): FeatureRegistration {
       name: 'MineTab',
       labelKey: 'tabMine',
       icon: 'mine',
+      selectedIcon: 'mine-filled',
       order: 3,
     },
+    reducer: {key: 'mine', reducer: mineReducer},
     routes: [
       {
         name: RoutePath.mineHttpTest,
@@ -37,3 +41,5 @@ export function registerSettingsFeature(): FeatureRegistration {
     ],
   };
 }
+
+export {MineScreen};

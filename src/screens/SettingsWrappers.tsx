@@ -1,8 +1,12 @@
 import React from 'react';
 import {i18n} from '@core/i18n';
 import {RoutePath, type RootStackScreenProps} from '@core/navigation';
-import {getAuthService} from '@core/supabase';
-import {logout, selectIsLoggedIn, selectUser} from '@features/auth';
+import {
+  logoutThunk,
+  selectIsLoggedIn,
+  selectUser,
+  updateUserSession,
+} from '@features/auth';
 import {
   MineScreen,
   SettingsScreen,
@@ -10,21 +14,35 @@ import {
   type SettingsScreenProps,
 } from '@features/settings';
 import {useAppDispatch, useAppSelector} from '@app/store/hooks';
-import {setLocale, setThemeMode} from '@app/store/appSlice';
-import {setEnv, selectCurrentEnv, selectEnvLabel} from '@app/store/envSlice';
+import {
+  setLocale,
+  setThemeMode,
+  selectThemeMode,
+  selectLocale,
+} from '@app/store/appSlice';
+import type {AppEnv} from '@core/domain';
+import {setEnv, selectCurrentEnv} from '@app/store/envSlice';
 
 export function MineScreenContainer(
-  props: Omit<MineScreenProps, 'isLoggedIn' | 'user' | 'envLabel' | 'onLogout'>,
+  props: Omit<
+    MineScreenProps,
+    'isLoggedIn' | 'user' | 'onLogout' | 'onUpdateAvatar'
+  >,
 ) {
   const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const user = useAppSelector(selectUser);
-  const envLabel = useAppSelector(selectEnvLabel);
 
   const handleLogout = async () => {
-    await getAuthService().signOut();
-    dispatch(logout());
+    await dispatch(logoutThunk());
     props.navigation.navigate(RoutePath.login);
+  };
+
+  const handleUpdateAvatar = (uri: string) => {
+    if (!user) {
+      return;
+    }
+    dispatch(updateUserSession({...user, avatar: uri}));
   };
 
   return (
@@ -32,8 +50,8 @@ export function MineScreenContainer(
       {...props}
       isLoggedIn={isLoggedIn}
       user={user}
-      envLabel={envLabel}
       onLogout={handleLogout}
+      onUpdateAvatar={handleUpdateAvatar}
     />
   );
 }
@@ -43,19 +61,29 @@ export function SettingsScreenContainer(
 ) {
   const dispatch = useAppDispatch();
   const currentEnv = useAppSelector(selectCurrentEnv);
+  const themeMode = useAppSelector(selectThemeMode);
+  const locale = useAppSelector(selectLocale);
 
   const settingsProps: SettingsScreenProps = {
     ...props,
     currentEnv,
-    onSetEnv: env => {
+    themeMode,
+    locale,
+    onSetEnv: (env: AppEnv) => {
       dispatch(setEnv(env));
     },
-    onSetLocale: locale => {
-      i18n.changeLanguage(locale);
-      dispatch(setLocale(locale));
+    onSetLocale: (nextLocale: 'zh' | 'en') => {
+      i18n.changeLanguage(nextLocale);
+      dispatch(setLocale(nextLocale));
     },
-    onSetTheme: mode => {
-      dispatch(setThemeMode(mode));
+    onToggleTheme: () => {
+      const next =
+        themeMode === 'light'
+          ? 'dark'
+          : themeMode === 'dark'
+          ? 'light'
+          : 'dark';
+      dispatch(setThemeMode(next));
     },
   };
 

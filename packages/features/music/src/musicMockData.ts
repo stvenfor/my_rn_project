@@ -1,50 +1,98 @@
-export interface LocalSong {
-  id: string;
-  title: string;
-  artist: string;
-  album: string;
-  audioUrl: string;
-  durationMs: number;
-  albumArtUrl?: string;
-  accentColor?: string;
-}
+import type {LocalSong} from './models/localSong';
+
+export type {LocalSong} from './models/localSong';
 
 export const MUSIC_MOCK_SONGS: LocalSong[] = [
   {
     id: '1',
-    title: 'SoundHelix Song 1',
-    artist: 'SoundHelix',
-    album: 'Examples',
+    title: 'Ya Ali - DJMaza.Com',
+    artist: 'Zubeen',
+    album: 'Gangster A Love Story',
     audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
     durationMs: 348000,
     albumArtUrl: 'https://picsum.photos/seed/music1/300/300',
-    accentColor: '#4DD0C8',
+    albumArtAsset: 'lady',
   },
   {
     id: '2',
-    title: 'SoundHelix Song 2',
-    artist: 'SoundHelix',
-    album: 'Examples',
+    title: 'Ek Do Teen - DJMaza.Info',
+    artist: 'Parry G, Shreya Ghoshal',
+    album: 'Baaghi 2',
     audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
     durationMs: 420000,
-    accentColor: '#7E57C2',
+    accentColor: '#673AB7',
   },
   {
     id: '3',
-    title: 'SoundHelix Song 3',
-    artist: 'SoundHelix',
-    album: 'Examples',
+    title: '16 yeh dil diwana hai',
+    artist: '16 yeh dil diwana hai',
+    album: 'Single',
     audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
     durationMs: 360000,
-    accentColor: '#5C6BC0',
+    accentColor: '#3F51B5',
   },
   {
     id: '4',
-    title: 'SoundHelix Song 4',
-    artist: 'SoundHelix',
-    album: 'Examples',
+    title: 'Shape of You',
+    artist: 'Ed Sheeran',
+    album: 'Divide',
     audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
     durationMs: 390000,
     albumArtUrl: 'https://picsum.photos/seed/music4/300/300',
+    albumArtAsset: 'musicRecord',
+  },
+  {
+    id: '5',
+    title: 'Blinding Lights',
+    artist: 'The Weeknd',
+    album: 'After Hours',
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
+    durationMs: 375000,
+    accentColor: '#2196F3',
+  },
+  {
+    id: '6',
+    title: 'Levitating',
+    artist: 'Dua Lipa',
+    album: 'Future Nostalgia',
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3',
+    durationMs: 368000,
+    albumArtUrl: 'https://picsum.photos/seed/music6/300/300',
+  },
+  {
+    id: '7',
+    title: 'Stay',
+    artist: 'The Kid LAROI & Justin Bieber',
+    album: 'F*CK LOVE 3',
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3',
+    durationMs: 355000,
+    accentColor: '#00BCD4',
+  },
+  {
+    id: '8',
+    title: 'Peaches',
+    artist: 'Justin Bieber',
+    album: 'Justice',
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3',
+    durationMs: 362000,
+    accentColor: '#009688',
+  },
+  {
+    id: '9',
+    title: 'Bad Habits',
+    artist: 'Ed Sheeran',
+    album: '=',
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3',
+    durationMs: 380000,
+    albumArtUrl: 'https://picsum.photos/seed/music9/300/300',
+  },
+  {
+    id: '10',
+    title: 'Shivers',
+    artist: 'Ed Sheeran',
+    album: '=',
+    audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3',
+    durationMs: 372000,
+    accentColor: '#4CAF50',
   },
 ];

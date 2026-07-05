@@ -1,11 +1,11 @@
 import {registerModuleBridgeHandler, WebBridgeActions} from '@core/webview';
-import {loadHomeDashboard} from '../homeSlice';
+import {refreshHomeDashboard} from '../store/homeSlice';
 
 export function registerHomeWebHandlers(
   dispatch: (action: unknown) => void,
 ): void {
   registerModuleBridgeHandler(WebBridgeActions.refreshDashboard, async () => {
-    await dispatch(loadHomeDashboard());
+    await dispatch(refreshHomeDashboard());
     return {ok: true, message: '首页数据已刷新'};
   });
 }

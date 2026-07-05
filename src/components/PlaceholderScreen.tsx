@@ -1,7 +1,13 @@
 import React from 'react';
 import {StyleSheet, Text} from 'react-native';
 import {useTranslation} from 'react-i18next';
-import {ScreenContainer, SectionTitle, typography} from '@ui/design-system';
+import {useNavigation} from '@react-navigation/native';
+import {
+  AppNavBar,
+  AppPageScaffold,
+  spacing,
+  typography,
+} from '@ui/design-system';
 
 export function PlaceholderScreen({
   title,
@@ -11,13 +17,23 @@ export function PlaceholderScreen({
   moduleId: string;
 }) {
   const {t} = useTranslation();
+  const navigation = useNavigation();
+  const canGoBack = navigation.canGoBack();
+
   return (
-    <ScreenContainer>
-      <SectionTitle title={title} />
+    <AppPageScaffold
+      contentStyle={{padding: spacing.md}}
+      navBar={
+        <AppNavBar
+          title={title}
+          showBackButton={canGoBack}
+          onBack={() => navigation.goBack()}
+        />
+      }>
       <Text style={styles.body}>
         {t('placeholderModule')} — {moduleId}
       </Text>
-    </ScreenContainer>
+    </AppPageScaffold>
   );
 }
 

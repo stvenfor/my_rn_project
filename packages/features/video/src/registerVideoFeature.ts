@@ -1,10 +1,6 @@
 import type {FeatureRegistration, StackScreenComponent} from '@core/navigation';
 import {RoutePath} from '@core/navigation';
-import {
-  VideoScreen,
-  ShortVideoScreen,
-  ShortVideoPlayScreen,
-} from './VideoScreens';
+import {VideoScreen, ShortVideoScreen, ShortVideoPlayScreen} from './screens';
 
 export function registerVideoFeature(): FeatureRegistration {
   return {

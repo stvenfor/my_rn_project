@@ -14,6 +14,8 @@ module.exports = {
     '^@core/(.*)$': '<rootDir>/packages/core/$1/src',
     '^@features/(.*)$': '<rootDir>/packages/features/$1/src',
     '^@ui/(.*)$': '<rootDir>/packages/ui/$1/src',
+    '^react-native-webview$': '<rootDir>/__mocks__/react-native-webview.js',
+    '^react-native-video$': '<rootDir>/__mocks__/react-native-video.js',
     '\\.(png|jpg|jpeg|ttf|otf)$': '<rootDir>/__mocks__/fileMock.js',
   },
   transformIgnorePatterns: [

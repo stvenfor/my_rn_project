@@ -3,10 +3,11 @@ import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {RoutePath, type RootStackScreenProps} from '@core/navigation';
 import {
+  AppNavBar,
+  AppPageScaffold,
   ListRow,
-  ScreenContainer,
-  SectionTitle,
   colors,
+  spacing,
   typography,
 } from '@ui/design-system';
 import {BFUI_TEMPLATES, findBfuiTemplate} from '../bfuiCatalog';
@@ -27,8 +28,15 @@ export function BfuiGalleryScreen({
   const {t} = useTranslation();
 
   return (
-    <ScreenContainer>
-      <SectionTitle title={t('bfuiTemplates')} />
+    <AppPageScaffold
+      contentStyle={{padding: spacing.md}}
+      navBar={
+        <AppNavBar
+          title={t('bfuiTemplates')}
+          showBackButton
+          onBack={() => navigation.goBack()}
+        />
+      }>
       <Text style={styles.summary}>
         {t('bfuiGallerySummary', {count: BFUI_TEMPLATES.length})}
       </Text>
@@ -59,12 +67,13 @@ export function BfuiGalleryScreen({
           );
         })}
       </ScrollView>
-    </ScreenContainer>
+    </AppPageScaffold>
   );
 }
 
 export function BfuiTemplateScreen({
   route,
+  navigation,
 }: RootStackScreenProps<typeof RoutePath.bfuiTemplate>) {
   const {t} = useTranslation();
   const template = findBfuiTemplate(route.params?.templateId ?? '');
@@ -74,10 +83,17 @@ export function BfuiTemplateScreen({
 
   if (!template || !TemplateComponent) {
     return (
-      <ScreenContainer>
-        <SectionTitle title={t('bfuiTemplates')} />
+      <AppPageScaffold
+        contentStyle={{padding: spacing.md}}
+        navBar={
+          <AppNavBar
+            title={t('bfuiTemplates')}
+            showBackButton
+            onBack={() => navigation.goBack()}
+          />
+        }>
         <Text style={styles.body}>{t('bfuiTemplateNotFound')}</Text>
-      </ScreenContainer>
+      </AppPageScaffold>
     );
   }
 

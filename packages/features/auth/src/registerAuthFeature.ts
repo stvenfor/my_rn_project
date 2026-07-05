@@ -1,12 +1,10 @@
 import type {FeatureRegistration, StackScreenComponent} from '@core/navigation';
 import {RoutePath} from '@core/navigation';
 import {authReducer} from './authSlice';
-import {
-  LoginScreen,
-  LoginPasswordScreen,
-  LoginOtpScreen,
-  RegisterScreen,
-} from './screens/AuthScreens';
+import {LoginScreen} from './screens/LoginScreen';
+import {LoginPasswordScreen} from './screens/LoginPasswordScreen';
+import {LoginOtpScreen} from './screens/LoginOtpScreen';
+import {RegisterScreen} from './screens/RegisterScreen';
 
 export function registerAuthFeature(): FeatureRegistration {
   return {

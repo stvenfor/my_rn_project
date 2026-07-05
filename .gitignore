@@ -68,8 +68,12 @@ yarn-error.log
 # HarmonyOS / RNOH
 harmony/oh_modules/
 harmony/**/oh_modules/
+harmony/.hvigor/
 harmony/entry/src/main/resources/rawfile/bundle.harmony.js
 harmony/entry/src/main/cpp/generated/
 harmony/entry/src/main/cpp/autolinking.cmake
 harmony/entry/src/main/cpp/RNOHPackagesFactory.h
 harmony/entry/src/main/ets/RNOHPackagesFactory.ets
+
+# CodeGraph (local IDE/tool cache)
+.codegraph/

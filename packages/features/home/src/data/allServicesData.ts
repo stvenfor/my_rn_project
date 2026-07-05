@@ -11,8 +11,18 @@ export interface AllServiceItem {
 
 export interface AllServiceSection {
   title: string;
+  subtitle?: string;
+  showEditButton?: boolean;
   items: AllServiceItem[];
 }
+
+export const MIN_FAVORITE_COUNT = 3;
+export const MAX_FAVORITE_COUNT = 8;
+
+export const favoriteSectionMeta = {
+  title: '常用服务',
+  subtitle: '将按自定义顺序出现在首页',
+} as const;
 
 const intro: AllServiceItem = {
   id: 'introduction_animation',
@@ -33,12 +43,6 @@ const music: AllServiceItem = {
   label: '音频列表',
   assetName: 'used_car',
   routePath: RoutePath.musicList,
-};
-const video: AllServiceItem = {
-  id: 'short_video',
-  label: '短视频',
-  assetName: 'small_video',
-  routePath: RoutePath.shortVideo,
 };
 
 export const defaultFavoriteItems: AllServiceItem[] = [
@@ -209,12 +213,24 @@ export const catalogSections: AllServiceSection[] = [
         templateId: 'navigation_drawer',
       },
       music,
-      video,
     ],
   },
 ];
 
-export const allCatalogItems: AllServiceItem[] = [
+const catalogById = new Map<string, AllServiceItem>();
+for (const item of [
   ...defaultFavoriteItems,
   ...catalogSections.flatMap(s => s.items),
-];
+]) {
+  catalogById.set(item.id, item);
+}
+
+export const allCatalogItems: AllServiceItem[] = Array.from(
+  catalogById.values(),
+);
+
+export function findItemById(id: string): AllServiceItem | undefined {
+  return catalogById.get(id);
+}
+
+export const defaultFavoriteIds = defaultFavoriteItems.map(item => item.id);

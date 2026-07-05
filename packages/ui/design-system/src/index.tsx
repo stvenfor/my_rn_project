@@ -11,9 +11,26 @@ import {colors, spacing, typography} from './theme';
 
 export {colors, spacing, typography, lightTheme, darkTheme} from './theme';
 export type {AppTheme} from './theme';
+export {AppNavBar, APP_NAV_BAR_HEIGHT} from './AppNavBar';
+export type {AppNavBarProps, AppNavBarStyle} from './AppNavBar';
+export {AppPageScaffold} from './AppPageScaffold';
+export type {AppPageLayout, AppPageScaffoldProps} from './AppPageScaffold';
+
+const deprecatedWarnings = new Set<string>();
+
+function warnDeprecatedOnce(name: string, replacement: string): void {
+  if (!__DEV__ || deprecatedWarnings.has(name)) {
+    return;
+  }
+  deprecatedWarnings.add(name);
+  console.warn(
+    `[design-system] ${name} is deprecated. Use ${replacement} instead.`,
+  );
+}
 
 let loadingHandler: ((visible: boolean, message?: string) => void) | null =
   null;
+let loadingDepth = 0;
 
 export function registerLoadingHandler(
   handler: (visible: boolean, message?: string) => void,
@@ -23,9 +40,19 @@ export function registerLoadingHandler(
 
 export const AppLoading = {
   show(message?: string) {
+    loadingDepth += 1;
     loadingHandler?.(true, message);
   },
   hide() {
+    if (loadingDepth > 0) {
+      loadingDepth -= 1;
+    }
+    if (loadingDepth === 0) {
+      loadingHandler?.(false);
+    }
+  },
+  forceHide() {
+    loadingDepth = 0;
     loadingHandler?.(false);
   },
   async run<T>(task: () => Promise<T>, message = '加载中'): Promise<T> {
@@ -109,6 +136,10 @@ export function LoadingPortal() {
   );
 }
 
+/**
+ * @deprecated 请改用 {@link AppPageScaffold}。`ScreenContainer` 仅保留兼容旧代码。
+ * 新页面请使用 `AppPageScaffold` + `AppNavBar` 组合。
+ */
 export function ScreenContainer({
   children,
   style,
@@ -116,6 +147,10 @@ export function ScreenContainer({
   children: React.ReactNode;
   style?: ViewStyle;
 }) {
+  warnDeprecatedOnce(
+    'ScreenContainer',
+    'AppPageScaffold（packages/ui/design-system/src/AppPageScaffold.tsx）',
+  );
   return <View style={[styles.screen, style]}>{children}</View>;
 }
 
@@ -133,7 +168,15 @@ export function PrimaryButton({
   );
 }
 
+/**
+ * @deprecated 请改用 {@link AppNavBar} 的 `title` / `titleComponent`。
+ * 页面级标题不应再使用独立的 `SectionTitle` 组件。
+ */
 export function SectionTitle({title}: {title: string}) {
+  warnDeprecatedOnce(
+    'SectionTitle',
+    'AppNavBar.title 或 AppNavBar.titleComponent',
+  );
   return <Text style={styles.sectionTitle}>{title}</Text>;
 }
 

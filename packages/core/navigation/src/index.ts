@@ -51,23 +51,52 @@ export type RootStackParamList = {
   HomeLearningReport: undefined;
   HomeCheckInMall: undefined;
   HomeAllServices: undefined;
-  ChatDetail: {conversationId: string; title: string};
+  ChatDetail: {
+    conversationId: string;
+    title: string;
+    portraitUrl?: string;
+    type?: 'private' | 'group';
+    isOnline?: boolean;
+  };
   CommunityPublish: undefined;
   CommunityVideoPlay: {url: string; title?: string};
-  ImagePreview: {uris: string[]; initialIndex?: number};
+  ImagePreview: {
+    uris?: string[];
+    imageUrl?: string;
+    initialIndex?: number;
+  };
   Settings: undefined;
-  MineHttpTest: undefined;
+  MineHttpTest:
+    | {
+        level?: number;
+        title?: string;
+        collected?: number;
+        total?: number;
+        collecting?: boolean;
+        locked?: boolean;
+      }
+    | undefined;
   DialogDemo: undefined;
   DealInvoiceDemo: undefined;
   DealInvoiceUpload: undefined;
-  Web: {title?: string; url?: string; params?: Record<string, unknown>};
+  Web: {
+    title?: string;
+    url?: string;
+    params?: Record<string, unknown>;
+    loadType?: 'asset' | 'url';
+    assetPath?: string;
+    bridgeScriptAssetPath?: string | null;
+    enableJavaScript?: boolean;
+    showAppBar?: boolean;
+    showBackButton?: boolean;
+  };
   Friend: undefined;
   Live: undefined;
   LiveRoom: {roomId: string};
   Pay: undefined;
   Video: undefined;
   ShortVideo: undefined;
-  ShortVideoPlay: {videoId: string; url?: string; title?: string};
+  ShortVideoPlay: {initialIndex?: number};
   MusicList: undefined;
   MusicNowPlaying: {trackId: string};
   BfuiGallery: undefined;
@@ -99,7 +128,9 @@ export interface TabRegistration {
   name: keyof MainTabParamList;
   labelKey: string;
   icon: string;
+  selectedIcon: string;
   order: number;
+  requiresAuth?: boolean;
 }
 
 export type StackScreenComponent = ComponentType<{
@@ -120,6 +151,11 @@ export interface FeatureRegistration {
   routes?: Array<{
     name: keyof RootStackParamList;
     component: StackScreenComponent;
+    sharedElements?: (
+      route: {name: string; params?: Record<string, unknown>},
+      otherRoute?: {name: string; params?: Record<string, unknown>},
+      showing?: boolean,
+    ) => string[];
   }>;
   reducer?: {key: string; reducer: Reducer};
 }

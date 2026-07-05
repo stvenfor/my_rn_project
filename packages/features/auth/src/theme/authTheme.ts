@@ -1,0 +1,15 @@
+export const authTheme = {
+  primaryBlue: '#1B82D2',
+  titleBlack: '#1A1A1A',
+  textGray: '#999999',
+  linkGray: '#666666',
+  dividerGray: '#E5E5E5',
+  inputHint: '#CCCCCC',
+  buttonDisabled: '#D8D8D8',
+  countryCodeBg: '#F5F5F5',
+  screenBackground: '#FFFFFF',
+  horizontalPadding: 28,
+  buttonHeight: 48,
+  buttonRadius: 4,
+  countryCodeRadius: 6,
+} as const;

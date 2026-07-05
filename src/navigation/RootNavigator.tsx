@@ -7,9 +7,8 @@ import {
   type RootStackParamList,
   type RootStackScreenProps,
 } from '@core/navigation';
-import {MusicMiniPlayerBar} from '@features/music';
+import {supportsSharedElementNavigation} from '@features/music';
 import {WebViewScreen} from '@app/screens/WebViewScreen';
-import {ImagePreviewScreen} from '@app/screens/ImagePreviewScreen';
 import {SettingsScreenContainer} from '@app/screens/SettingsWrappers';
 import {
   DebugBleScreen,
@@ -21,7 +20,25 @@ import {collectFeatureRoutes} from '@app/config/moduleManifest';
 import {MainTabs} from './MainTabs';
 import {colors} from '@ui/design-system';
 
-const Stack = createStackNavigator<RootStackParamList>();
+type StackNavigator = ReturnType<
+  typeof createStackNavigator<RootStackParamList>
+>;
+
+function createRootStackNavigator(): StackNavigator {
+  if (supportsSharedElementNavigation) {
+    try {
+      const createSharedElementStackNavigator =
+        require('react-navigation-shared-element')
+          .createSharedElementStackNavigator as typeof import('react-navigation-shared-element').createSharedElementStackNavigator;
+      return createSharedElementStackNavigator<RootStackParamList>();
+    } catch {
+      // Fall back when shared-element stack cannot load.
+    }
+  }
+  return createStackNavigator<RootStackParamList>();
+}
+
+const Stack = createRootStackNavigator();
 
 function SplashScreen({
   navigation,
@@ -46,10 +63,7 @@ function SplashScreen({
 function MainScreen() {
   return (
     <View style={styles.main}>
-      <View style={styles.mainContent}>
-        <MainTabs />
-      </View>
-      <MusicMiniPlayerBar />
+      <MainTabs />
     </View>
   );
 }
@@ -59,7 +73,7 @@ const featureRoutes = collectFeatureRoutes();
 export function RootNavigator() {
   return (
     <Stack.Navigator
-      screenOptions={{headerShown: true}}
+      screenOptions={{headerShown: false}}
       initialRouteName={RoutePath.splash}>
       <Stack.Screen
         name={RoutePath.splash}
@@ -76,6 +90,9 @@ export function RootNavigator() {
           key={route.name}
           name={route.name}
           component={route.component}
+          {...(route.sharedElements
+            ? {sharedElements: route.sharedElements}
+            : {})}
         />
       ))}
       <Stack.Screen
@@ -83,10 +100,6 @@ export function RootNavigator() {
         component={SettingsScreenContainer}
       />
       <Stack.Screen name={RoutePath.web} component={WebViewScreen} />
-      <Stack.Screen
-        name={RoutePath.imagePreview}
-        component={ImagePreviewScreen}
-      />
       <Stack.Screen name={RoutePath.debugBle} component={DebugBleScreen} />
       <Stack.Screen
         name={RoutePath.debugLinking}
@@ -105,5 +118,4 @@ const styles = StyleSheet.create({
   splash: {flex: 1, alignItems: 'center', justifyContent: 'center'},
   splashText: {marginTop: 16, color: colors.textSecondary},
   main: {flex: 1},
-  mainContent: {flex: 1},
 });

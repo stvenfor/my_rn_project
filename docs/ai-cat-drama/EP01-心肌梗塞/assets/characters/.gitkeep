@@ -1,0 +1,9 @@
+# 角色基准图占位
+
+将即梦生成的角色基准图放入此目录，命名：
+
+- `char_alili_front.png` — 阿狸（狸花猫）
+- `char_daju_front.png` — 大橘（橘猫）
+- `char_xiaobai_front.png` — 小白（白猫）
+
+生成 Prompt 见 [03-characters.md](../03-characters.md)

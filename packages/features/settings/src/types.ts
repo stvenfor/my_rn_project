@@ -5,14 +5,16 @@ import {RoutePath} from '@core/navigation';
 export interface MineScreenProps extends MainTabScreenProps<'MineTab'> {
   isLoggedIn: boolean;
   user: User | null;
-  envLabel: string;
   onLogout: () => Promise<void>;
+  onUpdateAvatar: (uri: string) => void;
 }
 
 export interface SettingsScreenProps
   extends RootStackScreenProps<typeof RoutePath.settings> {
   currentEnv: AppEnv;
+  themeMode: 'light' | 'dark' | 'system';
+  locale: 'zh' | 'en';
   onSetEnv: (env: AppEnv) => void;
   onSetLocale: (locale: 'zh' | 'en') => void;
-  onSetTheme: (mode: 'light' | 'dark' | 'system') => void;
+  onToggleTheme: () => void;
 }

@@ -14,8 +14,13 @@ class MockAuthService implements AuthService {
     }
     return {id: 'mock-phone', phone, displayName: phone};
   }
-  async signUpWithEmail(email: string, password: string): Promise<User> {
-    return this.signInWithPassword(email, password);
+  async signUpWithEmail(
+    email: string,
+    password: string,
+    displayName?: string,
+  ): Promise<User> {
+    const user = await this.signInWithPassword(email, password);
+    return displayName ? {...user, displayName} : user;
   }
   async signUpWithPhone(phone: string, otp: string): Promise<User> {
     return this.signInWithOtp(phone, otp);
@@ -44,8 +49,10 @@ export function configureAuthService(service?: AuthService): void {
 }
 
 export {
+  AUTH_USER_SESSION_KEY,
   configureAuthSessionService,
   getAuthSessionService,
+  restoreAuthSessionFromStorage,
 } from './sessionService';
 
 export {MOCK_OTP};

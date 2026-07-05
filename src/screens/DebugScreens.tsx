@@ -1,20 +1,26 @@
-import React, {useEffect, useState} from 'react';
-import {FlatList, StyleSheet, Text} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {useTranslation} from 'react-i18next';
+import {RoutePath, type RootStackParamList} from '@core/navigation';
 import type {RootStackScreenProps} from '@core/navigation';
 import {getBluetoothService, type BleDevice} from '@core/bluetooth';
 import {getImAdapter} from '@core/im';
-import {getLinkingService} from '@core/linking';
+import {getLinkingService, type PendingNavigation} from '@core/linking';
 import {getRealtimeAdapter} from '@core/realtime';
+import {selectIsLoggedIn} from '@features/auth';
+import {applyLinkingNavigation} from '@app/navigation/applyLinkingNavigation';
+import {useAppDispatch, useAppSelector} from '@app/store/hooks';
+import type {StackNavigationProp} from '@react-native-ohos/stack';
 import {
+  AppNavBar,
+  AppPageScaffold,
   ListRow,
   PrimaryButton,
-  ScreenContainer,
-  SectionTitle,
+  spacing,
   typography,
 } from '@ui/design-system';
 
-export function DebugBleScreen(_props: RootStackScreenProps<'DebugBle'>) {
+export function DebugBleScreen({navigation}: RootStackScreenProps<'DebugBle'>) {
   const {t} = useTranslation();
   const [devices, setDevices] = useState<BleDevice[]>([]);
   const [connected, setConnected] = useState<string | null>(null);
@@ -24,8 +30,15 @@ export function DebugBleScreen(_props: RootStackScreenProps<'DebugBle'>) {
   }, []);
 
   return (
-    <ScreenContainer>
-      <SectionTitle title={t('debugBleTitle')} />
+    <AppPageScaffold
+      contentStyle={{padding: spacing.md}}
+      navBar={
+        <AppNavBar
+          title={t('debugBleTitle')}
+          showBackButton
+          onBack={() => navigation.goBack()}
+        />
+      }>
       <Text style={styles.hint}>{t('debugBleHint')}</Text>
       <FlatList
         data={devices}
@@ -46,29 +59,89 @@ export function DebugBleScreen(_props: RootStackScreenProps<'DebugBle'>) {
           {t('debugBleConnected')}: {connected}
         </Text>
       ) : null}
-    </ScreenContainer>
+    </AppPageScaffold>
   );
 }
 
-export function DebugLinkingScreen(
-  _props: RootStackScreenProps<'DebugLinking'>,
-) {
+export function DebugLinkingScreen({
+  navigation,
+}: RootStackScreenProps<'DebugLinking'>) {
   const {t} = useTranslation();
+  const dispatch = useAppDispatch();
+  const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const linking = getLinkingService();
   const [lastUrl, setLastUrl] = useState<string | null>(null);
-  const pending = linking.getPendingNavigation();
+  const [pending, setPending] = useState<PendingNavigation | null>(
+    linking.getPendingNavigation(),
+  );
+  const [lastApplied, setLastApplied] = useState<string | null>(null);
 
-  useEffect(() => {
-    return linking.subscribe(url => setLastUrl(url));
+  const refreshPending = useCallback(() => {
+    setPending(linking.getPendingNavigation());
   }, [linking]);
 
+  useEffect(() => {
+    return linking.subscribe(url => {
+      setLastUrl(url);
+      refreshPending();
+    });
+  }, [linking, refreshPending]);
+
+  const stackNavigation =
+    navigation as unknown as StackNavigationProp<RootStackParamList>;
+
+  const emitUrl = (url: string) => {
+    linking.emit(url);
+    setLastUrl(url);
+    refreshPending();
+  };
+
+  const applyPending = async () => {
+    const next = linking.consumePendingNavigation();
+    refreshPending();
+    if (!next) {
+      setLastApplied('—');
+      return;
+    }
+
+    const applied = await applyLinkingNavigation(next, {
+      dispatch,
+      navigation: stackNavigation,
+      isLoggedIn,
+    });
+    setLastApplied(
+      applied
+        ? `${next.route}${next.params ? ` ${JSON.stringify(next.params)}` : ''}`
+        : `failed: ${next.route}`,
+    );
+  };
+
   return (
-    <ScreenContainer>
-      <SectionTitle title={t('debugLinkingTitle')} />
+    <AppPageScaffold
+      contentStyle={{padding: spacing.md}}
+      navBar={
+        <AppNavBar
+          title={t('debugLinkingTitle')}
+          showBackButton
+          onBack={() => navigation.goBack()}
+        />
+      }>
       <PrimaryButton
         title={t('debugLinkingSimulate')}
-        onPress={() => linking.emit('myapp://app/login?from=debug')}
+        onPress={() => emitUrl('myapp://app/login?from=debug')}
       />
+      <View style={styles.gap} />
+      <PrimaryButton
+        title={t('debugLinkingSimulateHome')}
+        onPress={() => emitUrl('myapp://app/home')}
+      />
+      <View style={styles.gap} />
+      <PrimaryButton
+        title={t('debugLinkingSimulateCommunity')}
+        onPress={() => emitUrl('myapp://app/community')}
+      />
+      <View style={styles.gap} />
+      <PrimaryButton title={t('debugLinkingApplyPending')} onPress={applyPending} />
       <Text style={styles.status}>
         {t('debugLinkingLast')}: {lastUrl ?? '—'}
       </Text>
@@ -78,13 +151,16 @@ export function DebugLinkingScreen(
           ? `${pending.route} ${JSON.stringify(pending.params ?? {})}`
           : '—'}
       </Text>
-    </ScreenContainer>
+      <Text style={styles.status}>
+        最近应用: {lastApplied ?? '—'}
+      </Text>
+    </AppPageScaffold>
   );
 }
 
-export function DebugRealtimeScreen(
-  _props: RootStackScreenProps<'DebugRealtime'>,
-) {
+export function DebugRealtimeScreen({
+  navigation,
+}: RootStackScreenProps<'DebugRealtime'>) {
   const {t} = useTranslation();
   const [state, setState] = useState('disconnected');
 
@@ -97,17 +173,24 @@ export function DebugRealtimeScreen(
   };
 
   return (
-    <ScreenContainer>
-      <SectionTitle title={t('debugRealtimeTitle')} />
+    <AppPageScaffold
+      contentStyle={{padding: spacing.md}}
+      navBar={
+        <AppNavBar
+          title={t('debugRealtimeTitle')}
+          showBackButton
+          onBack={() => navigation.goBack()}
+        />
+      }>
       <PrimaryButton title={t('debugRealtimeConnect')} onPress={connect} />
       <Text style={styles.status}>
         {t('debugRealtimeState')}: {state}
       </Text>
-    </ScreenContainer>
+    </AppPageScaffold>
   );
 }
 
-export function DebugImScreen(_props: RootStackScreenProps<'DebugIm'>) {
+export function DebugImScreen({navigation}: RootStackScreenProps<'DebugIm'>) {
   const {t} = useTranslation();
   const [summary, setSummary] = useState('');
 
@@ -120,15 +203,23 @@ export function DebugImScreen(_props: RootStackScreenProps<'DebugIm'>) {
   };
 
   return (
-    <ScreenContainer>
-      <SectionTitle title={t('debugImTitle')} />
+    <AppPageScaffold
+      contentStyle={{padding: spacing.md}}
+      navBar={
+        <AppNavBar
+          title={t('debugImTitle')}
+          showBackButton
+          onBack={() => navigation.goBack()}
+        />
+      }>
       <PrimaryButton title={t('debugImRefresh')} onPress={load} />
       <Text style={styles.status}>{summary || t('debugImEmpty')}</Text>
-    </ScreenContainer>
+    </AppPageScaffold>
   );
 }
 
 const styles = StyleSheet.create({
   hint: {...typography.caption, marginBottom: 12},
   status: {...typography.body, marginTop: 12},
+  gap: {height: 12},
 });

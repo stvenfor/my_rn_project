@@ -1,40 +1,49 @@
 import {
   homeReducer,
   loadHomeDashboard,
-  selectHomeBanners,
+  refreshHomeDashboard,
+  selectHomeDashboard,
   selectHomeError,
   selectHomeLoading,
-} from '../homeSlice';
+  updateGreeting,
+} from '../store/homeSlice';
 
-jest.mock('@core/api-client', () => ({
-  fetchWanAndroidBanner: jest.fn(),
+jest.mock('../services/homeRepository', () => ({
+  loadDashboard: jest.fn(),
 }));
 
-jest.mock('@ui/design-system', () => ({
-  AppLoading: {
-    run: (fn: () => Promise<unknown>) => fn(),
-  },
-}));
+const {loadDashboard} = jest.requireMock('../services/homeRepository');
 
-const {fetchWanAndroidBanner} = jest.requireMock('@core/api-client');
+const mockDashboard = {
+  storeName: '[4S]北京沃德龙鼎吉利',
+  features: [],
+  quickActions: [],
+  metricsToday: [],
+  metricsYesterday: [],
+  metricsMonth: [],
+  metricDetails: [],
+  services: [],
+  contacts: [],
+  news: [],
+};
 
 describe('homeSlice', () => {
   const base = {home: homeReducer(undefined, {type: '@@INIT'})};
 
   it('starts empty', () => {
-    expect(selectHomeBanners(base)).toEqual([]);
+    expect(selectHomeDashboard(base)).toBeNull();
     expect(selectHomeLoading(base)).toBe(false);
     expect(selectHomeError(base)).toBeNull();
   });
 
-  it('loadHomeDashboard.fulfilled stores banners', async () => {
-    fetchWanAndroidBanner.mockResolvedValueOnce([
-      {title: 'A', url: 'https://a'},
-      {title: 'B', url: 'https://b'},
-    ]);
-    const action = await loadHomeDashboard()(jest.fn(), jest.fn(), undefined);
+  it('loadHomeDashboard.fulfilled stores dashboard', async () => {
+    loadDashboard.mockResolvedValueOnce(mockDashboard);
+    const getState = () => ({home: base.home});
+    const action = await loadHomeDashboard()(jest.fn(), getState, undefined);
     const next = homeReducer(base.home, action);
-    expect(selectHomeBanners({home: next})).toHaveLength(2);
+    expect(selectHomeDashboard({home: next})?.storeName).toBe(
+      '[4S]北京沃德龙鼎吉利',
+    );
     expect(selectHomeLoading({home: next})).toBe(false);
   });
 
@@ -49,5 +58,24 @@ describe('homeSlice', () => {
     );
     expect(selectHomeError({home: next})).toBe('network');
     expect(selectHomeLoading({home: next})).toBe(false);
+  });
+
+  it('refreshHomeDashboard.fulfilled updates dashboard', async () => {
+    loadDashboard.mockResolvedValueOnce(mockDashboard);
+    const action = await refreshHomeDashboard()(
+      jest.fn(),
+      jest.fn(),
+      undefined,
+    );
+    const next = homeReducer(base.home, action);
+    expect(selectHomeDashboard({home: next})).toEqual(mockDashboard);
+  });
+
+  it('updateGreeting sets greeting from user', () => {
+    const next = homeReducer(
+      base.home,
+      updateGreeting({id: '1', displayName: '张三'}),
+    );
+    expect(next.userGreeting).toMatch(/，张三$/);
   });
 });

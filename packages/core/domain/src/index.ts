@@ -5,6 +5,7 @@ export interface User {
   email?: string;
   phone?: string;
   displayName?: string;
+  avatar?: string;
 }
 
 export interface AuthFailure {
@@ -15,7 +16,11 @@ export interface AuthFailure {
 export interface AuthService {
   signInWithPassword(email: string, password: string): Promise<User>;
   signInWithOtp(phone: string, otp: string): Promise<User>;
-  signUpWithEmail(email: string, password: string): Promise<User>;
+  signUpWithEmail(
+    email: string,
+    password: string,
+    displayName?: string,
+  ): Promise<User>;
   signUpWithPhone(phone: string, otp: string): Promise<User>;
   sendOtp(phone: string): Promise<void>;
   signOut(): Promise<void>;

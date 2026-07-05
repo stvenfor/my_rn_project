@@ -1,0 +1,14 @@
+# 分镜图占位
+
+将即梦生成的 8 镜分镜图放入此目录，命名：
+
+- EP01_S01_全景_饭桌_v1.png
+- EP01_S02_大橘_中景_委屈_v1.png
+- EP01_S03_阿狸_特写_冷笑_v1.png
+- EP01_S04_小白_中景_拱火_v1.png
+- EP01_S05_阿狸_特写_连珠炮_v1.png
+- EP01_S06_大橘_中景_崩溃_v1.png
+- EP01_S07_大橘_全景_躺倒_v1.png
+- EP01_S08_阿狸_特写_收尾_v1.png
+
+生成 Prompt 见 [04-storyboard-prompts.md](../04-storyboard-prompts.md)

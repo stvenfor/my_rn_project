@@ -3,6 +3,7 @@ export interface VideoMockSource {
   title: string;
   desc: string;
   url: string;
+  coverUrl?: string;
   category: string;
 }
 

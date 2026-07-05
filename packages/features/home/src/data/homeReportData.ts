@@ -65,10 +65,11 @@ export const learningRecords: LearningRecord[] = [
     time: '15:20',
     status: '12 min',
   },
+  {
+    emoji: '🎧',
+    title: '听力练习',
+    subtitle: '英美绕口令 · 5题',
+    time: '14:00',
+    status: '5 min',
+  },
 ];
-
-export const learningStats = {
-  studyMinutes: 86,
-  completedTasks: 12,
-  streakDays: 26,
-};

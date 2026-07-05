@@ -1,57 +1,88 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
+import {StyleSheet, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useNavigation} from '@react-navigation/native';
-import {useTranslation} from 'react-i18next';
-import {RoutePath, type MainTabParamList} from '@core/navigation';
-import {selectIsLoggedIn} from '@features/auth';
-import {HomeScreen} from '@features/home';
-import {ChatScreen} from '@features/chat';
-import {CommunityScreen} from '@features/community';
-import {MineScreenContainer} from '@app/screens/SettingsWrappers';
-import {useAppSelector} from '@app/store/hooks';
-import type {StackNavigationProp} from '@react-native-ohos/stack';
-import type {RootStackParamList} from '@core/navigation';
-
-import {createAuthTabListener} from './authGuard';
+import type {BottomTabBarProps} from '@react-navigation/bottom-tabs';
+import {useDispatch, useSelector} from 'react-redux';
+import type {MainTabParamList} from '@core/navigation';
+import {
+  selectMainTabSelectedIndex,
+  selectMainTabSwitchRevision,
+  setMainTabIndex,
+} from '@app/store/mainTabSlice';
+import {getMainTabComponent, getMainTabRegistrations} from './mainTabRegistry';
+import {PhoneBottomNavigationBar} from './PhoneBottomNavigationBar';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
-function useAuthTabListener() {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const isLoggedIn = useAppSelector(selectIsLoggedIn);
-  return createAuthTabListener(isLoggedIn, () =>
-    navigation.navigate(RoutePath.login),
+function MainTabControllerSync({
+  navigation,
+  state,
+}: Pick<BottomTabBarProps, 'navigation' | 'state'>) {
+  const dispatch = useDispatch();
+  const selectedIndex = useSelector(selectMainTabSelectedIndex);
+  const switchRevision = useSelector(selectMainTabSwitchRevision);
+  const lastHandledRevision = useRef(0);
+
+  useEffect(() => {
+    if (switchRevision <= lastHandledRevision.current) {
+      return;
+    }
+    lastHandledRevision.current = switchRevision;
+    const tabs = getMainTabRegistrations();
+    const target = tabs[selectedIndex];
+    if (!target) {
+      return;
+    }
+    if (state.routes[state.index]?.name !== target.name) {
+      navigation.navigate(target.name);
+    }
+  }, [navigation, selectedIndex, state.index, state.routes, switchRevision]);
+
+  useEffect(() => {
+    dispatch(setMainTabIndex(state.index));
+  }, [dispatch, state.index]);
+
+  return null;
+}
+
+function MainTabBar(props: BottomTabBarProps) {
+  return (
+    <>
+      <MainTabControllerSync navigation={props.navigation} state={props.state} />
+      <PhoneBottomNavigationBar {...props} />
+    </>
   );
 }
 
 export function MainTabs() {
-  const {t} = useTranslation();
-  const authListener = useAuthTabListener();
+  const tabs = getMainTabRegistrations();
+
+  if (tabs.length === 0) {
+    return null;
+  }
 
   return (
-    <Tab.Navigator screenOptions={{headerShown: true}}>
-      <Tab.Screen
-        name="HomeTab"
-        component={HomeScreen}
-        options={{title: t('tabHome')}}
-      />
-      <Tab.Screen
-        name="ChatTab"
-        component={ChatScreen}
-        options={{title: t('tabChat')}}
-        listeners={authListener}
-      />
-      <Tab.Screen
-        name="CommunityTab"
-        component={CommunityScreen}
-        options={{title: t('tabCommunity')}}
-        listeners={authListener}
-      />
-      <Tab.Screen
-        name="MineTab"
-        component={MineScreenContainer}
-        options={{title: t('tabMine')}}
-      />
-    </Tab.Navigator>
+    <View style={styles.root}>
+      <Tab.Navigator
+        tabBar={props => <MainTabBar {...props} />}
+        screenOptions={{
+          headerShown: false,
+          lazy: false,
+        }}>
+        {tabs.map(tab => (
+          <Tab.Screen
+            key={tab.name}
+            name={tab.name}
+            component={getMainTabComponent(tab.name)}
+          />
+        ))}
+      </Tab.Navigator>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+});

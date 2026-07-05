@@ -1,10 +1,8 @@
 import type {FeatureRegistration, StackScreenComponent} from '@core/navigation';
 import {RoutePath} from '@core/navigation';
-import {communityReducer} from './communitySlice';
-import {
-  CommunityPublishScreen,
-  CommunityVideoPlayScreen,
-} from './screens/CommunityScreens';
+import {communityReducer} from './store/communitySlice';
+import {CommunityPublishScreen} from './screens/CommunityPublishScreen';
+import {CommunityVideoPlayScreen} from './screens/CommunityVideoPlayScreen';
 
 export function registerCommunityFeature(): FeatureRegistration {
   return {
@@ -14,7 +12,9 @@ export function registerCommunityFeature(): FeatureRegistration {
       name: 'CommunityTab',
       labelKey: 'tabCommunity',
       icon: 'community',
+      selectedIcon: 'community-filled',
       order: 2,
+      requiresAuth: true,
     },
     reducer: {key: 'community', reducer: communityReducer},
     routes: [

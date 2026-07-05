@@ -1,0 +1,15 @@
+export const homeDashboardTheme = {
+  primaryBlue: '#1B82D2',
+  background: '#F5F6F8',
+  cardWhite: '#FFFFFF',
+  titleBlack: '#1A1A1A',
+  textGray: '#999999',
+  textDarkGray: '#666666',
+  bannerDark: '#1E3A5F',
+  badgeOrange: '#FF6B00',
+  badgeBlue: '#1B82D2',
+  bannerGradientStart: '#2B5DAE',
+  bannerGradientEnd: '#1A3A6E',
+  messageBadgeBg: '#FFF7E6',
+  messageBadgeText: '#FFB800',
+} as const;

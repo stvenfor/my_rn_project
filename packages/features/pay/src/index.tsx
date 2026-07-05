@@ -1,11 +1,13 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
 import {
+  AppNavBar,
+  AppPageScaffold,
   AppToast,
   ListRow,
-  ScreenContainer,
-  SectionTitle,
+  spacing,
   typography,
 } from '@ui/design-system';
 import {getPayService} from './payService';
@@ -18,6 +20,7 @@ const PAY_METHODS = [
 
 export function PayScreen() {
   const {t} = useTranslation();
+  const navigation = useNavigation();
 
   const handlePay = async (methodId: string, label: string) => {
     if (methodId === 'mock') {
@@ -29,8 +32,15 @@ export function PayScreen() {
   };
 
   return (
-    <ScreenContainer>
-      <SectionTitle title={t('payTitle')} />
+    <AppPageScaffold
+      contentStyle={{padding: spacing.md}}
+      navBar={
+        <AppNavBar
+          title={t('payTitle')}
+          showBackButton
+          onBack={() => navigation.goBack()}
+        />
+      }>
       <View style={styles.center}>
         <Text style={styles.moduleLabel}>{t('payModuleLabel')}</Text>
       </View>
@@ -44,7 +54,7 @@ export function PayScreen() {
           onPress={() => handlePay(method.id, method.label)}
         />
       ))}
-    </ScreenContainer>
+    </AppPageScaffold>
   );
 }
 

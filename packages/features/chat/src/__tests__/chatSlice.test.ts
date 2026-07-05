@@ -3,11 +3,13 @@ import {
   chatReducer,
   fetchConversations,
   selectConversations,
-} from '../chatSlice';
+} from '../store/chatSlice';
 
 describe('chatSlice', () => {
   it('loads conversations via IM adapter thunk', async () => {
-    const store = configureStore({reducer: {chat: chatReducer}});
+    const store = configureStore({
+      reducer: {chat: chatReducer, chatDetail: (s = {}) => s},
+    });
     await store.dispatch(fetchConversations());
     const conversations = selectConversations(store.getState());
     expect(conversations.length).toBeGreaterThan(0);
@@ -16,6 +18,7 @@ describe('chatSlice', () => {
       title: expect.any(String),
       lastMessage: expect.any(String),
       unreadCount: expect.any(Number),
+      portraitUrl: expect.any(String),
     });
   });
 });

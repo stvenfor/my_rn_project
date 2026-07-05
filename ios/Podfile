@@ -5,7 +5,7 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
-platform :ios, min_ios_version_supported
+platform :ios, '13.0'
 prepare_react_native_project!
 
 # react-native-track-player 依赖 SwiftAudioEx；国内直连 GitHub 易超时，可用镜像覆盖。
@@ -21,7 +21,7 @@ swift_audio_ex_git = ENV['SWIFT_AUDIO_EX_GIT'] || 'https://ghproxy.net/https://g
 #   dependencies: {
 #     ...(process.env.NO_FLIPPER ? { 'react-native-flipper': { platforms: { ios: null } } } : {}),
 # ```
-flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled
+flipper_config = FlipperConfiguration.disabled
 
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil

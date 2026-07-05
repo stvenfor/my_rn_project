@@ -1,3 +1,11 @@
+export type MediaPickSource = 'gallery' | 'camera';
+
+export interface PickImageOptions {
+  source?: MediaPickSource;
+  maxWidth?: number;
+  imageQuality?: number;
+}
+
 export interface PickedMedia {
   uri: string;
   type: 'image' | 'video';
@@ -5,6 +13,6 @@ export interface PickedMedia {
 }
 
 export interface MediaPickerService {
-  pickImage(): Promise<PickedMedia | null>;
+  pickImage(options?: PickImageOptions): Promise<PickedMedia | null>;
   pickImages(maxCount: number): Promise<PickedMedia[]>;
 }

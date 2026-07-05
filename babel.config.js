@@ -40,7 +40,6 @@ module.exports = {
           '@app/store/appSlice': './src/store/appSlice',
           '@app/navigation/RootNavigator': './src/navigation/RootNavigator',
           '@app/app/AppProviders': './src/app/AppProviders',
-          '@app/components/PlaceholderScreen': './src/components/PlaceholderScreen',
         },
         extensions: ['.ios.js', '.android.js', '.js', '.ts', '.tsx', '.json'],
       },

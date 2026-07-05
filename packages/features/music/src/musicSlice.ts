@@ -8,7 +8,6 @@ import {
 import {
   createAudioPlayerService,
   setAudioPlayerService,
-  formatDuration,
   type PlayerState,
 } from '@core/media-player';
 import {MUSIC_MOCK_SONGS, type LocalSong} from './musicMockData';
@@ -22,6 +21,7 @@ interface MusicState {
   positionMs: number;
   durationMs: number;
   isMuted: boolean;
+  volumeBeforeMute: number;
   initialized: boolean;
 }
 
@@ -32,6 +32,7 @@ const initialState: MusicState = {
   positionMs: 0,
   durationMs: 0,
   isMuted: false,
+  volumeBeforeMute: 1,
   initialized: false,
 };
 
@@ -48,7 +49,7 @@ export const initMusicPlayer = createAsyncThunk(
         dispatch(musicSlice.actions.setDuration(durationMs));
       },
       onComplete: () => {
-        dispatch(musicSlice.actions.setPlayerState('stopped'));
+        dispatch(playNext());
       },
       onStateChanged: state => {
         dispatch(musicSlice.actions.setPlayerState(state));
@@ -96,8 +97,15 @@ export const playNext = createAsyncThunk(
   'music/next',
   async (_, {getState, dispatch}) => {
     const {currentIndex, songs} = (getState() as {music: MusicState}).music;
-    const next = currentIndex < 0 ? 0 : (currentIndex + 1) % songs.length;
-    await dispatch(playAt(next));
+    if (songs.length === 0) {
+      return;
+    }
+    const next = currentIndex + 1;
+    if (next >= songs.length) {
+      await dispatch(playAt(0));
+    } else {
+      await dispatch(playAt(next));
+    }
   },
 );
 
@@ -105,17 +113,45 @@ export const playPrevious = createAsyncThunk(
   'music/prev',
   async (_, {getState, dispatch}) => {
     const {currentIndex, songs} = (getState() as {music: MusicState}).music;
-    const prev =
-      currentIndex < 0 ? 0 : (currentIndex - 1 + songs.length) % songs.length;
-    await dispatch(playAt(prev));
+    if (songs.length === 0) {
+      return;
+    }
+    const prev = currentIndex - 1;
+    if (prev < 0) {
+      await dispatch(playAt(songs.length - 1));
+    } else {
+      await dispatch(playAt(prev));
+    }
+  },
+);
+
+export const shuffleAndPlay = createAsyncThunk(
+  'music/shuffle',
+  async (_, {getState, dispatch}) => {
+    const {songs} = (getState() as {music: MusicState}).music;
+    if (songs.length === 0) {
+      return undefined;
+    }
+    const index = Date.now() % songs.length;
+    await dispatch(playAt(index));
+    return songs[index]?.id;
   },
 );
 
 export const seekTo = createAsyncThunk(
   'music/seek',
-  async (positionMs: number) => {
+  async (positionMs: number, {getState}) => {
+    const music = (getState() as {music: MusicState}).music;
     const player = await createAudioPlayerService();
-    await player.seek(positionMs);
+    const maxMs =
+      music.durationMs > 0
+        ? music.durationMs
+        : music.currentIndex >= 0
+        ? music.songs[music.currentIndex]?.durationMs ?? 0
+        : 0;
+    const clamped = Math.max(0, Math.min(positionMs, maxMs));
+    await player.seek(clamped);
+    return clamped;
   },
 );
 
@@ -136,15 +172,21 @@ const musicSlice = createSlice({
     },
     setPlayerState(state, action: PayloadAction<MusicPlayerState>) {
       state.playerState = action.payload;
-      if (action.payload === 'stopped') {
-        state.currentIndex = -1;
+      if (action.payload === 'stopped' && state.currentIndex < 0) {
         state.positionMs = 0;
         state.durationMs = 0;
       }
     },
     toggleMute(state) {
-      state.isMuted = !state.isMuted;
-      createAudioPlayerService().then(p => p.setVolume(state.isMuted ? 0 : 1));
+      if (state.isMuted) {
+        const restoreVolume = state.volumeBeforeMute;
+        state.isMuted = false;
+        createAudioPlayerService().then(p => p.setVolume(restoreVolume));
+      } else {
+        state.volumeBeforeMute = 1;
+        state.isMuted = true;
+        createAudioPlayerService().then(p => p.setVolume(0));
+      }
     },
   },
   extraReducers: builder => {
@@ -160,6 +202,11 @@ const musicSlice = createSlice({
         state.durationMs = action.payload.durationMs;
         state.positionMs = 0;
         state.playerState = 'playing';
+      })
+      .addCase(seekTo.fulfilled, (state, action) => {
+        if (action.payload != null) {
+          state.positionMs = action.payload;
+        }
       })
       .addCase(stopPlayback.fulfilled, state => {
         state.currentIndex = -1;
@@ -193,6 +240,8 @@ export const selectMusicPosition = (state: {music: MusicState}) =>
   state.music.positionMs;
 export const selectMusicDuration = (state: {music: MusicState}) =>
   state.music.durationMs;
+export const selectMusicIsMuted = (state: {music: MusicState}) =>
+  state.music.isMuted;
 export const selectHasActiveSession = (state: {music: MusicState}) => {
   const {currentIndex, playerState} = state.music;
   return (
@@ -200,4 +249,4 @@ export const selectHasActiveSession = (state: {music: MusicState}) => {
   );
 };
 
-export {formatDuration};
+export {formatMusicDuration} from './utils/formatMusicDuration';

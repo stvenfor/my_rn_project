@@ -14,11 +14,12 @@ import {
 } from '@core/realtime';
 import {RoutePath, type RootStackScreenProps} from '@core/navigation';
 import {
+  AppNavBar,
+  AppPageScaffold,
   ListRow,
   PrimaryButton,
-  ScreenContainer,
-  SectionTitle,
   colors,
+  spacing,
   typography,
 } from '@ui/design-system';
 
@@ -73,8 +74,15 @@ export function LiveScreen({
 }: RootStackScreenProps<typeof RoutePath.live>) {
   const {t} = useTranslation();
   return (
-    <ScreenContainer>
-      <SectionTitle title={t('liveTitle')} />
+    <AppPageScaffold
+      contentStyle={{padding: spacing.md}}
+      navBar={
+        <AppNavBar
+          title={t('liveTitle')}
+          showBackButton
+          onBack={() => navigation.goBack()}
+        />
+      }>
       <Text style={styles.body}>{t('liveDesc')}</Text>
       {LIVE_ROOMS.map(room => (
         <ListRow
@@ -86,20 +94,28 @@ export function LiveScreen({
           }
         />
       ))}
-    </ScreenContainer>
+    </AppPageScaffold>
   );
 }
 
 export function LiveRoomScreen({
   route,
+  navigation,
 }: RootStackScreenProps<typeof RoutePath.liveRoom>) {
   const {t} = useTranslation();
   const roomId = route.params?.roomId ?? 'mock_room';
   const {connectionState, signals, sendSignal} = useLiveRoomRealtime(roomId);
 
   return (
-    <ScreenContainer>
-      <SectionTitle title={`${t('liveRoomTitle')} · ${roomId}`} />
+    <AppPageScaffold
+      contentStyle={{padding: spacing.md}}
+      navBar={
+        <AppNavBar
+          title={`${t('liveRoomTitle')} · ${roomId}`}
+          showBackButton
+          onBack={() => navigation.goBack()}
+        />
+      }>
       <Text style={styles.status}>WS: {connectionState}</Text>
       {connectionState === 'connecting' ? (
         <ActivityIndicator size="small" color={colors.primary} />
@@ -118,7 +134,7 @@ export function LiveRoomScreen({
           </Text>
         )}
       />
-    </ScreenContainer>
+    </AppPageScaffold>
   );
 }
 
