@@ -19,11 +19,11 @@ exports[`LoginScreen renders login greeting snapshot 1`] = `
       contentContainerStyle={
         [
           {
-            "paddingHorizontal": 28,
+            "paddingHorizontal": 24,
           },
           {
             "paddingBottom": 24,
-            "paddingTop": 48,
+            "paddingTop": 32,
           },
         ]
       }
@@ -35,249 +35,399 @@ exports[`LoginScreen renders login greeting snapshot 1`] = `
         <Text
           style={
             {
-              "color": "#1A1A1A",
-              "fontSize": 26,
+              "color": "#000000",
+              "fontSize": 32,
               "fontWeight": "700",
-              "lineHeight": 34,
+              "letterSpacing": -0.5,
+              "lineHeight": 36.8,
             }
           }
         >
-          早上好，欢迎使用i车商
+          晚上好，欢迎使用i车商
         </Text>
         <View
           style={
             {
-              "height": 32,
+              "height": 8,
+            }
+          }
+        />
+        <Text
+          style={
+            {
+              "color": "rgba(60, 60, 67, 0.60)",
+              "fontSize": 15,
+              "fontWeight": "400",
+              "lineHeight": 21,
+            }
+          }
+        >
+          登录以继续使用
+        </Text>
+        <View
+          style={
+            {
+              "height": 40,
             }
           }
         />
         <View
           style={
             {
-              "borderColor": "#E5E5E5",
-              "borderRadius": 8,
-              "borderWidth": 1,
-              "flexDirection": "row",
-              "overflow": "hidden",
+              "backgroundColor": "#E9E9EB",
+              "borderRadius": 12,
+              "padding": 4,
             }
           }
         >
           <View
-            accessibilityRole="button"
-            accessibilityState={
-              {
-                "busy": undefined,
-                "checked": undefined,
-                "disabled": undefined,
-                "expanded": undefined,
-                "selected": undefined,
-              }
-            }
-            accessibilityValue={
-              {
-                "max": undefined,
-                "min": undefined,
-                "now": undefined,
-                "text": undefined,
-              }
-            }
-            accessible={true}
-            collapsable={false}
-            focusable={true}
-            onBlur={[Function]}
-            onClick={[Function]}
-            onFocus={[Function]}
-            onResponderGrant={[Function]}
-            onResponderMove={[Function]}
-            onResponderRelease={[Function]}
-            onResponderTerminate={[Function]}
-            onResponderTerminationRequest={[Function]}
-            onStartShouldSetResponder={[Function]}
             style={
-              [
-                {
-                  "alignItems": "center",
-                  "backgroundColor": "#FFFFFF",
-                  "flex": 1,
-                  "flexDirection": "row",
-                  "gap": 6,
-                  "justifyContent": "center",
-                  "paddingVertical": 10,
-                },
-                {
-                  "backgroundColor": "rgba(27, 130, 210, 0.12)",
-                },
-              ]
+              {
+                "flexDirection": "row",
+              }
             }
           >
-            <Text
+            <View
+              accessibilityRole="button"
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
               style={
                 [
                   {
-                    "color": "#999999",
-                    "fontSize": 16,
+                    "alignItems": "center",
+                    "borderRadius": 10,
+                    "flex": 1,
+                    "justifyContent": "center",
+                    "paddingHorizontal": 12,
+                    "paddingVertical": 8,
                   },
                   {
-                    "color": "#1B82D2",
-                    "fontWeight": "600",
+                    "backgroundColor": "#FFFFFF",
                   },
                 ]
               }
             >
-              ✉
-            </Text>
-            <Text
-              style={
-                [
-                  {
-                    "color": "#999999",
-                    "fontSize": 14,
-                    "fontWeight": "500",
-                  },
-                  {
-                    "color": "#1B82D2",
-                    "fontWeight": "600",
-                  },
-                ]
-              }
-            >
-              邮箱登录
-            </Text>
-          </View>
-          <View
-            accessibilityRole="button"
-            accessibilityState={
-              {
-                "busy": undefined,
-                "checked": undefined,
-                "disabled": undefined,
-                "expanded": undefined,
-                "selected": undefined,
-              }
-            }
-            accessibilityValue={
-              {
-                "max": undefined,
-                "min": undefined,
-                "now": undefined,
-                "text": undefined,
-              }
-            }
-            accessible={true}
-            collapsable={false}
-            focusable={true}
-            onBlur={[Function]}
-            onClick={[Function]}
-            onFocus={[Function]}
-            onResponderGrant={[Function]}
-            onResponderMove={[Function]}
-            onResponderRelease={[Function]}
-            onResponderTerminate={[Function]}
-            onResponderTerminationRequest={[Function]}
-            onStartShouldSetResponder={[Function]}
-            style={
-              [
+              <Text
+                style={
+                  [
+                    {
+                      "color": "#000000",
+                      "fontSize": 15,
+                      "fontWeight": "500",
+                    },
+                    {
+                      "color": "#000000",
+                      "fontWeight": "500",
+                    },
+                  ]
+                }
+              >
+                邮箱登录
+              </Text>
+            </View>
+            <View
+              accessibilityRole="button"
+              accessibilityState={
                 {
-                  "alignItems": "center",
-                  "backgroundColor": "#FFFFFF",
-                  "flex": 1,
-                  "flexDirection": "row",
-                  "gap": 6,
-                  "justifyContent": "center",
-                  "paddingVertical": 10,
-                },
-                false,
-              ]
-            }
-          >
-            <Text
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
               style={
                 [
                   {
-                    "color": "#999999",
-                    "fontSize": 16,
+                    "alignItems": "center",
+                    "borderRadius": 10,
+                    "flex": 1,
+                    "justifyContent": "center",
+                    "paddingHorizontal": 12,
+                    "paddingVertical": 8,
                   },
                   false,
                 ]
               }
             >
-              ✆
-            </Text>
-            <Text
-              style={
-                [
-                  {
-                    "color": "#999999",
-                    "fontSize": 14,
-                    "fontWeight": "500",
-                  },
-                  false,
-                ]
-              }
-            >
-              短信登录
-            </Text>
+              <Text
+                style={
+                  [
+                    {
+                      "color": "#000000",
+                      "fontSize": 15,
+                      "fontWeight": "500",
+                    },
+                    false,
+                  ]
+                }
+              >
+                短信登录
+              </Text>
+            </View>
           </View>
         </View>
         <View
           style={
             {
-              "height": 32,
+              "height": 24,
             }
           }
         />
-        <View
-          style={
-            {
-              "alignItems": "flex-end",
-              "borderBottomColor": "#E5E5E5",
-              "borderBottomWidth": 1,
-              "flexDirection": "row",
-              "paddingBottom": 8,
-            }
-          }
-        >
+        <View>
           <View
-            style={
-              {
-                "marginRight": 8,
-                "paddingBottom": 2,
-              }
-            }
-          >
-            <Text
-              style={
-                {
-                  "color": "#999999",
-                  "fontSize": 18,
-                }
-              }
-            >
-              ✉
-            </Text>
-          </View>
-          <TextInput
-            autoCapitalize="none"
-            autoCorrect={false}
-            keyboardType="email-address"
-            onChangeText={[Function]}
-            placeholder="请输入邮箱"
-            placeholderTextColor="#CCCCCC"
             style={
               [
                 {
-                  "color": "#1A1A1A",
-                  "flex": 1,
-                  "fontSize": 18,
-                  "fontWeight": "500",
-                  "minHeight": 28,
-                  "paddingVertical": 0,
+                  "alignItems": "center",
+                  "backgroundColor": "#FFFFFF",
+                  "borderColor": "#C6C6C8",
+                  "borderRadius": 12,
+                  "borderWidth": 0.5,
+                  "flexDirection": "row",
+                  "paddingHorizontal": 16,
                 },
-                undefined,
+                false,
+                {
+                  "height": 52,
+                },
               ]
             }
-            value="454655062@qq.com"
+          >
+            <View
+              style={
+                {
+                  "marginRight": 8,
+                }
+              }
+            >
+              <View
+                style={
+                  [
+                    {
+                      "alignItems": "center",
+                      "justifyContent": "center",
+                    },
+                    {
+                      "height": 22,
+                      "width": 22,
+                    },
+                  ]
+                }
+              >
+                <View
+                  style={
+                    [
+                      {
+                        "borderRadius": 2,
+                        "borderWidth": 1.5,
+                      },
+                      {
+                        "borderColor": "rgba(60, 60, 67, 0.60)",
+                        "height": 12.76,
+                        "width": 18.04,
+                      },
+                    ]
+                  }
+                />
+                <View
+                  style={
+                    [
+                      {
+                        "backgroundColor": "transparent",
+                        "borderLeftColor": "transparent",
+                        "borderRightColor": "transparent",
+                        "borderStyle": "solid",
+                        "height": 0,
+                        "width": 0,
+                      },
+                      {
+                        "borderLeftWidth": 9.02,
+                        "borderRightWidth": 9.02,
+                        "borderTopColor": "rgba(60, 60, 67, 0.60)",
+                        "borderTopWidth": 6.16,
+                        "marginTop": -11,
+                      },
+                    ]
+                  }
+                />
+              </View>
+            </View>
+            <TextInput
+              autoCapitalize="none"
+              autoCorrect={false}
+              keyboardType="email-address"
+              onBlur={[Function]}
+              onChangeText={[Function]}
+              onFocus={[Function]}
+              placeholder="邮箱"
+              placeholderTextColor="rgba(60, 60, 67, 0.30)"
+              style={
+                [
+                  {
+                    "color": "#000000",
+                    "flex": 1,
+                    "fontSize": 17,
+                    "fontWeight": "400",
+                    "lineHeight": 20.4,
+                    "paddingVertical": 0,
+                  },
+                  undefined,
+                ]
+              }
+              value="454655062@qq.com"
+            />
+          </View>
+          <View
+            style={
+              {
+                "height": 16,
+              }
+            }
           />
+          <View
+            style={
+              [
+                {
+                  "alignItems": "center",
+                  "backgroundColor": "#FFFFFF",
+                  "borderColor": "#C6C6C8",
+                  "borderRadius": 12,
+                  "borderWidth": 0.5,
+                  "flexDirection": "row",
+                  "paddingHorizontal": 16,
+                },
+                false,
+                {
+                  "height": 52,
+                },
+              ]
+            }
+          >
+            <View
+              style={
+                {
+                  "marginRight": 8,
+                }
+              }
+            >
+              <View
+                style={
+                  [
+                    {
+                      "alignItems": "center",
+                      "justifyContent": "center",
+                    },
+                    {
+                      "height": 22,
+                      "width": 22,
+                    },
+                  ]
+                }
+              >
+                <View
+                  style={
+                    [
+                      {
+                        "backgroundColor": "transparent",
+                        "borderBottomWidth": 0,
+                        "borderWidth": 2,
+                      },
+                      {
+                        "borderColor": "rgba(60, 60, 67, 0.60)",
+                        "borderRadius": 4.62,
+                        "height": 7.04,
+                        "marginBottom": -2,
+                        "width": 9.24,
+                      },
+                    ]
+                  }
+                />
+                <View
+                  style={
+                    [
+                      {},
+                      {
+                        "backgroundColor": "rgba(60, 60, 67, 0.60)",
+                        "borderRadius": 3,
+                        "height": 9.24,
+                        "width": 12.76,
+                      },
+                    ]
+                  }
+                />
+              </View>
+            </View>
+            <TextInput
+              onBlur={[Function]}
+              onChangeText={[Function]}
+              onFocus={[Function]}
+              placeholder="密码"
+              placeholderTextColor="rgba(60, 60, 67, 0.30)"
+              secureTextEntry={true}
+              style={
+                [
+                  {
+                    "color": "#000000",
+                    "flex": 1,
+                    "fontSize": 17,
+                    "fontWeight": "400",
+                    "lineHeight": 20.4,
+                    "paddingVertical": 0,
+                  },
+                  undefined,
+                ]
+              }
+              value="123456"
+            />
+          </View>
         </View>
         <View
           style={
@@ -287,91 +437,134 @@ exports[`LoginScreen renders login greeting snapshot 1`] = `
           }
         />
         <View
+          accessibilityRole="checkbox"
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": true,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
           style={
             {
               "alignItems": "flex-start",
               "flexDirection": "row",
+              "paddingVertical": 4,
             }
           }
         >
           <View
-            accessibilityRole="checkbox"
-            accessibilityState={
-              {
-                "busy": undefined,
-                "checked": true,
-                "disabled": undefined,
-                "expanded": undefined,
-                "selected": undefined,
-              }
-            }
-            accessibilityValue={
-              {
-                "max": undefined,
-                "min": undefined,
-                "now": undefined,
-                "text": undefined,
-              }
-            }
-            accessible={true}
-            collapsable={false}
-            focusable={true}
-            onBlur={[Function]}
-            onClick={[Function]}
-            onFocus={[Function]}
-            onResponderGrant={[Function]}
-            onResponderMove={[Function]}
-            onResponderRelease={[Function]}
-            onResponderTerminate={[Function]}
-            onResponderTerminationRequest={[Function]}
-            onStartShouldSetResponder={[Function]}
             style={
-              [
-                {
-                  "alignItems": "center",
-                  "borderColor": "#E5E5E5",
-                  "borderRadius": 12,
-                  "borderWidth": 1.5,
-                  "height": 24,
-                  "justifyContent": "center",
-                  "marginRight": 8,
-                  "width": 24,
-                },
-                {
-                  "backgroundColor": "#1B82D2",
-                  "borderColor": "#1B82D2",
-                },
-              ]
+              {
+                "alignItems": "flex-start",
+                "height": 44,
+                "justifyContent": "center",
+                "width": 44,
+              }
             }
           >
-            <Text
+            <View
               style={
-                {
-                  "color": "#FFFFFF",
-                  "fontSize": 14,
-                  "fontWeight": "700",
-                  "lineHeight": 16,
-                }
+                [
+                  {
+                    "alignItems": "center",
+                    "borderColor": "#C6C6C8",
+                    "borderRadius": 11,
+                    "borderWidth": 1.5,
+                    "height": 22,
+                    "justifyContent": "center",
+                    "width": 22,
+                  },
+                  {
+                    "backgroundColor": "#007AFF",
+                    "borderColor": "#007AFF",
+                  },
+                ]
               }
             >
-              ✓
-            </Text>
+              <View
+                style={
+                  [
+                    {
+                      "alignItems": "center",
+                      "justifyContent": "center",
+                    },
+                    {
+                      "height": 14,
+                      "width": 14,
+                    },
+                  ]
+                }
+              >
+                <View
+                  style={
+                    [
+                      {
+                        "backgroundColor": "transparent",
+                        "borderBottomWidth": 2,
+                        "borderLeftWidth": 2,
+                      },
+                      {
+                        "borderBottomColor": "#FFFFFF",
+                        "borderLeftColor": "#FFFFFF",
+                        "height": 3.9200000000000004,
+                        "marginTop": -1.12,
+                        "transform": [
+                          {
+                            "rotate": "-45deg",
+                          },
+                        ],
+                        "width": 7.700000000000001,
+                      },
+                    ]
+                  }
+                />
+              </View>
+            </View>
           </View>
           <Text
             style={
-              {
-                "color": "#999999",
-                "flex": 1,
-                "fontSize": 13,
-                "lineHeight": 18,
-              }
+              [
+                {
+                  "color": "rgba(60, 60, 67, 0.60)",
+                  "fontSize": 13,
+                  "fontWeight": "400",
+                  "lineHeight": 17.55,
+                },
+                {
+                  "flex": 1,
+                  "paddingTop": 12,
+                },
+              ]
             }
           >
             我已阅读并同意
             <Text
               style={
                 {
-                  "color": "#1B82D2",
+                  "color": "#007AFF",
                 }
               }
             >
@@ -421,33 +614,37 @@ exports[`LoginScreen renders login greeting snapshot 1`] = `
             [
               {
                 "alignItems": "center",
-                "borderRadius": 4,
-                "height": 48,
                 "justifyContent": "center",
                 "width": "100%",
               },
               {
-                "backgroundColor": "#1B82D2",
+                "backgroundColor": "#007AFF",
+                "borderRadius": 14,
+                "height": 52,
               },
             ]
           }
         >
           <Text
             style={
-              {
-                "color": "#FFFFFF",
-                "fontSize": 17,
-                "fontWeight": "600",
-              }
+              [
+                {
+                  "color": "#FFFFFF",
+                  "fontSize": 17,
+                  "fontWeight": "600",
+                  "lineHeight": 20.4,
+                },
+                false,
+              ]
             }
           >
-            下一步
+            登录
           </Text>
         </View>
         <View
           style={
             {
-              "height": 20,
+              "height": 24,
             }
           }
         />
@@ -456,7 +653,7 @@ exports[`LoginScreen renders login greeting snapshot 1`] = `
             {
               "alignItems": "center",
               "flexDirection": "row",
-              "justifyContent": "flex-end",
+              "justifyContent": "center",
             }
           }
         >
@@ -491,13 +688,29 @@ exports[`LoginScreen renders login greeting snapshot 1`] = `
             onResponderTerminate={[Function]}
             onResponderTerminationRequest={[Function]}
             onStartShouldSetResponder={[Function]}
+            style={
+              {
+                "justifyContent": "center",
+                "minHeight": 44,
+                "minWidth": 44,
+                "paddingHorizontal": 8,
+              }
+            }
           >
             <Text
               style={
-                {
-                  "color": "#666666",
-                  "fontSize": 13,
-                }
+                [
+                  {
+                    "color": "rgba(60, 60, 67, 0.60)",
+                    "fontSize": 13,
+                    "fontWeight": "400",
+                    "lineHeight": 17.55,
+                  },
+                  {
+                    "color": "#007AFF",
+                    "fontWeight": "500",
+                  },
+                ]
               }
             >
               我要注册
@@ -506,9 +719,9 @@ exports[`LoginScreen renders login greeting snapshot 1`] = `
           <View
             style={
               {
-                "backgroundColor": "#E5E5E5",
+                "backgroundColor": "#C6C6C8",
                 "height": 12,
-                "marginHorizontal": 8,
+                "marginHorizontal": 16,
                 "width": 1,
               }
             }
@@ -544,13 +757,29 @@ exports[`LoginScreen renders login greeting snapshot 1`] = `
             onResponderTerminate={[Function]}
             onResponderTerminationRequest={[Function]}
             onStartShouldSetResponder={[Function]}
+            style={
+              {
+                "justifyContent": "center",
+                "minHeight": 44,
+                "minWidth": 44,
+                "paddingHorizontal": 8,
+              }
+            }
           >
             <Text
               style={
-                {
-                  "color": "#666666",
-                  "fontSize": 13,
-                }
+                [
+                  {
+                    "color": "rgba(60, 60, 67, 0.60)",
+                    "fontSize": 13,
+                    "fontWeight": "400",
+                    "lineHeight": 17.55,
+                  },
+                  {
+                    "color": "#007AFF",
+                    "fontWeight": "500",
+                  },
+                ]
               }
             >
               忘记密码

@@ -7,14 +7,14 @@ Machine-readable source: [page-resource-parity-manifest.ts](./page-resource-pari
 
 | Dimension | Flutter | RN target | Coverage |
 |-----------|---------|-----------|----------|
-| Pages | 52 | 52 mapped | 100% |
+| Pages | 60 | 60 mapped | 100% (8 classroom Deferred) |
 | First-party assets | 76 | 76 migrated | 100% |
 
 Status legend: `Migrated` | `Degraded` | `Placeholder` | `Deferred` | `Removed`
 
-## Page mapping (52)
+## Page mapping (60)
 
-See `PAGE_PARITY_ENTRIES` in the manifest for the authoritative list.
+See `PAGE_PARITY_ENTRIES` in the manifest for the authoritative list. Flutter `classroom` (8 pages) is registered as `Deferred` until `@features/classroom` exists.
 
 ## Asset mapping (76)
 

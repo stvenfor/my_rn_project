@@ -34,10 +34,10 @@ export const PAGE_PARITY_ENTRIES: PageParityEntry[] = [
   {id: 'app-web-route', module: 'app', flutterPath: 'packages/commons/ui/lib/kit/web/web_route_page.dart', rnRoute: 'Web', rnComponent: 'WebViewScreen', status: 'Migrated'},
   {id: 'app-web-view', module: 'app', flutterPath: 'packages/commons/ui/lib/kit/web/app_web_view_page.dart', rnRoute: 'Web', rnComponent: 'WebViewScreen', status: 'Migrated', note: 'Merged into WebViewScreen'},
 
-  {id: 'auth-login', module: 'auth', flutterPath: 'packages/features/auth/lib/user/view/login_page.dart', rnRoute: 'Login', rnComponent: 'LoginScreen', status: 'Migrated', note: 'Segmented email/phone login, privacy row, greeting, footer links aligned with AuthController'},
-  {id: 'auth-login-password', module: 'auth', flutterPath: 'packages/features/auth/lib/user/view/login_password_page.dart', rnRoute: 'LoginPassword', rnComponent: 'LoginPasswordScreen', status: 'Migrated', note: 'Underline password input, 8-16 validation, footer links'},
-  {id: 'auth-login-otp', module: 'auth', flutterPath: 'packages/features/auth/lib/user/view/login_otp_page.dart', rnRoute: 'LoginOtp', rnComponent: 'LoginOtpScreen', status: 'Migrated', note: 'Masked phone, OTP resend cooldown, mock OTP hint'},
-  {id: 'auth-register', module: 'auth', flutterPath: 'packages/features/auth/lib/user/view/register_page.dart', rnRoute: 'Register', rnComponent: 'RegisterScreen', status: 'Migrated', note: 'Email/phone tab register with privacy checkbox and validation'},
+  {id: 'auth-login', module: 'auth', flutterPath: 'packages/features/auth/lib/user/view/login_page.dart', rnRoute: 'Login', rnComponent: 'LoginScreen', status: 'Migrated', note: '1:1 same-page email+password / phone+OTP; iOS AuthTheme; account-not-registered Alert'},
+  {id: 'auth-login-password', module: 'auth', flutterPath: 'packages/features/auth/lib/user/view/login_password_page.dart', rnRoute: 'LoginPassword', rnComponent: 'LoginPasswordScreen', status: 'Migrated', note: 'Legacy route only (no UI callers from Login); white underline style; min password 6'},
+  {id: 'auth-login-otp', module: 'auth', flutterPath: 'packages/features/auth/lib/user/view/login_otp_page.dart', rnRoute: 'LoginOtp', rnComponent: 'LoginOtpScreen', status: 'Migrated', note: 'Legacy route only; white underline OTP page; resend cooldown + mock hint'},
+  {id: 'auth-register', module: 'auth', flutterPath: 'packages/features/auth/lib/user/view/register_page.dart', rnRoute: 'Register', rnComponent: 'RegisterScreen', status: 'Migrated', note: '1:1 iOS register: AuthBackButton, Cupertino segment, grouped card / PhoneOtpFormSection'},
   {id: 'auth-dev-home', module: 'auth', flutterPath: 'packages/features/auth/lib/user/view/auth_dev_home_page.dart', status: 'Removed', note: 'Flutter module standalone dev entry; not part of app shell'},
 
   {id: 'home-page', module: 'home', flutterPath: 'packages/features/home/lib/home/view/home_page.dart', rnRoute: 'HomeTab', rnComponent: 'HomeScreen', status: 'Migrated'},
@@ -89,6 +89,15 @@ export const PAGE_PARITY_ENTRIES: PageParityEntry[] = [
   {id: 'debug-linking', module: 'infrastructure', flutterPath: 'packages/infrastructure/linking/lib/debug/linking_debug_page.dart', rnRoute: 'DebugLinking', rnComponent: 'DebugLinkingScreen', status: 'Migrated', note: 'App shell debug route via @core/linking'},
   {id: 'debug-realtime', module: 'infrastructure', flutterPath: 'packages/infrastructure/realtime/lib/debug/realtime_debug_page.dart', rnRoute: 'DebugRealtime', rnComponent: 'DebugRealtimeScreen', status: 'Migrated', note: 'App shell debug route via @core/realtime'},
   {id: 'debug-im', module: 'infrastructure', flutterPath: 'packages/infrastructure/rongcloud_im/lib/debug/im_debug_page.dart', rnRoute: 'DebugIm', rnComponent: 'DebugImScreen', status: 'Migrated', note: 'App shell debug route via @core/im'},
+
+  {id: 'classroom-my-class-list', module: 'classroom', flutterPath: 'packages/features/classroom/lib/view/my_class_list_page.dart', status: 'Deferred', owner: 'rn-team', targetVersion: 'v0.3', note: 'Flutter classroom module; RN @features/classroom not created yet'},
+  {id: 'classroom-class-homework-stats', module: 'classroom', flutterPath: 'packages/features/classroom/lib/view/class_homework_stats_page.dart', status: 'Deferred', owner: 'rn-team', targetVersion: 'v0.3', note: 'Flutter classroom module; RN @features/classroom not created yet'},
+  {id: 'classroom-homework-detail-student', module: 'classroom', flutterPath: 'packages/features/classroom/lib/view/homework_detail_student_page.dart', status: 'Deferred', owner: 'rn-team', targetVersion: 'v0.3', note: 'Flutter classroom module; RN @features/classroom not created yet'},
+  {id: 'classroom-homework-detail-teacher', module: 'classroom', flutterPath: 'packages/features/classroom/lib/view/homework_detail_teacher_page.dart', status: 'Deferred', owner: 'rn-team', targetVersion: 'v0.3', note: 'Flutter classroom module; RN @features/classroom not created yet'},
+  {id: 'classroom-homework-review', module: 'classroom', flutterPath: 'packages/features/classroom/lib/view/homework_review_page.dart', status: 'Deferred', owner: 'rn-team', targetVersion: 'v0.3', note: 'Flutter classroom module; RN @features/classroom not created yet'},
+  {id: 'classroom-dubbing-homework', module: 'classroom', flutterPath: 'packages/features/classroom/lib/view/dubbing_homework_page.dart', status: 'Deferred', owner: 'rn-team', targetVersion: 'v0.3', note: 'Flutter classroom module; RN @features/classroom not created yet'},
+  {id: 'classroom-video-detail', module: 'classroom', flutterPath: 'packages/features/classroom/lib/view/video_detail_page.dart', status: 'Deferred', owner: 'rn-team', targetVersion: 'v0.3', note: 'Flutter classroom module; RN @features/classroom not created yet'},
+  {id: 'classroom-claim-gift-card', module: 'classroom', flutterPath: 'packages/features/classroom/lib/view/claim_gift_card_page.dart', status: 'Deferred', owner: 'rn-team', targetVersion: 'v0.3', note: 'Flutter classroom module; RN @features/classroom not created yet'},
 ];
 
 export const ASSET_PARITY_ENTRIES: AssetParityEntry[] = [
@@ -154,5 +163,5 @@ export const ASSET_PARITY_ENTRIES: AssetParityEntry[] = [
 
 // BFUI assets appended programmatically in assetParity.test via BFUI_ASSET_MANIFEST
 
-export const EXPECTED_PAGE_COUNT = 52;
+export const EXPECTED_PAGE_COUNT = 60;
 export const EXPECTED_ASSET_COUNT = 91;

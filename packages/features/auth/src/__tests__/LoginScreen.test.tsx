@@ -22,6 +22,7 @@ jest.mock('react-redux', () => ({
         displayName: '',
         otpCode: '',
         otpCooldownSeconds: 0,
+        phoneOtpSent: false,
         pendingEmail: '',
         pendingPhone: '',
       },
@@ -29,7 +30,6 @@ jest.mock('react-redux', () => ({
 }));
 
 jest.mock('@ui/design-system', () => {
-  const ReactMock = require('react');
   const {View} = require('react-native');
   return {
     AppPageScaffold: ({children}: {children: React.ReactNode}) => (
@@ -41,7 +41,11 @@ jest.mock('@ui/design-system', () => {
 
 describe('LoginScreen', () => {
   it('renders login greeting snapshot', () => {
-    const navigation = {navigate: jest.fn(), goBack: jest.fn(), reset: jest.fn()};
+    const navigation = {
+      navigate: jest.fn(),
+      goBack: jest.fn(),
+      reset: jest.fn(),
+    };
     const tree = renderer
       .create(
         <LoginScreen navigation={navigation as never} route={{} as never} />,

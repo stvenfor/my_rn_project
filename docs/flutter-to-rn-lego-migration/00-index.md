@@ -8,25 +8,35 @@
 
 | 文档 | 用途 | 主要读者 |
 |---|---|---|
+| **`07-1to1-migration-guide.md`** | **1:1 迁移执行指南（路径约定、步骤、parity）** | Cursor, Codex |
+| **`08-acceptance-checklist.md`** | **验收权威清单（后续按此验收）** | Codex, QA, Cursor |
 | `01-flutter-analysis-report.md` | Flutter 项目结构、包职责、路由、状态和依赖分析 | Cursor, Codex |
 | `02-lego-monorepo-architecture.md` | RN LEGO 目标架构、目录结构、依赖图和边界规则 | Cursor, Codex |
 | `03-module-migration-plan.md` | 每个模块的迁移清单、优先级、风险和 Cursor checklist | Cursor |
 | `04-cursor-execution-spec.md` | Cursor 执行规范、模板、提交报告格式和禁止事项 | Cursor |
 | `05-acceptance-and-qa-plan.md` | 分层验收、模块验收、三端 smoke test 和专项验收 | Codex, Cursor |
 | `06-supervision-playbook.md` | Codex 监督实现、review、返工和放行标准 | Codex |
+| `page-resource-parity-manifest.ts` | 页面/资源 parity machine-readable 真相源 | Cursor, CI |
+| `page-resource-parity-matrix.md` | Parity 人读摘要 | Codex, QA |
 | `appendices/dependency-mapping.md` | Flutter 依赖到 RN 依赖的映射和归属 | Cursor |
 | `appendices/conversion-cheatsheet.md` | Flutter 到 RN 的转换速查表 | Cursor |
 | `appendices/module-boundary-rules.md` | import 边界、ESLint 草案、跨模块通信规范 | Cursor |
 | `appendices/risk-register.md` | 风险台账、触发条件、缓解方案、验收证据 | Codex, Cursor |
 
+## Skill
+
+- 项目入口：`.cursor/skills/flutter-to-rn-lego-module/SKILL.md`
+- 完整 skill：`/Users/mac/Desktop/skills/flutter-to-rn-lego-module/`（结构对称于 `flutter-to-harmony-module`）
+
 ## Cursor 执行顺序
 
-1. 阅读 `01-flutter-analysis-report.md`，确认迁移基于真实 Flutter 包结构。
-2. 阅读 `02-lego-monorepo-architecture.md`，先建立目标 monorepo 和模块边界。
-3. 按 `03-module-migration-plan.md` 的优先级执行：Foundation -> Shell -> Core Features -> Media/Realtime -> BFUI/Long-tail。
-4. 每个阶段执行前，按 `04-cursor-execution-spec.md` 生成阶段执行报告。
-5. 每个阶段提交给 Codex 审查前，按 `05-acceptance-and-qa-plan.md` 运行对应验收。
-6. 如 Codex 退回返工，按 `06-supervision-playbook.md` 的返工格式补充证据。
+1. 阅读 **`07-1to1-migration-guide.md`**，锁定源/目标路径与 1:1 规则。
+2. 阅读 `01-flutter-analysis-report.md`，确认迁移基于真实 Flutter 包结构。
+3. 阅读 `02-lego-monorepo-architecture.md`，确认 monorepo 与模块边界（路径以 `packages/features/*` 为准）。
+4. 按 `03-module-migration-plan.md` 的优先级执行；单模块流程跟 skill `flutter-to-rn-lego-module`。
+5. 每阶段按 `04-cursor-execution-spec.md` 产出 Delivery Report + UX 证据。
+6. 提交审查前按 **`08-acceptance-checklist.md`** 自检（权威）；`05-acceptance-and-qa-plan.md` 作补充说明。
+7. 如退回返工，按 `06-supervision-playbook.md` 补充证据。
 
 ## Codex 监督职责
 

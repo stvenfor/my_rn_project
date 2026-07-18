@@ -4,7 +4,7 @@ import {
 } from '../../docs/flutter-to-rn-lego-migration/page-resource-parity-manifest';
 
 describe('page parity manifest', () => {
-  it('covers all 52 Flutter pages', () => {
+  it('covers all Flutter pages registered in parity manifest', () => {
     expect(PAGE_PARITY_ENTRIES).toHaveLength(EXPECTED_PAGE_COUNT);
   });
 

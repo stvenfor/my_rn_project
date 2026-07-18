@@ -1,4 +1,8 @@
-import {createAsyncThunk, createSlice, type PayloadAction} from '@reduxjs/toolkit';
+import {
+  createAsyncThunk,
+  createSlice,
+  type PayloadAction,
+} from '@reduxjs/toolkit';
 import type {User} from '@core/domain';
 import {
   getAuthService,
@@ -7,10 +11,7 @@ import {
 } from '@core/supabase';
 import type {AuthCredentialMode} from './models/authCredentialMode';
 import {mapAuthError} from './models/authFailure';
-import {
-  isValidChinaMobile,
-  normalizeDigits,
-} from './utils/phoneAuthUtils';
+import {isValidChinaMobile, normalizeDigits} from './utils/phoneAuthUtils';
 import {
   isOtpValid,
   isPasswordValid,
@@ -29,6 +30,7 @@ export interface AuthState {
   displayName: string;
   otpCode: string;
   otpCooldownSeconds: number;
+  phoneOtpSent: boolean;
   pendingEmail: string;
   pendingPhone: string;
 }
@@ -38,13 +40,14 @@ const initialState: AuthState = {
   isLoading: false,
   agreedPrivacy: true,
   credentialMode: 'email',
-  email: '454655062@qq.com',
-  phone: '13477525645',
-  password: '123456',
-  confirmPassword: '123456',
+  email: '',
+  phone: '',
+  password: '',
+  confirmPassword: '',
   displayName: '',
   otpCode: '',
   otpCooldownSeconds: 0,
+  phoneOtpSent: false,
   pendingEmail: '',
   pendingPhone: '',
 };
@@ -68,7 +71,7 @@ export const sendPhoneOtpThunk = createAsyncThunk(
 export const verifyPhoneOtpThunk = createAsyncThunk(
   'auth/verifyPhoneOtp',
   async (
-    params: {phone: string; otp: string},
+    params: {phone: string; otp: string; fromRegister?: boolean},
     {rejectWithValue},
   ) => {
     try {
@@ -77,7 +80,7 @@ export const verifyPhoneOtpThunk = createAsyncThunk(
         params.otp.trim(),
       );
       await getAuthSessionService().setUser(user);
-      return user;
+      return {user, fromRegister: params.fromRegister ?? false};
     } catch (error) {
       return rejectWithValue(mapAuthError(error));
     }
@@ -86,10 +89,7 @@ export const verifyPhoneOtpThunk = createAsyncThunk(
 
 export const loginWithPasswordThunk = createAsyncThunk(
   'auth/loginWithPassword',
-  async (
-    params: {email: string; password: string},
-    {rejectWithValue},
-  ) => {
+  async (params: {email: string; password: string}, {rejectWithValue}) => {
     try {
       const user = await getAuthService().signInWithPassword(
         params.email.trim(),
@@ -132,9 +132,8 @@ export const logoutThunk = createAsyncThunk('auth/logout', async () => {
   await getAuthSessionService().clearSession();
 });
 
-export const loadAuthSession = createAsyncThunk(
-  'auth/loadSession',
-  async () => restoreAuthSessionFromStorage(),
+export const loadAuthSession = createAsyncThunk('auth/loadSession', async () =>
+  restoreAuthSessionFromStorage(),
 );
 
 export const updateUserSession = createAsyncThunk(
@@ -196,6 +195,9 @@ const authSlice = createSlice({
     resetOtpCode(state) {
       state.otpCode = '';
     },
+    setPhoneOtpSent(state, action: PayloadAction<boolean>) {
+      state.phoneOtpSent = action.payload;
+    },
   },
   extraReducers: builder => {
     const setLoading = (state: AuthState, loading: boolean) => {
@@ -210,6 +212,7 @@ const authSlice = createSlice({
         setLoading(state, false);
         state.pendingPhone = action.payload.phone;
         state.otpCooldownSeconds = 60;
+        state.phoneOtpSent = true;
       })
       .addCase(sendPhoneOtpThunk.rejected, state => {
         setLoading(state, false);
@@ -219,7 +222,7 @@ const authSlice = createSlice({
       })
       .addCase(verifyPhoneOtpThunk.fulfilled, (state, action) => {
         setLoading(state, false);
-        state.user = action.payload;
+        state.user = action.payload.user;
       })
       .addCase(verifyPhoneOtpThunk.rejected, state => {
         setLoading(state, false);
@@ -230,6 +233,7 @@ const authSlice = createSlice({
       .addCase(loginWithPasswordThunk.fulfilled, (state, action) => {
         setLoading(state, false);
         state.user = action.payload;
+        state.pendingEmail = action.payload.email ?? state.email;
       })
       .addCase(loginWithPasswordThunk.rejected, state => {
         setLoading(state, false);
@@ -272,6 +276,7 @@ export const {
   startOtpCooldown,
   tickOtpCooldown,
   resetOtpCode,
+  setPhoneOtpSent,
 } = authSlice.actions;
 
 export const authReducer = authSlice.reducer;
@@ -309,6 +314,9 @@ export const selectAuthOtpCode = (state: {auth: AuthState}) =>
 export const selectOtpCooldownSeconds = (state: {auth: AuthState}) =>
   state.auth.otpCooldownSeconds;
 
+export const selectPhoneOtpSent = (state: {auth: AuthState}) =>
+  state.auth.phoneOtpSent;
+
 export const selectPendingEmail = (state: {auth: AuthState}) =>
   state.auth.pendingEmail;
 
@@ -328,6 +336,17 @@ export const selectIsOtpValid = (state: {auth: AuthState}) =>
 export const selectCanResendOtp = (state: {auth: AuthState}) =>
   state.auth.otpCooldownSeconds <= 0 && !state.auth.isLoading;
 
+export const selectCanLoginWithEmail = (state: {auth: AuthState}) =>
+  !state.auth.isLoading &&
+  validateEmail(state.auth.email) &&
+  isPasswordValid(state.auth.password);
+
+export const selectCanLoginWithPhoneOtp = (state: {auth: AuthState}) =>
+  !state.auth.isLoading &&
+  state.auth.agreedPrivacy &&
+  isValidChinaMobile(state.auth.phone) &&
+  isOtpValid(state.auth.otpCode);
+
 export const selectMaskedPendingPhone = (state: {auth: AuthState}) => {
   const phone =
     state.auth.pendingPhone.length > 0
@@ -340,12 +359,26 @@ export const selectMaskedPendingPhone = (state: {auth: AuthState}) => {
   return `${digits.slice(0, 3)}****${digits.slice(7)}`;
 };
 
+/** @deprecated Prefer canLoginWithEmailPassword; kept for legacy callers. */
 export function canProceedToPassword(state: AuthState): string | null {
   if (!state.agreedPrivacy) {
     return '请先阅读并同意隐私条款';
   }
   if (!validateEmail(state.email)) {
     return '请输入有效的邮箱';
+  }
+  return null;
+}
+
+export function canLoginWithEmailPassword(state: AuthState): string | null {
+  if (!state.agreedPrivacy) {
+    return '请先阅读并同意隐私条款';
+  }
+  if (!validateEmail(state.email)) {
+    return '请输入有效的邮箱';
+  }
+  if (!isPasswordValid(state.password)) {
+    return '请输入至少6位密码';
   }
   return null;
 }
@@ -357,6 +390,22 @@ export function canSendPhoneOtp(state: AuthState): string | null {
   if (!isValidChinaMobile(state.phone)) {
     return '请输入有效的手机号';
   }
+  if (state.otpCooldownSeconds > 0 || state.isLoading) {
+    return '请稍后再试';
+  }
+  return null;
+}
+
+export function canLoginWithPhoneOtp(state: AuthState): string | null {
+  if (!state.agreedPrivacy) {
+    return '请先阅读并同意隐私条款';
+  }
+  if (!isValidChinaMobile(state.phone)) {
+    return '请输入有效的手机号';
+  }
+  if (!isOtpValid(state.otpCode)) {
+    return '请输入 6 位验证码';
+  }
   return null;
 }
 
@@ -367,11 +416,11 @@ export function canRegisterWithEmail(state: AuthState): string | null {
   if (!validateEmail(state.email)) {
     return '请输入有效的邮箱';
   }
-  if (
-    !isPasswordValid(state.password) ||
-    state.password !== state.confirmPassword
-  ) {
-    return '两次密码不一致或长度不符合要求';
+  if (!isPasswordValid(state.password)) {
+    return '请输入至少6位密码';
+  }
+  if (state.password !== state.confirmPassword) {
+    return '两次密码不一致';
   }
   return null;
 }

@@ -1,5 +1,8 @@
 # 验收与 QA 方案
 
+> **验收勾选以 [08-acceptance-checklist.md](./08-acceptance-checklist.md) 为权威。**  
+> 本文保留分层 QA 说明与阶段放行条件；冲突时以 08 为准。
+
 ## 总体验收门槛
 
 任一阶段放行前必须满足：

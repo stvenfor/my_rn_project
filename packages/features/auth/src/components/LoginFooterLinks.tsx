@@ -2,7 +2,7 @@ import React from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import type {NavigationProp} from '@react-navigation/native';
 import {RoutePath, type RootStackParamList} from '@core/navigation';
-import {authTheme} from '../theme/authTheme';
+import {authTextStyles, authTheme} from '../theme/authTheme';
 
 type AuthStackNavigation = NavigationProp<RootStackParamList>;
 
@@ -15,12 +15,28 @@ export function LoginFooterLinks({navigation}: LoginFooterLinksProps) {
     <View style={styles.row}>
       <Pressable
         accessibilityRole="button"
-        onPress={() => navigation.navigate(RoutePath.register)}>
-        <Text style={styles.link}>我要注册</Text>
+        onPress={() => navigation.navigate(RoutePath.register)}
+        style={styles.linkHit}>
+        <Text
+          style={[
+            authTextStyles.caption,
+            {color: authTheme.accent, fontWeight: '500'},
+          ]}>
+          我要注册
+        </Text>
       </Pressable>
       <View style={styles.divider} />
-      <Pressable accessibilityRole="button" onPress={() => {}}>
-        <Text style={styles.link}>忘记密码</Text>
+      <Pressable
+        accessibilityRole="button"
+        onPress={() => {}}
+        style={styles.linkHit}>
+        <Text
+          style={[
+            authTextStyles.caption,
+            {color: authTheme.accent, fontWeight: '500'},
+          ]}>
+          忘记密码
+        </Text>
       </Pressable>
     </View>
   );
@@ -30,16 +46,18 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
   },
-  link: {
-    fontSize: 13,
-    color: authTheme.linkGray,
+  linkHit: {
+    minHeight: 44,
+    minWidth: 44,
+    paddingHorizontal: 8,
+    justifyContent: 'center',
   },
   divider: {
     width: 1,
     height: 12,
-    backgroundColor: authTheme.dividerGray,
-    marginHorizontal: 8,
+    backgroundColor: authTheme.separator,
+    marginHorizontal: 16,
   },
 });

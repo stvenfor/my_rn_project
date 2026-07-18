@@ -2,27 +2,33 @@
 name: flutter-to-rn-lego-module
 description: >-
   Convert Flutter/GetX modules to React Native LEGO feature packages in
-  my_rn_project (RN 0.72.5, RTK, React Navigation 6, Harmony 0.72.140).
-  UI mappings (mappings/01–07), Dart→TS types (08), responsive (09),
-  assets→require registries (10), registerFeature routing, parity tests.
-  Use when migrating Flutter to RN, porting feature modules, or syncing
-  pages/assets with my_ai_project.
+  my_rn_project (RN 0.72.5, RTK, React Navigation 6, Harmony 0.72.140) with
+  1:1 UI/UX parity. UI mappings (mappings/01–07), Dart→TS types (08),
+  responsive (09), assets→require registries (10), registerFeature routing,
+  UX 1:1 gates, parity tests. Use when migrating Flutter to RN, porting
+  feature modules, syncing pages/assets with my_ai_project, or accepting
+  against docs/flutter-to-rn-lego-migration/08-acceptance-checklist.md.
 ---
 
 # Flutter To RN LEGO Module (Project Entry)
 
-本文件为 **my_rn_project 仓库内精简入口**。完整 skill（mappings/01–10、template、validate）见：
+本文件为 **my_rn_project 仓库内精简入口**。完整 skill（mappings/01–10、template、UX gates、validate）见：
 
 **`/Users/mac/Desktop/skills/flutter-to-rn-lego-module/SKILL.md`**
 
-源 Flutter 项目：`/Users/mac/Desktop/github/my_ai_project`  
-目标 RN 仓库：本仓库（`my_rn_project`）
+| | Path |
+|--|------|
+| 源 Flutter | `/Users/mac/Desktop/github/my_ai_project` |
+| 目标 RN | 本仓库（`my_rn_project`） |
+| 对称参考 | `/Users/mac/Desktop/skills/flutter-to-harmony-module` |
 
 ## 执行前必读
 
 | 文档 | 用途 |
 |------|------|
-| [page-resource-parity-manifest.ts](../../docs/flutter-to-rn-lego-migration/page-resource-parity-manifest.ts) | 52 页 + 76 资源 parity 真相源 |
+| [07-1to1-migration-guide.md](../../docs/flutter-to-rn-lego-migration/07-1to1-migration-guide.md) | **迁移执行指南** |
+| [08-acceptance-checklist.md](../../docs/flutter-to-rn-lego-migration/08-acceptance-checklist.md) | **验收权威清单**（按此验收） |
+| [page-resource-parity-manifest.ts](../../docs/flutter-to-rn-lego-migration/page-resource-parity-manifest.ts) | 页面 + 资源 parity 真相源 |
 | [moduleManifest.ts](../../src/config/moduleManifest.ts) | feature 聚合与路由收集 |
 | [04-cursor-execution-spec.md](../../docs/flutter-to-rn-lego-migration/04-cursor-execution-spec.md) | 交付格式与边界规则 |
 | [module-boundary-rules.md](../../docs/flutter-to-rn-lego-migration/appendices/module-boundary-rules.md) | 禁止 feature-to-feature import |
@@ -43,10 +49,11 @@ description: >-
 
 1. 锁定 `FLUTTER_MODULE` + `RN_FEATURE`（见主 skill Required inputs）。
 2. 读主 skill `mappings/README.md`，顺序：**09 → 08 → 10 → 01–07**。
-3. 实现 `packages/features/<name>/`（screens / store / assets registry）。
-4. 接线：`register*Feature` → `moduleManifest` → `RoutePath`。
-5. 更新 `page-resource-parity-manifest.ts`（每页/每资源必须有 status）。
-6. 验证：
+3. 产出 UX contract（主 skill `references/ux-1to1-gates.md`）。
+4. 实现 `packages/features/<name>/`（screens / store / assets registry）。
+5. 接线：`register*Feature` → `moduleManifest` → `RoutePath`。
+6. 更新 `page-resource-parity-manifest.ts`（每页/每资源必须有 status）。
+7. 验证 + 按 `08-acceptance-checklist.md` 自检。
 
 ```bash
 npm run lint && npm run typecheck && npm run test
@@ -62,7 +69,7 @@ Parity 测试：
 
 `Migrated | Degraded | Placeholder | Deferred | Removed`
 
-未复制资源 / 未注册路由 / 未更新 manifest → **视为未完成**。
+仅占位 / 缺资源 / 未注册路由 → **不得标 Migrated**。未更新 manifest → **视为未完成**。
 
 ## Stack（版本锁定）
 
@@ -73,7 +80,7 @@ Parity 测试：
 
 ## 输出格式
 
-按主 skill 顺序回复：分析摘要 → 四张映射表 → 文件列表 → 路由变更 → 验证结果 → 遗留项。
+分析摘要 → 四张映射表 + UX contract → 文件列表 → 路由变更 → 验证结果 → 验收自检 → 遗留项。
 
 每轮附带 **Cursor Delivery Report**（见 `04-cursor-execution-spec.md`）。
 
@@ -82,6 +89,7 @@ Parity 测试：
 | 资源 | 路径 |
 |------|------|
 | 主 SKILL | `/Users/mac/Desktop/skills/flutter-to-rn-lego-module/SKILL.md` |
+| UX 1:1 gates | `/Users/mac/Desktop/skills/flutter-to-rn-lego-module/references/ux-1to1-gates.md` |
 | 迁移模板 | `/Users/mac/Desktop/skills/flutter-to-rn-lego-module/assets/template.md` |
 | UI/状态/资源映射 | `/Users/mac/Desktop/skills/flutter-to-rn-lego-module/mappings/` |
 | 校验脚本 | `/Users/mac/Desktop/skills/flutter-to-rn-lego-module/scripts/validate.sh` |

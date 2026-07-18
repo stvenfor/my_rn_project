@@ -8,7 +8,6 @@ import {
   selectIsPasswordValid,
   selectMaskedPendingPhone,
   selectUser,
-  setPendingEmail,
   setUser,
   startOtpCooldown,
   tickOtpCooldown,

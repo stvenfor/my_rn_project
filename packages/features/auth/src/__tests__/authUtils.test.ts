@@ -36,9 +36,10 @@ describe('authValidation', () => {
     expect(validateEmail('bad')).toBe(false);
   });
 
-  it('validates password length', () => {
-    expect(isPasswordValid('12345678')).toBe(true);
-    expect(isPasswordValid('123')).toBe(false);
+  it('validates password length (>=6, Flutter AuthController)', () => {
+    expect(isPasswordValid('123456')).toBe(true);
+    expect(isPasswordValid('12345')).toBe(false);
+    expect(isPasswordValid('12345678901234567')).toBe(true);
   });
 
   it('validates otp', () => {

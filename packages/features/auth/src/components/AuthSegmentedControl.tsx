@@ -4,78 +4,77 @@ import type {AuthCredentialMode} from '../models/authCredentialMode';
 import {authTheme} from '../theme/authTheme';
 
 interface AuthSegmentedControlProps {
-  value: AuthCredentialMode;
-  onChange: (mode: AuthCredentialMode) => void;
+  value: AuthCredentialMode | string;
+  onChange: (mode: AuthCredentialMode | string) => void;
+  segments: Array<{value: string; label: string}>;
 }
 
-const SEGMENTS: Array<{
-  value: AuthCredentialMode;
-  label: string;
-  icon: string;
-}> = [
-  {value: 'email', label: '邮箱登录', icon: '✉'},
-  {value: 'phone', label: '短信登录', icon: '✆'},
-];
-
+/** CupertinoSlidingSegmentedControl-style switcher. */
 export function AuthSegmentedControl({
   value,
   onChange,
+  segments,
 }: AuthSegmentedControlProps) {
   return (
     <View style={styles.root}>
-      {SEGMENTS.map(segment => {
-        const selected = segment.value === value;
-        return (
-          <Pressable
-            key={segment.value}
-            accessibilityRole="button"
-            onPress={() => onChange(segment.value)}
-            style={[styles.segment, selected && styles.segmentSelected]}>
-            <Text style={[styles.icon, selected && styles.segmentTextSelected]}>
-              {segment.icon}
-            </Text>
-            <Text
-              style={[styles.label, selected && styles.segmentTextSelected]}>
-              {segment.label}
-            </Text>
-          </Pressable>
-        );
-      })}
+      <View style={styles.track}>
+        {segments.map(segment => {
+          const selected = segment.value === value;
+          return (
+            <Pressable
+              key={segment.value}
+              accessibilityRole="button"
+              onPress={() => onChange(segment.value)}
+              style={[styles.segment, selected && styles.segmentSelected]}>
+              <Text style={[styles.label, selected && styles.labelSelected]}>
+                {segment.label}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
     </View>
   );
 }
 
+export const LOGIN_SEGMENTS: Array<{value: AuthCredentialMode; label: string}> =
+  [
+    {value: 'email', label: '邮箱登录'},
+    {value: 'phone', label: '短信登录'},
+  ];
+
+export const REGISTER_SEGMENTS = [
+  {value: 'email', label: '邮箱注册'},
+  {value: 'phone', label: '手机注册'},
+] as const;
+
 const styles = StyleSheet.create({
   root: {
+    backgroundColor: authTheme.fillSecondary,
+    borderRadius: authTheme.radiusMd,
+    padding: 4,
+  },
+  track: {
     flexDirection: 'row',
-    borderWidth: 1,
-    borderColor: authTheme.dividerGray,
-    borderRadius: 8,
-    overflow: 'hidden',
   },
   segment: {
     flex: 1,
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 6,
-    paddingVertical: 10,
-    backgroundColor: '#FFFFFF',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: authTheme.radiusMd - 2,
   },
   segmentSelected: {
-    backgroundColor: 'rgba(27, 130, 210, 0.12)',
-  },
-  icon: {
-    fontSize: 16,
-    color: authTheme.textGray,
+    backgroundColor: authTheme.surface,
   },
   label: {
-    fontSize: 14,
-    color: authTheme.textGray,
+    fontSize: 15,
     fontWeight: '500',
+    color: authTheme.labelPrimary,
   },
-  segmentTextSelected: {
-    color: authTheme.primaryBlue,
-    fontWeight: '600',
+  labelSelected: {
+    fontWeight: '500',
+    color: authTheme.labelPrimary,
   },
 });

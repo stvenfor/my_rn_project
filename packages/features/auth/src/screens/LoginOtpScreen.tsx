@@ -15,7 +15,10 @@ import {RoutePath, type RootStackScreenProps} from '@core/navigation';
 import {USE_MOCK_AUTH} from '@core/config';
 import {MOCK_OTP} from '@core/supabase';
 import {AppNavBar, AppPageScaffold, AppToast} from '@ui/design-system';
-import {AuthPrimaryButton, AuthUnderlineInput} from '../components/AuthFormControls';
+import {
+  AuthPrimaryButton,
+  AuthUnderlineInput,
+} from '../components/AuthFormControls';
 import {
   selectAuthLoading,
   selectAuthOtpCode,
@@ -36,6 +39,9 @@ import {isValidChinaMobile, normalizeDigits} from '../utils/phoneAuthUtils';
 
 type AuthDispatch = ThunkDispatch<{auth: unknown}, unknown, UnknownAction>;
 
+const MOCK_TEST_PHONE = '13400000000';
+
+/** Legacy route — white underline style; main login no longer navigates here. */
 export function LoginOtpScreen({
   route,
   navigation,
@@ -117,11 +123,11 @@ export function LoginOtpScreen({
   };
 
   return (
-    <AppPageScaffold backgroundColor={authTheme.screenBackground}>
+    <AppPageScaffold backgroundColor={authTheme.legacyScreenBackground}>
       <AppNavBar
         showBackButton
         onBack={() => navigation.goBack()}
-        backgroundColor={authTheme.screenBackground}
+        backgroundColor={authTheme.legacyScreenBackground}
         foregroundColor={authTheme.titleBlack}
       />
       <KeyboardAvoidingView
@@ -138,14 +144,18 @@ export function LoginOtpScreen({
           {USE_MOCK_AUTH ? (
             <>
               <View style={styles.gap8} />
-              <Text style={styles.mockHint}>Mock 模式验证码：{MOCK_OTP}</Text>
+              <Text style={styles.mockHint}>
+                测试号 {MOCK_TEST_PHONE}，验证码 {MOCK_OTP}
+              </Text>
             </>
           ) : null}
           <View style={styles.gap40} />
           <AuthUnderlineInput
             autoFocus
             value={otpCode}
-            onChangeText={value => dispatch(updateOtpCode(value))}
+            onChangeText={value =>
+              dispatch(updateOtpCode(value.replace(/\D/g, '').slice(0, 6)))
+            }
             keyboardType="number-pad"
             maxLength={6}
             placeholder="6 位验证码"
@@ -174,6 +184,7 @@ export function LoginOtpScreen({
             onPress={onVerify}
             disabled={!otpValid}
             loading={isLoading}
+            legacy
           />
         </ScrollView>
       </KeyboardAvoidingView>
@@ -184,7 +195,7 @@ export function LoginOtpScreen({
 const styles = StyleSheet.create({
   flex: {flex: 1},
   scrollContent: {
-    paddingHorizontal: authTheme.horizontalPadding,
+    paddingHorizontal: authTheme.legacyHorizontalPadding,
     paddingTop: 16,
     paddingBottom: 24,
   },

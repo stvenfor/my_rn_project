@@ -1,5 +1,6 @@
 import React, {useMemo} from 'react';
 import {
+  Alert,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -13,28 +14,41 @@ import type {ThunkDispatch, UnknownAction} from '@reduxjs/toolkit';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {RoutePath, type RootStackScreenProps} from '@core/navigation';
 import {AppPageScaffold, AppToast} from '@ui/design-system';
-import {AuthPhoneInput, AuthPrimaryButton, AuthUnderlineInput} from '../components/AuthFormControls';
-import {AuthPrivacyRow} from '../components/AuthPrivacyRow';
-import {AuthSegmentedControl} from '../components/AuthSegmentedControl';
-import {LoginFooterLinks} from '../components/LoginFooterLinks';
 import {
-  canProceedToPassword,
-  canSendPhoneOtp,
-  sendPhoneOtpThunk,
+  AuthFilledInput,
+  AuthPrimaryButton,
+} from '../components/AuthFormControls';
+import {AuthLockIcon, AuthMailIcon} from '../components/AuthIcons';
+import {AuthPrivacyRow} from '../components/AuthPrivacyRow';
+import {
+  AuthSegmentedControl,
+  LOGIN_SEGMENTS,
+} from '../components/AuthSegmentedControl';
+import {LoginFooterLinks} from '../components/LoginFooterLinks';
+import {PhoneOtpFormSection} from '../components/PhoneOtpFormSection';
+import {
+  canLoginWithEmailPassword,
+  canLoginWithPhoneOtp,
+  loginWithPasswordThunk,
   selectAgreedPrivacy,
   selectAuthEmail,
   selectAuthLoading,
-  selectAuthPhone,
+  selectAuthPassword,
+  selectCanLoginWithEmail,
+  selectCanLoginWithPhoneOtp,
   selectCredentialMode,
-  setPendingEmail,
   switchCredentialMode,
   togglePrivacy,
   updateEmail,
-  updatePhone,
+  updatePassword,
+  verifyPhoneOtpThunk,
   type AuthState,
 } from '../authSlice';
+import {isAccountNotRegisteredFailure} from '../models/authFailure';
+import {navigateAfterAuth} from '../services/authNavigation';
 import {buildAuthGreeting} from '../utils/authGreeting';
-import {authTheme} from '../theme/authTheme';
+import {authTextStyles, authTheme} from '../theme/authTheme';
+import {normalizeDigits} from '../utils/phoneAuthUtils';
 
 type AuthDispatch = ThunkDispatch<{auth: AuthState}, unknown, UnknownAction>;
 
@@ -45,51 +59,75 @@ export function LoginScreen({
   const insets = useSafeAreaInsets();
   const credentialMode = useSelector(selectCredentialMode);
   const email = useSelector(selectAuthEmail);
-  const phone = useSelector(selectAuthPhone);
+  const password = useSelector(selectAuthPassword);
   const agreedPrivacy = useSelector(selectAgreedPrivacy);
   const isLoading = useSelector(selectAuthLoading);
+  const canEmail = useSelector(selectCanLoginWithEmail);
+  const canPhone = useSelector(selectCanLoginWithPhoneOtp);
   const authState = useSelector((state: {auth: AuthState}) => state.auth);
   const greeting = useMemo(() => buildAuthGreeting(), []);
 
+  const enabled =
+    !isLoading && (credentialMode === 'email' ? canEmail : canPhone);
+
+  const showLoginFailure = (error: unknown) => {
+    const message =
+      error && typeof error === 'object' && 'message' in error
+        ? String((error as {message: string}).message)
+        : '操作失败，请稍后重试';
+    AppToast.show(message);
+    if (isAccountNotRegisteredFailure(error)) {
+      Alert.alert('提示', message, [
+        {text: '取消', style: 'cancel'},
+        {
+          text: '去注册',
+          onPress: () => navigation.navigate(RoutePath.register),
+        },
+      ]);
+    }
+  };
+
   const onPrimaryPress = async () => {
     if (credentialMode === 'email') {
-      const validationError = canProceedToPassword(authState);
+      const validationError = canLoginWithEmailPassword(authState);
       if (validationError) {
         AppToast.show(validationError);
         return;
       }
-      dispatch(setPendingEmail(email));
-      navigation.navigate(RoutePath.loginPassword, {email: email.trim()});
+      const result = await dispatch(loginWithPasswordThunk({email, password}));
+      if (loginWithPasswordThunk.fulfilled.match(result)) {
+        navigateAfterAuth(navigation);
+        return;
+      }
+      if (loginWithPasswordThunk.rejected.match(result)) {
+        showLoginFailure(result.payload);
+      }
       return;
     }
 
-    const validationError = canSendPhoneOtp(authState);
+    const validationError = canLoginWithPhoneOtp(authState);
     if (validationError) {
       AppToast.show(validationError);
       return;
     }
 
-    const result = await dispatch(sendPhoneOtpThunk({phone}));
-    if (sendPhoneOtpThunk.fulfilled.match(result)) {
-      AppToast.show('验证码已发送');
-      navigation.navigate(RoutePath.loginOtp, {phone: result.payload.phone});
+    const result = await dispatch(
+      verifyPhoneOtpThunk({
+        phone: normalizeDigits(authState.pendingPhone || authState.phone),
+        otp: authState.otpCode,
+      }),
+    );
+    if (verifyPhoneOtpThunk.fulfilled.match(result)) {
+      navigateAfterAuth(navigation);
       return;
     }
-
-    if (sendPhoneOtpThunk.rejected.match(result)) {
-      const error = result.payload;
-      AppToast.show(
-        error && typeof error === 'object' && 'message' in error
-          ? String(error.message)
-          : '操作失败，请稍后重试',
-      );
+    if (verifyPhoneOtpThunk.rejected.match(result)) {
+      showLoginFailure(result.payload);
     }
   };
 
   return (
-    <AppPageScaffold
-      layout="edgeToEdge"
-      backgroundColor={authTheme.screenBackground}>
+    <AppPageScaffold layout="edgeToEdge" backgroundColor={authTheme.background}>
       <KeyboardAvoidingView
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
@@ -100,32 +138,44 @@ export function LoginScreen({
           contentContainerStyle={[
             styles.scrollContent,
             {
-              paddingTop: insets.top + 48,
+              paddingTop: insets.top + 32,
               paddingBottom: 24 + insets.bottom,
             },
           ]}>
-          <Text style={styles.greeting}>{greeting}</Text>
-          <View style={styles.gap32} />
+          <Text style={authTextStyles.largeTitle}>{greeting}</Text>
+          <View style={styles.gap8} />
+          <Text style={authTextStyles.subtitle}>登录以继续使用</Text>
+          <View style={styles.gap40} />
           <AuthSegmentedControl
             value={credentialMode}
-            onChange={mode => dispatch(switchCredentialMode(mode))}
+            segments={LOGIN_SEGMENTS}
+            onChange={mode =>
+              dispatch(switchCredentialMode(mode as 'email' | 'phone'))
+            }
           />
-          <View style={styles.gap32} />
+          <View style={styles.gap24} />
           {credentialMode === 'email' ? (
-            <AuthUnderlineInput
-              value={email}
-              onChangeText={value => dispatch(updateEmail(value))}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-              placeholder="请输入邮箱"
-              prefix={<Text style={styles.prefixIcon}>✉</Text>}
-            />
+            <View>
+              <AuthFilledInput
+                value={email}
+                onChangeText={value => dispatch(updateEmail(value))}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+                placeholder="邮箱"
+                prefix={<AuthMailIcon />}
+              />
+              <View style={styles.gap16} />
+              <AuthFilledInput
+                value={password}
+                onChangeText={value => dispatch(updatePassword(value))}
+                secureTextEntry
+                placeholder="密码"
+                prefix={<AuthLockIcon />}
+              />
+            </View>
           ) : (
-            <AuthPhoneInput
-              value={phone}
-              onChangeText={value => dispatch(updatePhone(value))}
-            />
+            <PhoneOtpFormSection />
           )}
           <View style={styles.gap24} />
           <AuthPrivacyRow
@@ -134,11 +184,12 @@ export function LoginScreen({
           />
           <View style={styles.gap32} />
           <AuthPrimaryButton
-            title={credentialMode === 'email' ? '下一步' : '获取验证码'}
+            title="登录"
             onPress={onPrimaryPress}
+            disabled={!enabled}
             loading={isLoading}
           />
-          <View style={styles.gap20} />
+          <View style={styles.gap24} />
           <LoginFooterLinks navigation={navigation} />
         </ScrollView>
       </KeyboardAvoidingView>
@@ -151,17 +202,9 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: authTheme.horizontalPadding,
   },
-  greeting: {
-    fontSize: 26,
-    fontWeight: '700',
-    color: authTheme.titleBlack,
-    lineHeight: 34,
-  },
-  gap32: {height: 32},
+  gap8: {height: 8},
+  gap16: {height: 16},
   gap24: {height: 24},
-  gap20: {height: 20},
-  prefixIcon: {
-    fontSize: 18,
-    color: authTheme.textGray,
-  },
+  gap32: {height: 32},
+  gap40: {height: 40},
 });

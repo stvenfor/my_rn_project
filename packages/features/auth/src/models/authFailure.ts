@@ -22,3 +22,13 @@ export function isEmailConfirmationFailure(error: unknown): boolean {
     failure.message.includes('验证邮件')
   );
 }
+
+/** Flutter AccountNotRegisteredFailure → dialog「去注册」. */
+export function isAccountNotRegisteredFailure(error: unknown): boolean {
+  const failure = mapAuthError(error);
+  return (
+    failure.code === 'account_not_registered' ||
+    failure.message.includes('未注册') ||
+    failure.message.includes('账号不存在')
+  );
+}
