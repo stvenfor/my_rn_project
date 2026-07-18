@@ -13,7 +13,15 @@ export async function createAudioPlayerService(): Promise<AudioPlayerService> {
     initPromise = (async () => {
       try {
         const native = new TrackPlayerAudioService();
-        await native.ensureSetup();
+        await Promise.race([
+          native.ensureSetup(),
+          new Promise<never>((_, reject) =>
+            setTimeout(
+              () => reject(new Error('TrackPlayer setup timeout')),
+              3000,
+            ),
+          ),
+        ]);
         sharedService = native;
         return native;
       } catch (error) {

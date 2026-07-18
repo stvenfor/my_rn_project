@@ -67,11 +67,21 @@ export const playAt = createAsyncThunk(
     }
     const song = songs[index];
     const player = await createAudioPlayerService();
-    await player.play(song.audioUrl, song.durationMs, {
-      id: song.id,
-      title: song.title,
-      artist: song.artist,
-    });
+    try {
+      await Promise.race([
+        player.play(song.audioUrl, song.durationMs, {
+          id: song.id,
+          title: song.title,
+          artist: song.artist,
+        }),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('play timeout')), 8000),
+        ),
+      ]);
+    } catch (error) {
+      // 播放失败不阻断 UI：列表页已乐观切歌并导航到 Now Playing。
+      console.warn('[music] playAt failed:', error);
+    }
     return {index, durationMs: song.durationMs};
   },
 );
@@ -193,6 +203,17 @@ const musicSlice = createSlice({
     builder
       .addCase(initMusicPlayer.fulfilled, state => {
         state.initialized = true;
+      })
+      // Flutter playAt 先写 currentIndex/playing，再 await 音频 —— 乐观更新保证点击立刻有反馈
+      .addCase(playAt.pending, (state, action) => {
+        const index = action.meta.arg;
+        if (index < 0 || index >= state.songs.length) {
+          return;
+        }
+        state.currentIndex = index;
+        state.durationMs = state.songs[index]?.durationMs ?? 0;
+        state.positionMs = 0;
+        state.playerState = 'playing';
       })
       .addCase(playAt.fulfilled, (state, action) => {
         if (!action.payload) {

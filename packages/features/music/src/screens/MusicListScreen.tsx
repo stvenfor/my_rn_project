@@ -12,7 +12,6 @@ import {
   selectCurrentSong,
   selectHasActiveSession,
   selectMusicSongs,
-  shuffleAndPlay,
   type MusicDispatch,
 } from '../musicSlice';
 import {musicTheme} from '../theme/musicTheme';
@@ -40,35 +39,37 @@ export function MusicListScreen({
     [navigation],
   );
 
+  /**
+   * Flutter: playAt → push NowPlaying。
+   * 关键点勿 await play：TrackPlayer 在部分端（如鸿蒙）setup/play 会挂起，
+   * 导致看起来「点击无反应」。先导航 + 乐观切歌，播放异步进行。
+   */
   const handleSongPress = useCallback(
-    async (index: number, trackId: string) => {
-      try {
-        await dispatch(playAt(index));
-      } catch {
-        // 播放失败仍允许进入 Now Playing（Mock/TrackPlayer 异常时不阻断导航）。
-      }
+    (index: number, trackId: string) => {
       openNowPlaying(trackId);
+      dispatch(playAt(index)).catch(() => undefined);
     },
     [dispatch, openNowPlaying],
   );
 
-  const handleShuffle = useCallback(async () => {
-    const result = await dispatch(shuffleAndPlay());
-    const trackId = shuffleAndPlay.fulfilled.match(result)
-      ? result.payload
-      : undefined;
-    if (trackId) {
-      openNowPlaying(trackId);
+  const handleShuffle = useCallback(() => {
+    if (songs.length === 0) {
+      return;
     }
-  }, [dispatch, openNowPlaying]);
+    const index = Date.now() % songs.length;
+    const trackId = songs[index]?.id;
+    if (!trackId) {
+      return;
+    }
+    openNowPlaying(trackId);
+    dispatch(playAt(index)).catch(() => undefined);
+  }, [dispatch, openNowPlaying, songs]);
 
   const renderItem = useCallback(
     ({item, index}: {item: LocalSong; index: number}) => (
       <MusicSongListTile
         song={item}
-        onPress={() => {
-          handleSongPress(index, item.id).catch(() => undefined);
-        }}
+        onPress={() => handleSongPress(index, item.id)}
       />
     ),
     [handleSongPress],
@@ -89,7 +90,8 @@ export function MusicListScreen({
               hasSession && currentSong ? (
                 <Pressable
                   onPress={() => openNowPlaying(currentSong.id)}
-                  style={styles.nowPlayingAction}>
+                  style={styles.nowPlayingAction}
+                  hitSlop={8}>
                   <Text style={styles.nowPlayingText}>
                     {t('musicNowPlaying')}
                   </Text>
@@ -98,21 +100,21 @@ export function MusicListScreen({
             }
           />
           <FlatList
+            style={styles.list}
             data={songs}
             keyExtractor={item => item.id}
             renderItem={renderItem}
             contentContainerStyle={styles.listContent}
+            ItemSeparatorComponent={ListSeparator}
           />
         </View>
         {hasSession ? (
-          <View style={styles.miniBar}>
+          <View style={styles.miniBar} pointerEvents="box-none">
             <MusicMiniPlayerBar />
           </View>
         ) : null}
         <Pressable
-          onPress={() => {
-            handleShuffle().catch(() => undefined);
-          }}
+          onPress={handleShuffle}
           style={[styles.fab, {bottom: 16 + miniBarInset}]}
           accessibilityRole="button"
           accessibilityLabel={t('musicShuffle')}>
@@ -123,6 +125,10 @@ export function MusicListScreen({
   );
 }
 
+function ListSeparator() {
+  return <View style={styles.separator} />;
+}
+
 const styles = StyleSheet.create({
   root: {
     flex: 1,
@@ -131,8 +137,17 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
   },
+  list: {
+    flex: 1,
+  },
   listContent: {
     paddingBottom: 88,
+    flexGrow: 1,
+  },
+  separator: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    marginLeft: 88,
   },
   miniBar: {
     position: 'absolute',
@@ -147,6 +162,7 @@ const styles = StyleSheet.create({
   nowPlayingText: {
     color: musicTheme.titleColor,
     fontSize: 14,
+    fontWeight: '500',
   },
   fab: {
     position: 'absolute',
@@ -162,10 +178,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 8,
     shadowOffset: {width: 0, height: 4},
+    zIndex: 20,
   },
   fabIcon: {
     color: musicTheme.fabIconColor,
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: '600',
+    transform: [{rotate: '90deg'}],
   },
 });
