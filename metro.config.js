@@ -18,6 +18,41 @@ const ohosStackPath = path.resolve(
   'node_modules/@react-native-ohos/stack',
 );
 
+const harmonyConfig = createHarmonyMetroConfig({
+  reactNativeHarmonyPackageName: '@react-native-oh/react-native-harmony',
+});
+const harmonyResolveRequest = harmonyConfig.resolver?.resolveRequest;
+
+function resolveOrThrow(context, moduleName, platform) {
+  return context.resolveRequest(context, moduleName, platform);
+}
+
+/**
+ * Harmony often lacks `.harmony.*` platform files. When resolution fails,
+ * fall back to the iOS implementation (same strategy RNOH uses for RN core).
+ */
+function resolveWithHarmonyIosFallback(context, moduleName, platform) {
+  if (platform !== 'harmony') {
+    if (typeof harmonyResolveRequest === 'function') {
+      return harmonyResolveRequest(context, moduleName, platform);
+    }
+    return resolveOrThrow(context, moduleName, platform);
+  }
+
+  try {
+    if (typeof harmonyResolveRequest === 'function') {
+      return harmonyResolveRequest(context, moduleName, platform);
+    }
+    return resolveOrThrow(context, moduleName, platform);
+  } catch (harmonyError) {
+    try {
+      return resolveOrThrow(context, moduleName, 'ios');
+    } catch (_iosError) {
+      throw harmonyError;
+    }
+  }
+}
+
 /**
  * @type {import("metro-config").MetroConfig}
  */
@@ -26,25 +61,18 @@ const config = {
   resolver: {
     nodeModulesPaths: [path.resolve(projectRoot, 'node_modules')],
     resolveRequest: (context, moduleName, platform) => {
-      if (platform === 'harmony') {
-        if (moduleName === '@react-navigation/stack') {
-          return context.resolveRequest(context, ohosStackPath, platform);
-        }
-        return context.resolveRequest(context, moduleName, platform);
+      if (platform === 'harmony' && moduleName === '@react-navigation/stack') {
+        return resolveWithHarmonyIosFallback(context, ohosStackPath, platform);
       }
 
       if (
         moduleName === '@react-native-ohos/stack' &&
         (platform === 'ios' || platform === 'android')
       ) {
-        return context.resolveRequest(
-          context,
-          '@react-navigation/stack',
-          platform,
-        );
+        return resolveOrThrow(context, '@react-navigation/stack', platform);
       }
 
-      return context.resolveRequest(context, moduleName, platform);
+      return resolveWithHarmonyIosFallback(context, moduleName, platform);
     },
   },
   transformer: {
@@ -59,8 +87,6 @@ const config = {
 
 module.exports = mergeConfig(
   getDefaultConfig(projectRoot),
-  createHarmonyMetroConfig({
-    reactNativeHarmonyPackageName: '@react-native-oh/react-native-harmony',
-  }),
+  harmonyConfig,
   config,
 );

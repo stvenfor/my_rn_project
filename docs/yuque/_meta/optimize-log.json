@@ -1,0 +1,22 @@
+{
+  "runs": [
+    {
+      "at": "2026-07-05T04:29:45.378Z",
+      "folder_filter": "试点示例",
+      "dry_run": false,
+      "changed": 2
+    },
+    {
+      "at": "2026-07-05T04:30:08.379Z",
+      "folder_filter": null,
+      "dry_run": false,
+      "changed": 0
+    },
+    {
+      "at": "2026-07-05T04:44:09.084Z",
+      "folder_filter": null,
+      "dry_run": false,
+      "changed": 1
+    }
+  ]
+}

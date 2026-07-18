@@ -17,12 +17,23 @@
     "typecheck": "tsc --noEmit",
     "dev": "react-native bundle-harmony --dev",
     "harmony": "react-native run-harmony",
+    "harmony:patch": "node scripts/patch-harmony-rnoh-packages.js",
     "codegen": "react-native codegen-harmony --cpp-output-path ./harmony/entry/src/main/cpp/generated --rnoh-module-path ./harmony/entry/oh_modules/@rnoh/react-native-openharmony",
     "link:harmony": "react-native link-harmony",
     "sync:app-shell-assets": "node scripts/sync-app-shell-assets.js",
     "sync:web-assets": "node scripts/sync-web-assets.js",
-    "postinstall": "node scripts/patch-boost-podspec.js && node scripts/patch-yoga-ygvalue.js && node scripts/patch-image-picker-autolinking.js && node scripts/patch-harmony-video-link.js",
-    "pod:install": "node scripts/pod-install-ios.js"
+    "postinstall": "node scripts/patch-boost-podspec.js && node scripts/patch-yoga-ygvalue.js && node scripts/patch-harmony-rnoh-packages.js && node scripts/patch-rn-harmony-stubs.js",
+    "pod:install": "node scripts/pod-install-ios.js",
+    "yuque:auth": "bash scripts/yuque/check-auth.sh",
+    "yuque:sync": "node scripts/yuque/sync.mjs",
+    "yuque:sync-all": "node scripts/yuque/sync.mjs -- --all",
+    "yuque:inventory": "node scripts/yuque/build-inventory.mjs",
+    "yuque:optimize": "node scripts/yuque/optimize-rules.mjs",
+    "yuque:backup": "node scripts/yuque/backup.mjs",
+    "yuque:diff": "node scripts/yuque/generate-diff.mjs",
+    "yuque:push": "node scripts/yuque/push-all.mjs",
+    "yuque:pilot": "node scripts/yuque/pilot.mjs",
+    "yuque:run-all": "node scripts/yuque/run-all.mjs"
   },
   "dependencies": {
     "@commons/toolkit": "*",
@@ -99,10 +110,12 @@
     "babel-plugin-module-resolver": "^5.0.2",
     "eslint": "^8.19.0",
     "jest": "^29.2.1",
+    "js-yaml": "^5.2.1",
     "metro-react-native-babel-preset": "0.76.8",
     "prettier": "^2.4.1",
     "react-test-renderer": "18.2.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "yuque-dl": "^1.0.85"
   },
   "engines": {
     "node": ">=16"

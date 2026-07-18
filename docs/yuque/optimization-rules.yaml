@@ -1,0 +1,19 @@
+global:
+  rules:
+    - normalize_whitespace
+    - fix_heading_levels
+    - code_block_lang
+    - compress_blank_lines
+  skip_patterns:
+    - "*.sheet.md"
+    - "*画板*"
+    - "*board*"
+
+folders:
+  默认:
+    ai_content: false
+
+  # 示例：为特定文件夹启用 AI 内容优化
+  # AI猫短剧:
+  #   ai_content: true
+  #   ai_template: docs/ai-cat-drama/EP01-心肌梗塞/README.md

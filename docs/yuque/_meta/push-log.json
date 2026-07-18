@@ -1,0 +1,25 @@
+{
+  "runs": [
+    {
+      "at": "2026-07-05T04:30:08.239Z",
+      "dry_run": true,
+      "folder_filter": "试点示例",
+      "total": 2,
+      "pushed": 0,
+      "failed": 0,
+      "conflicts": 0,
+      "results": [
+        {
+          "slug": "pilot",
+          "status": "dry-run",
+          "rel_path": "试点示例/示例文档01.md"
+        },
+        {
+          "slug": "pilot",
+          "status": "dry-run",
+          "rel_path": "试点示例/示例文档02.md"
+        }
+      ]
+    }
+  ]
+}

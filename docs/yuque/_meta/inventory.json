@@ -1,0 +1,40 @@
+{
+  "generated_at": "2026-07-05T04:44:08.948Z",
+  "yuque_root": "/Users/mac/Desktop/github/my_rn_project/docs/yuque",
+  "repos": [
+    "eav1v0"
+  ],
+  "total": 2,
+  "documents": [
+    {
+      "slug": "pilot-sample-doc-01",
+      "group": "hanshihuanyan",
+      "title": "试点示例文档",
+      "rel_path": "eav1v0/试点示例/示例文档01.md",
+      "inner_rel_path": "试点示例/示例文档01.md",
+      "folder_path": "试点示例",
+      "word_count": 55,
+      "has_images": false,
+      "has_heading_levels": true,
+      "optimizable": true,
+      "skip_reason": null,
+      "book": "eav1v0",
+      "mirror_dir": "/Users/mac/Desktop/github/my_rn_project/docs/yuque/eav1v0"
+    },
+    {
+      "slug": "pilot-sample-doc-02",
+      "group": "hanshihuanyan",
+      "title": "第二篇示例",
+      "rel_path": "eav1v0/试点示例/示例文档02.md",
+      "inner_rel_path": "试点示例/示例文档02.md",
+      "folder_path": "试点示例",
+      "word_count": 42,
+      "has_images": false,
+      "has_heading_levels": true,
+      "optimizable": true,
+      "skip_reason": null,
+      "book": "eav1v0",
+      "mirror_dir": "/Users/mac/Desktop/github/my_rn_project/docs/yuque/eav1v0"
+    }
+  ]
+}

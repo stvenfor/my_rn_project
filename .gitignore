@@ -77,3 +77,6 @@ harmony/entry/src/main/ets/RNOHPackagesFactory.ets
 
 # CodeGraph (local IDE/tool cache)
 .codegraph/
+
+# Local secrets
+.env.local
