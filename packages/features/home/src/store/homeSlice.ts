@@ -15,10 +15,13 @@ export function buildGreeting(user: User | null): string {
   return `${period}，${name}`;
 }
 
+export const TOP_TABS = ['首页', '视频', 'Club'] as const;
+
 interface HomeState {
   dashboard: HomeDashboardData | null;
   userGreeting: string;
   selectedMetricTab: number;
+  selectedTopTab: number;
   loading: boolean;
   refreshing: boolean;
   error: string | null;
@@ -28,6 +31,7 @@ const initialState: HomeState = {
   dashboard: null,
   userGreeting: buildGreeting(null),
   selectedMetricTab: 0,
+  selectedTopTab: 0,
   loading: false,
   refreshing: false,
   error: null,
@@ -54,6 +58,9 @@ const homeSlice = createSlice({
   reducers: {
     setMetricTab(state, action: PayloadAction<number>) {
       state.selectedMetricTab = action.payload;
+    },
+    setTopTab(state, action: PayloadAction<number>) {
+      state.selectedTopTab = action.payload;
     },
     updateGreeting(state, action: PayloadAction<User | null>) {
       state.userGreeting = buildGreeting(action.payload);
@@ -87,7 +94,7 @@ const homeSlice = createSlice({
   },
 });
 
-export const {setMetricTab, updateGreeting} = homeSlice.actions;
+export const {setMetricTab, setTopTab, updateGreeting} = homeSlice.actions;
 export const homeReducer = homeSlice.reducer;
 
 export const selectHomeDashboard = (state: {home: HomeState}) =>
@@ -96,6 +103,8 @@ export const selectHomeGreeting = (state: {home: HomeState}) =>
   state.home.userGreeting;
 export const selectHomeMetricTab = (state: {home: HomeState}) =>
   state.home.selectedMetricTab;
+export const selectHomeTopTab = (state: {home: HomeState}) =>
+  state.home.selectedTopTab;
 export const selectHomeLoading = (state: {home: HomeState}) =>
   state.home.loading;
 export const selectHomeRefreshing = (state: {home: HomeState}) =>

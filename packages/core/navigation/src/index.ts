@@ -14,6 +14,12 @@ export const RoutePath = {
   homeLearningReport: 'HomeLearningReport',
   homeCheckInMall: 'HomeCheckInMall',
   homeAllServices: 'HomeAllServices',
+  homeSearch: 'HomeSearch',
+  homeStrategy: 'HomeStrategy',
+  homeDubbingFeed: 'HomeDubbingFeed',
+  homeHotRankDetail: 'HomeHotRankDetail',
+  homeUsedCarList: 'HomeUsedCarList',
+  homeUsedCarDetail: 'HomeUsedCarDetail',
   chatDetail: 'ChatDetail',
   communityPublish: 'CommunityPublish',
   communityVideoPlay: 'CommunityVideoPlay',
@@ -28,13 +34,21 @@ export const RoutePath = {
   live: 'Live',
   liveRoom: 'LiveRoom',
   pay: 'Pay',
+  payMembership: 'PayMembership',
   video: 'Video',
   shortVideo: 'ShortVideo',
   shortVideoPlay: 'ShortVideoPlay',
+  dubbingVideoList: 'DubbingVideoList',
+  dubbingWorkList: 'DubbingWorkList',
+  dubbingVideoDetail: 'DubbingVideoDetail',
+  dubbingWorkDetail: 'DubbingWorkDetail',
   musicList: 'MusicList',
   musicNowPlaying: 'MusicNowPlaying',
   bfuiGallery: 'BfuiGallery',
   bfuiTemplate: 'BfuiTemplate',
+  classroomMyClass: 'ClassroomMyClass',
+  classroomHomeworkStats: 'ClassroomHomeworkStats',
+  classroomHomeworkReview: 'ClassroomHomeworkReview',
   debugBle: 'DebugBle',
   debugLinking: 'DebugLinking',
   debugRealtime: 'DebugRealtime',
@@ -51,6 +65,16 @@ export type RootStackParamList = {
   HomeLearningReport: undefined;
   HomeCheckInMall: undefined;
   HomeAllServices: undefined;
+  HomeSearch: undefined;
+  HomeStrategy: undefined;
+  HomeDubbingFeed: undefined;
+  HomeHotRankDetail: {
+    boardId?: string;
+    title?: string;
+    theme?: string;
+  };
+  HomeUsedCarList: undefined;
+  HomeUsedCarDetail: {id: number};
   ChatDetail: {
     conversationId: string;
     title: string;
@@ -94,13 +118,21 @@ export type RootStackParamList = {
   Live: undefined;
   LiveRoom: {roomId: string};
   Pay: undefined;
+  PayMembership: undefined;
   Video: undefined;
   ShortVideo: undefined;
   ShortVideoPlay: {initialIndex?: number};
+  DubbingVideoList: undefined;
+  DubbingWorkList: undefined;
+  DubbingVideoDetail: {id: string};
+  DubbingWorkDetail: {id: string};
   MusicList: undefined;
   MusicNowPlaying: {trackId: string};
   BfuiGallery: undefined;
   BfuiTemplate: {templateId: string};
+  ClassroomMyClass: undefined;
+  ClassroomHomeworkStats: {classId?: string} | undefined;
+  ClassroomHomeworkReview: undefined;
   DebugBle: undefined;
   DebugLinking: undefined;
   DebugRealtime: undefined;

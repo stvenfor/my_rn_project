@@ -44,8 +44,27 @@ export function HomeAllServicesScreen({
       });
       return;
     }
-    if (item.routePath === RoutePath.musicList) {
-      navigation.navigate(RoutePath.musicList);
+    switch (item.routePath) {
+      case RoutePath.musicList:
+        navigation.navigate(RoutePath.musicList);
+        break;
+      case RoutePath.homeDubbingFeed:
+        navigation.navigate(RoutePath.homeDubbingFeed);
+        break;
+      case RoutePath.payMembership:
+        navigation.navigate(RoutePath.payMembership);
+        break;
+      case RoutePath.classroomMyClass:
+        navigation.navigate(RoutePath.classroomMyClass);
+        break;
+      case RoutePath.dubbingVideoList:
+        navigation.navigate(RoutePath.dubbingVideoList);
+        break;
+      case RoutePath.dubbingWorkList:
+        navigation.navigate(RoutePath.dubbingWorkList);
+        break;
+      default:
+        break;
     }
   };
 

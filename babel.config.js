@@ -34,6 +34,7 @@ module.exports = {
           '@features/video': './packages/features/video/src',
           '@features/music': './packages/features/music/src',
           '@features/bfui': './packages/features/bfui/src',
+          '@features/classroom': './packages/features/classroom/src',
           '@app': './src',
           '@app/store': './src/store',
           '@app/store/envSlice': './src/store/envSlice',

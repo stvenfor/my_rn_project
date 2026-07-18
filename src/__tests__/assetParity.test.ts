@@ -8,6 +8,7 @@ import {BFUI_ASSET_MANIFEST} from '@features/bfui/assets/bfuiAssets';
 import {HOME_ASSET_MANIFEST} from '@features/home/assets/homeAssets';
 import {MUSIC_ASSET_MANIFEST} from '@features/music/assets/musicAssets';
 import {SETTINGS_ASSET_MANIFEST} from '@features/settings/assets/settingsAssets';
+import {MEMBERSHIP_ASSET_MANIFEST} from '@features/pay';
 import {VIDEO_MOCK_ASSET_MANIFEST} from '@commons/toolkit';
 import {APP_SHELL_ASSET_MANIFEST} from '../../assets/app/appShellAssets';
 import {WEB_ASSET_MANIFEST} from '@core/webview';
@@ -20,6 +21,7 @@ describe('asset parity', () => {
     ...MUSIC_ASSET_MANIFEST,
     ...BFUI_ASSET_MANIFEST,
     ...SETTINGS_ASSET_MANIFEST,
+    ...MEMBERSHIP_ASSET_MANIFEST,
     ...VIDEO_MOCK_ASSET_MANIFEST,
     ...APP_SHELL_ASSET_MANIFEST,
     ...WEB_ASSET_MANIFEST,

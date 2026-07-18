@@ -2,7 +2,11 @@ import {configureStore} from '@reduxjs/toolkit';
 import {authReducer} from '@features/auth';
 import {envReducer} from './envSlice';
 import {appReducer} from './appSlice';
-import {homeReducer, allServicesReducer} from '@features/home';
+import {
+  homeReducer,
+  allServicesReducer,
+  homeSearchReducer,
+} from '@features/home';
 import {mineReducer} from '@features/settings';
 import {chatReducer, registerChatDetailReducer} from '@features/chat';
 import {communityReducer} from '@features/community';
@@ -17,6 +21,7 @@ export const store = configureStore({
     mainTab: mainTabReducer,
     home: homeReducer,
     allServices: allServicesReducer,
+    homeSearch: homeSearchReducer,
     mine: mineReducer,
     chat: chatReducer,
     chatDetail: registerChatDetailReducer().reducer,

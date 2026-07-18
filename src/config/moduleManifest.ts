@@ -10,6 +10,7 @@ import {registerLiveFeature} from '@features/live';
 import {registerPayFeature} from '@features/pay';
 import {registerVideoFeature} from '@features/video';
 import {registerBfuiFeature} from '@features/bfui';
+import {registerClassroomFeature} from '@features/classroom';
 
 export const enabledModules: FeatureRegistration[] = [
   registerHomeFeature(),
@@ -23,6 +24,7 @@ export const enabledModules: FeatureRegistration[] = [
   registerPayFeature(),
   registerVideoFeature(),
   registerBfuiFeature(),
+  registerClassroomFeature(),
 ];
 
 export function collectMainTabs() {

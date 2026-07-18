@@ -1,6 +1,6 @@
 import React from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import {homeDashboardTheme} from '../theme/homeDashboardTheme';
+import {homeDashboardTheme as t} from '../theme/homeDashboardTheme';
 
 interface Props {
   onPress: () => void;
@@ -9,7 +9,9 @@ interface Props {
 export function HomeLearningReportEntry({onPress}: Props) {
   return (
     <Pressable style={styles.wrap} onPress={onPress}>
-      <Text style={styles.emoji}>📊</Text>
+      <View style={styles.iconBox}>
+        <Text style={styles.iconGlyph}>📈</Text>
+      </View>
       <View style={styles.meta}>
         <Text style={styles.title}>学习报告</Text>
         <Text style={styles.subtitle}>今日高光 · 学习记录</Text>
@@ -24,23 +26,30 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginHorizontal: 16,
-    marginTop: 8,
-    marginBottom: 24,
+    marginTop: 16,
     padding: 16,
-    backgroundColor: homeDashboardTheme.cardWhite,
-    borderRadius: 12,
+    backgroundColor: t.surface,
+    borderRadius: t.radiusMd,
   },
-  emoji: {fontSize: 28},
+  iconBox: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: 'rgba(0,122,255,0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconGlyph: {fontSize: 22},
   meta: {flex: 1, marginLeft: 12},
   title: {
-    fontSize: 15,
+    fontSize: 17,
     fontWeight: '600',
-    color: homeDashboardTheme.titleBlack,
+    color: t.labelPrimary,
   },
   subtitle: {
-    fontSize: 12,
-    color: homeDashboardTheme.textGray,
+    fontSize: 13,
+    color: t.labelSecondary,
     marginTop: 2,
   },
-  chevron: {fontSize: 22, color: homeDashboardTheme.textGray},
+  chevron: {fontSize: 22, color: t.labelTertiary},
 });

@@ -2,6 +2,7 @@ import {RoutePath} from '@core/navigation';
 import type {HomeServiceIconKey} from '../assets/homeAssets';
 
 export interface AllServiceItem {
+  /** Flutter: defaults to assetName including `.png` */
   id: string;
   label: string;
   assetName: HomeServiceIconKey;
@@ -24,205 +25,188 @@ export const favoriteSectionMeta = {
   subtitle: '将按自定义顺序出现在首页',
 } as const;
 
-const intro: AllServiceItem = {
-  id: 'introduction_animation',
-  label: '引导动画',
-  assetName: 'smart_online_marketing',
-  routePath: RoutePath.bfuiTemplate,
-  templateId: 'introduction_animation',
-};
-const hotel: AllServiceItem = {
-  id: 'hotel_booking',
-  label: '酒店预订',
-  assetName: 'customer_profile',
-  routePath: RoutePath.bfuiTemplate,
-  templateId: 'hotel_booking',
-};
-const music: AllServiceItem = {
-  id: 'music_list',
-  label: '音频列表',
-  assetName: 'used_car',
-  routePath: RoutePath.musicList,
-};
+function item(
+  label: string,
+  assetKey: HomeServiceIconKey,
+  routePath: string,
+  templateId?: string,
+): AllServiceItem {
+  return {
+    id: `${assetKey}.png`,
+    label,
+    assetName: assetKey,
+    routePath,
+    templateId,
+  };
+}
+
+const introductionAnimation = item(
+  '引导动画',
+  'smart_online_marketing',
+  RoutePath.bfuiTemplate,
+  'introduction_animation',
+);
+const hotelBooking = item(
+  '酒店预订',
+  'customer_profile',
+  RoutePath.bfuiTemplate,
+  'hotel_booking',
+);
+const hotelFilters = item(
+  '酒店筛选',
+  'smart_sale',
+  RoutePath.bfuiTemplate,
+  'hotel_filters',
+);
+const fitnessApp = item(
+  '健身应用',
+  'new_car_deal',
+  RoutePath.bfuiTemplate,
+  'fitness_app',
+);
+const myDiary = item(
+  '我的日记',
+  'exhibition_hall_shooting',
+  RoutePath.bfuiTemplate,
+  'my_diary',
+);
+const training = item(
+  '训练计划',
+  'intelligence_task',
+  RoutePath.bfuiTemplate,
+  'training',
+);
+const designCourse = item(
+  '设计课程',
+  'marketing',
+  RoutePath.bfuiTemplate,
+  'design_course',
+);
+const courseInfo = item(
+  '课程详情',
+  'business_poster',
+  RoutePath.bfuiTemplate,
+  'course_info',
+);
+const help = item(
+  '帮助中心',
+  'after_sales_area',
+  RoutePath.bfuiTemplate,
+  'help',
+);
+const feedback = item(
+  '意见反馈',
+  'calculator',
+  RoutePath.bfuiTemplate,
+  'feedback',
+);
+const musicPlayer = item('音频列表', 'used_car', RoutePath.musicList);
+const navigationDrawer = item(
+  '侧滑导航',
+  'service_management',
+  RoutePath.bfuiTemplate,
+  'navigation_drawer',
+);
+const glassView = item(
+  '玻璃卡片',
+  'online_customer_acquisition',
+  RoutePath.bfuiTemplate,
+  'glass_view',
+);
+const waveView = item(
+  '波浪动画',
+  'smart_number',
+  RoutePath.bfuiTemplate,
+  'wave_view',
+);
+const runningView = item(
+  '跑步数据',
+  'new_car_in_store',
+  RoutePath.bfuiTemplate,
+  'running_view',
+);
+const workoutView = item(
+  '训练视图',
+  'v_store',
+  RoutePath.bfuiTemplate,
+  'workout_view',
+);
+const mediterraneanDiet = item(
+  '地中海饮食',
+  'small_video',
+  RoutePath.bfuiTemplate,
+  'mediterranean_diet',
+);
+const classroom = item(
+  '班级教学',
+  'intelligence_task',
+  RoutePath.classroomMyClass,
+);
+const dubbingVideoList = item(
+  '视频列表',
+  'small_video',
+  RoutePath.dubbingVideoList,
+);
+const dubbingWorkList = item(
+  '作品列表',
+  'exhibition_hall_shooting',
+  RoutePath.dubbingWorkList,
+);
+const dubbingHome = item('配音首页', 'dubbing_home', RoutePath.homeDubbingFeed);
+const membershipRenew = item('会员续费', 'marketing', RoutePath.payMembership);
 
 export const defaultFavoriteItems: AllServiceItem[] = [
-  intro,
-  {
-    id: 'glass_view',
-    label: '玻璃卡片',
-    assetName: 'online_customer_acquisition',
-    routePath: RoutePath.bfuiTemplate,
-    templateId: 'glass_view',
-  },
-  {
-    id: 'mediterranean_diet',
-    label: '地中海饮食',
-    assetName: 'small_video',
-    routePath: RoutePath.bfuiTemplate,
-    templateId: 'mediterranean_diet',
-  },
-  {
-    id: 'navigation_drawer',
-    label: '侧滑导航',
-    assetName: 'service_management',
-    routePath: RoutePath.bfuiTemplate,
-    templateId: 'navigation_drawer',
-  },
-  {
-    id: 'my_diary',
-    label: '我的日记',
-    assetName: 'exhibition_hall_shooting',
-    routePath: RoutePath.bfuiTemplate,
-    templateId: 'my_diary',
-  },
-  {
-    id: 'training',
-    label: '训练计划',
-    assetName: 'intelligence_task',
-    routePath: RoutePath.bfuiTemplate,
-    templateId: 'training',
-  },
-  {
-    id: 'running_view',
-    label: '跑步数据',
-    assetName: 'new_car_in_store',
-    routePath: RoutePath.bfuiTemplate,
-    templateId: 'running_view',
-  },
-  {
-    id: 'wave_view',
-    label: '波浪动画',
-    assetName: 'smart_number',
-    routePath: RoutePath.bfuiTemplate,
-    templateId: 'wave_view',
-  },
+  introductionAnimation,
+  glassView,
+  mediterraneanDiet,
+  navigationDrawer,
+  myDiary,
+  training,
+  runningView,
+  waveView,
 ];
 
 export const catalogSections: AllServiceSection[] = [
   {
     title: '线索服务',
     items: [
-      intro,
-      hotel,
-      {
-        id: 'hotel_filters',
-        label: '酒店筛选',
-        assetName: 'smart_sale',
-        routePath: RoutePath.bfuiTemplate,
-        templateId: 'hotel_filters',
-      },
-      {
-        id: 'fitness_app',
-        label: '健身应用',
-        assetName: 'new_car_deal',
-        routePath: RoutePath.bfuiTemplate,
-        templateId: 'fitness_app',
-      },
-      {
-        id: 'glass_view',
-        label: '玻璃卡片',
-        assetName: 'online_customer_acquisition',
-        routePath: RoutePath.bfuiTemplate,
-        templateId: 'glass_view',
-      },
-      {
-        id: 'running_view',
-        label: '跑步数据',
-        assetName: 'new_car_in_store',
-        routePath: RoutePath.bfuiTemplate,
-        templateId: 'running_view',
-      },
-      {
-        id: 'wave_view',
-        label: '波浪动画',
-        assetName: 'smart_number',
-        routePath: RoutePath.bfuiTemplate,
-        templateId: 'wave_view',
-      },
+      introductionAnimation,
+      hotelBooking,
+      hotelFilters,
+      fitnessApp,
+      glassView,
+      runningView,
+      waveView,
     ],
   },
   {
     title: '营销服务',
     items: [
-      {
-        id: 'my_diary',
-        label: '我的日记',
-        assetName: 'exhibition_hall_shooting',
-        routePath: RoutePath.bfuiTemplate,
-        templateId: 'my_diary',
-      },
-      {
-        id: 'design_course',
-        label: '设计课程',
-        assetName: 'marketing',
-        routePath: RoutePath.bfuiTemplate,
-        templateId: 'design_course',
-      },
-      {
-        id: 'training',
-        label: '训练计划',
-        assetName: 'intelligence_task',
-        routePath: RoutePath.bfuiTemplate,
-        templateId: 'training',
-      },
-      {
-        id: 'workout_view',
-        label: '训练视图',
-        assetName: 'v_store',
-        routePath: RoutePath.bfuiTemplate,
-        templateId: 'workout_view',
-      },
-      {
-        id: 'mediterranean_diet',
-        label: '地中海饮食',
-        assetName: 'small_video',
-        routePath: RoutePath.bfuiTemplate,
-        templateId: 'mediterranean_diet',
-      },
-      {
-        id: 'course_info',
-        label: '课程详情',
-        assetName: 'business_poster',
-        routePath: RoutePath.bfuiTemplate,
-        templateId: 'course_info',
-      },
+      myDiary,
+      designCourse,
+      training,
+      workoutView,
+      mediterraneanDiet,
+      courseInfo,
     ],
   },
   {
+    title: '教学服务',
+    items: [classroom, dubbingHome, dubbingVideoList, dubbingWorkList],
+  },
+  {
     title: '其他服务',
-    items: [
-      {
-        id: 'help',
-        label: '帮助中心',
-        assetName: 'after_sales_area',
-        routePath: RoutePath.bfuiTemplate,
-        templateId: 'help',
-      },
-      {
-        id: 'feedback',
-        label: '意见反馈',
-        assetName: 'calculator',
-        routePath: RoutePath.bfuiTemplate,
-        templateId: 'feedback',
-      },
-      {
-        id: 'navigation_drawer',
-        label: '侧滑导航',
-        assetName: 'service_management',
-        routePath: RoutePath.bfuiTemplate,
-        templateId: 'navigation_drawer',
-      },
-      music,
-    ],
+    items: [membershipRenew, help, feedback, navigationDrawer, musicPlayer],
   },
 ];
 
+/** Flutter builds Map from defaults + sections; later duplicate ids overwrite. */
 const catalogById = new Map<string, AllServiceItem>();
-for (const item of [
+for (const entry of [
   ...defaultFavoriteItems,
   ...catalogSections.flatMap(s => s.items),
 ]) {
-  catalogById.set(item.id, item);
+  catalogById.set(entry.id, entry);
 }
 
 export const allCatalogItems: AllServiceItem[] = Array.from(
@@ -233,4 +217,4 @@ export function findItemById(id: string): AllServiceItem | undefined {
   return catalogById.get(id);
 }
 
-export const defaultFavoriteIds = defaultFavoriteItems.map(item => item.id);
+export const defaultFavoriteIds = defaultFavoriteItems.map(fav => fav.id);

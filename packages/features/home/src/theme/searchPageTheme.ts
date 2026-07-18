@@ -1,0 +1,16 @@
+export const searchPageTheme = {
+  accent: '#007AFF',
+  background: '#F2F2F7',
+  surface: '#FFFFFF',
+  fillSecondary: '#E9E9EB',
+  labelPrimary: '#000000',
+  labelSecondary: 'rgba(60,60,67,0.6)',
+  labelTertiary: 'rgba(60,60,67,0.3)',
+  separator: '#C6C6C8',
+  rankGold: '#FF9500',
+  rankSilver: '#8E8E93',
+  rankBronze: '#CD7F32',
+  radiusMd: 12,
+  searchFieldHeight: 44,
+  contentMaxWidth: 720,
+} as const;

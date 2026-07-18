@@ -15,6 +15,7 @@ import {RoutePath, type MainTabScreenProps} from '@core/navigation';
 import {WebBridgeAssets, WebPageLoadType} from '@core/webview';
 import {PrimaryButton} from '@ui/design-system';
 import {HomeBannerSection} from '../components/HomeBannerSection';
+import {HomeClubTabContent} from '../components/HomeClubTabContent';
 import {HomeContactList} from '../components/HomeContactList';
 import {HomeFeatureGrid} from '../components/HomeFeatureGrid';
 import {HomeGreetingSection} from '../components/HomeGreetingSection';
@@ -24,6 +25,9 @@ import {HomeQuickActionGrid} from '../components/HomeQuickActionGrid';
 import {HomeSearchBar} from '../components/HomeSearchBar';
 import {HomeServiceGrid} from '../components/HomeServiceGrid';
 import {HomeStoreMetricsCard} from '../components/HomeStoreMetricsCard';
+import {HomeStrategyEntry} from '../components/HomeStrategyEntry';
+import {HomeTopTabBar} from '../components/HomeTopTabBar';
+import {HomeVideoTabContent} from '../components/HomeVideoTabContent';
 import {useHomeMiniPlayerInset} from '../hooks/useHomeMiniPlayerInset';
 import type {HomeFeatureItem} from '../models/homeDashboardModel';
 import {
@@ -37,10 +41,12 @@ import {
   selectHomeLoading,
   selectHomeMetricTab,
   selectHomeRefreshing,
+  selectHomeTopTab,
   setMetricTab,
+  setTopTab,
   updateGreeting,
 } from '../store/homeSlice';
-import {homeDashboardTheme} from '../theme/homeDashboardTheme';
+import {homeDashboardTheme as t} from '../theme/homeDashboardTheme';
 
 type HomeDispatch = ThunkDispatch<
   Record<string, unknown>,
@@ -64,6 +70,7 @@ export function HomeScreen({navigation}: MainTabScreenProps<'HomeTab'>) {
   const dashboard = useSelector(selectHomeDashboard);
   const greeting = useSelector(selectHomeGreeting);
   const metricTab = useSelector(selectHomeMetricTab);
+  const topTab = useSelector(selectHomeTopTab);
   const metrics = useSelector(selectCurrentMetrics);
   const loading = useSelector(selectHomeLoading);
   const refreshing = useSelector(selectHomeRefreshing);
@@ -107,6 +114,10 @@ export function HomeScreen({navigation}: MainTabScreenProps<'HomeTab'>) {
       navigation.navigate(RoutePath.homeCheckInMall);
       return;
     }
+    if (item.label === '二手车') {
+      navigation.navigate(RoutePath.homeUsedCarList);
+      return;
+    }
     if (item.label === '销售顾问') {
       navigation.navigate(RoutePath.web, {
         loadType: WebPageLoadType.asset,
@@ -139,7 +150,7 @@ export function HomeScreen({navigation}: MainTabScreenProps<'HomeTab'>) {
       <View style={styles.errorWrap}>
         {loading || refreshing ? (
           <>
-            <ActivityIndicator size="large" color={homeDashboardTheme.primaryBlue} />
+            <ActivityIndicator size="large" color={t.accent} />
             <Text style={styles.loadingText}>加载中</Text>
           </>
         ) : null}
@@ -150,63 +161,74 @@ export function HomeScreen({navigation}: MainTabScreenProps<'HomeTab'>) {
   return (
     <ScrollView
       style={styles.root}
-      contentContainerStyle={{paddingBottom: miniPlayerInset}}
+      contentContainerStyle={{
+        paddingTop: insets.top + 16,
+        paddingBottom: 24 + miniPlayerInset,
+      }}
       refreshControl={
         <RefreshControl
           refreshing={refreshing || loading}
           onRefresh={() => dispatch(refreshHomeDashboard())}
+          tintColor={t.accent}
         />
       }>
-      <View style={[styles.darkZone, {paddingTop: insets.top}]}>
-        <HomeSearchBar />
-        <HomeBannerSection />
-        <HomeFeatureGrid
-          items={dashboard.features}
-          onFeaturePress={onFeaturePress}
+      <HomeGreetingSection greeting={greeting} />
+      <HomeSearchBar
+        onSearchPress={() => navigation.navigate(RoutePath.homeSearch)}
+      />
+      <HomeTopTabBar
+        selectedIndex={topTab}
+        onSelected={index => dispatch(setTopTab(index))}
+      />
+
+      {topTab === 1 ? (
+        <HomeVideoTabContent
+          onOpenDubbing={() => navigation.navigate(RoutePath.homeDubbingFeed)}
         />
-        <View style={styles.darkSpacer} />
-      </View>
-      <View style={styles.roundTransition} />
-      <View style={styles.lightZone}>
-        <HomeGreetingSection greeting={greeting} />
-        <HomeQuickActionGrid actions={dashboard.quickActions} />
-        <HomeStoreMetricsCard
-          storeName={dashboard.storeName}
-          selectedTab={metricTab}
-          tabs={METRIC_TABS}
-          metrics={metrics}
-          details={dashboard.metricDetails}
-          onTabSelected={index => dispatch(setMetricTab(index))}
+      ) : topTab === 2 ? (
+        <HomeClubTabContent
+          onJoin={() => navigation.navigate('CommunityTab')}
         />
-        <HomeServiceGrid items={dashboard.services} />
-        <HomeContactList items={dashboard.contacts} />
-        <HomeNewsList items={dashboard.news} />
-        <HomeLearningReportEntry
-          onPress={() => navigation.navigate(RoutePath.homeLearningReport)}
-        />
-      </View>
+      ) : (
+        <>
+          <HomeBannerSection />
+          <HomeFeatureGrid
+            items={dashboard.features}
+            onFeaturePress={onFeaturePress}
+          />
+          <HomeQuickActionGrid actions={dashboard.quickActions} />
+          <HomeStoreMetricsCard
+            storeName={dashboard.storeName}
+            selectedTab={metricTab}
+            tabs={METRIC_TABS}
+            metrics={metrics}
+            details={dashboard.metricDetails}
+            onTabSelected={index => dispatch(setMetricTab(index))}
+          />
+          <HomeStrategyEntry
+            onPress={() => navigation.navigate(RoutePath.homeStrategy)}
+          />
+          <HomeServiceGrid items={dashboard.services} />
+          <HomeContactList items={dashboard.contacts} />
+          <HomeNewsList items={dashboard.news} />
+          <HomeLearningReportEntry
+            onPress={() => navigation.navigate(RoutePath.homeLearningReport)}
+          />
+        </>
+      )}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  root: {flex: 1, backgroundColor: homeDashboardTheme.background},
-  darkZone: {backgroundColor: homeDashboardTheme.bannerDark},
-  darkSpacer: {height: 16},
-  roundTransition: {
-    height: 20,
-    backgroundColor: homeDashboardTheme.bannerDark,
-    borderBottomLeftRadius: 24,
-    borderBottomRightRadius: 24,
-  },
-  lightZone: {backgroundColor: homeDashboardTheme.background},
+  root: {flex: 1, backgroundColor: t.background},
   errorWrap: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 24,
-    backgroundColor: homeDashboardTheme.background,
+    backgroundColor: t.background,
   },
   errorText: {color: '#E53935', marginBottom: 12, textAlign: 'center'},
-  loadingText: {marginTop: 12, color: homeDashboardTheme.textGray, fontSize: 14},
+  loadingText: {marginTop: 12, color: t.textGray, fontSize: 14},
 });

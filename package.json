@@ -55,6 +55,7 @@
     "@features/auth": "*",
     "@features/bfui": "*",
     "@features/chat": "*",
+    "@features/classroom": "*",
     "@features/community": "*",
     "@features/friend": "*",
     "@features/home": "*",

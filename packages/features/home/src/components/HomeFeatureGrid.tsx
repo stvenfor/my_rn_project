@@ -8,6 +8,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import type {HomeFeatureItem} from '../models/homeDashboardModel';
+import {homeDashboardTheme as t} from '../theme/homeDashboardTheme';
 
 interface Props {
   items: HomeFeatureItem[];
@@ -16,10 +17,10 @@ interface Props {
 
 export function HomeFeatureGrid({items, onFeaturePress}: Props) {
   const {width} = useWindowDimensions();
-  const cellWidth = (width - 16) / 5;
+  const cellWidth = (width - 32 - 16) / 5;
 
   return (
-    <View style={styles.wrap}>
+    <View style={styles.card}>
       {items.map(item => (
         <Pressable
           key={item.label}
@@ -42,29 +43,32 @@ export function HomeFeatureGrid({items, onFeaturePress}: Props) {
 }
 
 const styles = StyleSheet.create({
-  wrap: {
+  card: {
+    marginHorizontal: 16,
+    marginTop: 16,
+    paddingHorizontal: 8,
+    paddingVertical: 16,
+    backgroundColor: t.surface,
+    borderRadius: t.radiusMd,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingHorizontal: 8,
-    paddingTop: 16,
-    paddingBottom: 0,
   },
   cell: {alignItems: 'center', marginBottom: 12},
   iconBox: {
     width: 48,
     height: 48,
-    borderRadius: 14,
-    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderRadius: 12,
+    backgroundColor: t.fillSecondary,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  iconImage: {width: 48, height: 48, borderRadius: 14},
+  iconImage: {width: 48, height: 48, borderRadius: 12},
   emoji: {fontSize: 24},
   label: {
     marginTop: 6,
     fontSize: 11,
-    color: 'rgba(255,255,255,0.9)',
+    color: t.labelPrimary,
     textAlign: 'center',
     paddingHorizontal: 2,
   },

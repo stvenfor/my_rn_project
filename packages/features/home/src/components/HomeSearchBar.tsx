@@ -1,16 +1,22 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {homeDashboardTheme as t} from '../theme/homeDashboardTheme';
 
-export function HomeSearchBar() {
+interface Props {
+  onSearchPress: () => void;
+  onScanPress?: () => void;
+}
+
+export function HomeSearchBar({onSearchPress, onScanPress}: Props) {
   return (
     <View style={styles.wrap}>
-      <View style={styles.searchBox}>
-        <Text style={styles.searchIcon}>🔍</Text>
+      <Pressable style={styles.searchBox} onPress={onSearchPress}>
+        <Text style={styles.searchIcon}>⌕</Text>
         <Text style={styles.placeholder}>搜索客户、订单、资讯</Text>
-      </View>
-      <View style={styles.scanBtn}>
+      </Pressable>
+      <Pressable style={styles.scanBtn} onPress={onScanPress}>
         <Text style={styles.scanIcon}>▣</Text>
-      </View>
+      </Pressable>
     </View>
   );
 }
@@ -20,27 +26,31 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingTop: 16,
   },
   searchBox: {
     flex: 1,
-    height: 40,
+    height: 44,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 14,
-    backgroundColor: 'rgba(255,255,255,0.15)',
-    borderRadius: 20,
+    backgroundColor: t.surface,
+    borderRadius: t.radiusMd,
+    borderWidth: 0.5,
+    borderColor: t.separator,
   },
-  searchIcon: {fontSize: 14, marginRight: 8, opacity: 0.7},
-  placeholder: {fontSize: 14, color: 'rgba(255,255,255,0.6)'},
+  searchIcon: {fontSize: 18, marginRight: 8, color: t.labelSecondary},
+  placeholder: {fontSize: 15, color: t.labelTertiary},
   scanBtn: {
-    width: 40,
-    height: 40,
+    width: 44,
+    height: 44,
     marginLeft: 12,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderRadius: t.radiusMd,
+    backgroundColor: t.surface,
+    borderWidth: 0.5,
+    borderColor: t.separator,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  scanIcon: {fontSize: 18, color: '#fff'},
+  scanIcon: {fontSize: 18, color: t.accent},
 });

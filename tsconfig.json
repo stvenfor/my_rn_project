@@ -52,6 +52,7 @@
       "@features/live": ["packages/features/live/src"],
       "@features/pay": ["packages/features/pay/src"],
       "@features/video": ["packages/features/video/src"],
+      "@features/classroom": ["packages/features/classroom/src"],
       "@features/music": ["packages/features/music/src"],
       "@features/bfui": ["packages/features/bfui/src"],
       "@app/*": ["src/*"]
