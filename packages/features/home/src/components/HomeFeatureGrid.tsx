@@ -1,12 +1,13 @@
 import React from 'react';
 import {
   Image,
+  type ImageSourcePropType,
   Pressable,
   StyleSheet,
   Text,
   View,
-  useWindowDimensions,
 } from 'react-native';
+import {homeServiceIcons, type HomeServiceIconKey} from '../assets/homeAssets';
 import type {HomeFeatureItem} from '../models/homeDashboardModel';
 import {homeDashboardTheme as t} from '../theme/homeDashboardTheme';
 
@@ -15,29 +16,39 @@ interface Props {
   onFeaturePress: (item: HomeFeatureItem) => void;
 }
 
-export function HomeFeatureGrid({items, onFeaturePress}: Props) {
-  const {width} = useWindowDimensions();
-  const cellWidth = (width - 32 - 16) / 5;
+function resolveIconSource(item: HomeFeatureItem): ImageSourcePropType | null {
+  if (item.iconKey && item.iconKey in homeServiceIcons) {
+    return homeServiceIcons[item.iconKey as HomeServiceIconKey];
+  }
+  if (item.imageUrl) {
+    return {uri: item.imageUrl};
+  }
+  return null;
+}
 
+export function HomeFeatureGrid({items, onFeaturePress}: Props) {
   return (
     <View style={styles.card}>
-      {items.map(item => (
-        <Pressable
-          key={item.label}
-          style={[styles.cell, {width: cellWidth}]}
-          onPress={() => onFeaturePress(item)}>
-          <View style={styles.iconBox}>
-            {item.imageUrl ? (
-              <Image source={{uri: item.imageUrl}} style={styles.iconImage} />
-            ) : (
-              <Text style={styles.emoji}>{item.emoji ?? '?'}</Text>
-            )}
-          </View>
-          <Text style={styles.label} numberOfLines={1}>
-            {item.label}
-          </Text>
-        </Pressable>
-      ))}
+      {items.map(item => {
+        const source = resolveIconSource(item);
+        return (
+          <Pressable
+            key={item.label}
+            style={styles.cell}
+            onPress={() => onFeaturePress(item)}>
+            <View style={styles.iconBox}>
+              {source ? (
+                <Image source={source} style={styles.iconImage} />
+              ) : (
+                <Text style={styles.emoji}>{item.emoji ?? '?'}</Text>
+              )}
+            </View>
+            <Text style={styles.label} numberOfLines={1}>
+              {item.label}
+            </Text>
+          </Pressable>
+        );
+      })}
     </View>
   );
 }
@@ -47,13 +58,21 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginTop: 16,
     paddingHorizontal: 8,
-    paddingVertical: 16,
+    paddingTop: 16,
+    paddingBottom: 4,
     backgroundColor: t.surface,
     borderRadius: t.radiusMd,
     flexDirection: 'row',
     flexWrap: 'wrap',
+    ...t.cardShadow,
   },
-  cell: {alignItems: 'center', marginBottom: 12},
+  /** Flutter GridView crossAxisCount: 5 — percent width avoids screen-width miscalc → 4-col wrap */
+  cell: {
+    width: '20%',
+    alignItems: 'center',
+    marginBottom: 12,
+    paddingHorizontal: 2,
+  },
   iconBox: {
     width: 48,
     height: 48,

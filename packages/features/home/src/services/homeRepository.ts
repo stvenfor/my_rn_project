@@ -5,25 +5,16 @@ export async function loadDashboard(): Promise<HomeDashboardData> {
   return {
     storeName: '[4S]北京沃德龙鼎吉利',
     features: [
-      {label: '销售顾问', imageUrl: 'https://picsum.photos/seed/sales/200/200'},
-      {label: '生活服务', imageUrl: 'https://picsum.photos/seed/life/200/200'},
-      {label: '二手车', imageUrl: 'https://picsum.photos/seed/usedcar/200/200'},
-      {
-        label: '新车关注',
-        imageUrl: 'https://picsum.photos/seed/newcar/200/200',
-      },
-      {
-        label: '客户管理',
-        imageUrl: 'https://picsum.photos/seed/customer/200/200',
-      },
-      {label: '订单中心', imageUrl: 'https://picsum.photos/seed/order/200/200'},
-      {label: '数据分析', imageUrl: 'https://picsum.photos/seed/data/200/200'},
-      {label: '直播带货', imageUrl: 'https://picsum.photos/seed/live/200/200'},
-      {
-        label: '营销活动',
-        imageUrl: 'https://picsum.photos/seed/market/200/200',
-      },
-      {label: '更多', imageUrl: 'https://picsum.photos/seed/more/200/200'},
+      {label: '销售顾问', iconKey: 'smart_sale'},
+      {label: '生活服务', iconKey: 'service_management'},
+      {label: '二手车', iconKey: 'used_car'},
+      {label: '新车关注', iconKey: 'new_car_in_store'},
+      {label: '客户管理', iconKey: 'customer_profile'},
+      {label: '订单中心', iconKey: 'new_car_deal'},
+      {label: '数据分析', iconKey: 'intelligence_task'},
+      {label: '直播带货', iconKey: 'small_video'},
+      {label: '营销活动', iconKey: 'marketing'},
+      {label: '更多', iconKey: 'all_functions'},
     ],
     quickActions: [
       {

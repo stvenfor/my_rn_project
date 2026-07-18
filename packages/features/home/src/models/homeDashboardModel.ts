@@ -2,6 +2,8 @@ export interface HomeFeatureItem {
   label: string;
   emoji?: string;
   imageUrl?: string;
+  /** Local all_services icon key (preferred over remote imageUrl). */
+  iconKey?: string;
 }
 
 export interface HomeQuickAction {
