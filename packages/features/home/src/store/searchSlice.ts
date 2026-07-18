@@ -17,6 +17,9 @@ interface SearchState {
   selectedRankTab: SearchRankTab;
   rankLists: Record<SearchRankTab, SearchRankItem[]>;
   rotateIndex: number;
+  /** Flutter `_isUserEditing` — pause overlay while typing / after clear */
+  isUserEditing: boolean;
+  isFocused: boolean;
 }
 
 const initialRankLists = Object.fromEntries(
@@ -31,9 +34,20 @@ const initialState: SearchState = {
   selectedRankTab: 'hotDubbing',
   rankLists: initialRankLists,
   rotateIndex: 0,
+  isUserEditing: false,
+  isFocused: false,
 };
 
 const MAX_HISTORY = 10;
+
+function shouldShowOverlay(state: SearchState): boolean {
+  return (
+    !state.isUserEditing &&
+    !state.isFocused &&
+    state.history.length > 0 &&
+    state.keyword.trim().length === 0
+  );
+}
 
 const searchSlice = createSlice({
   name: 'homeSearch',
@@ -41,9 +55,21 @@ const searchSlice = createSlice({
   reducers: {
     setKeyword(state, action: PayloadAction<string>) {
       state.keyword = action.payload;
+      if (action.payload.trim().length > 0) {
+        state.isUserEditing = true;
+      }
     },
     clearKeyword(state) {
       state.keyword = '';
+      state.isUserEditing = true;
+    },
+    setSearchFocused(state, action: PayloadAction<boolean>) {
+      state.isFocused = action.payload;
+      if (action.payload) {
+        state.isUserEditing = true;
+      } else if (state.keyword.trim().length === 0) {
+        state.isUserEditing = false;
+      }
     },
     pushHistory(state, action: PayloadAction<string>) {
       const text = action.payload.trim();
@@ -54,18 +80,44 @@ const searchSlice = createSlice({
         text,
         ...state.history.filter(item => item !== text),
       ].slice(0, MAX_HISTORY);
+      state.rotateIndex = 0;
+    },
+    /** Flutter onTagTap: fill keyword + history, stay in editing mode */
+    applyTagKeyword(state, action: PayloadAction<string>) {
+      const text = action.payload.trim();
+      if (!text) {
+        return;
+      }
+      state.isUserEditing = true;
+      state.keyword = text;
+      state.history = [
+        text,
+        ...state.history.filter(item => item !== text),
+      ].slice(0, MAX_HISTORY);
+      state.rotateIndex = 0;
     },
     clearHistory(state) {
       state.history = [];
+      state.rotateIndex = 0;
+      if (!state.isUserEditing && !state.isFocused) {
+        state.keyword = '';
+      }
     },
     refreshDiscovery(state) {
-      state.discovery = [...state.discovery].sort(() => Math.random() - 0.5);
+      const items = [...state.discovery];
+      for (let i = items.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const tmp = items[i];
+        items[i] = items[j];
+        items[j] = tmp;
+      }
+      state.discovery = items;
     },
     setRankTab(state, action: PayloadAction<SearchRankTab>) {
       state.selectedRankTab = action.payload;
     },
     bumpRotateIndex(state) {
-      if (state.history.length === 0) {
+      if (!shouldShowOverlay(state) || state.history.length === 0) {
         return;
       }
       state.rotateIndex = (state.rotateIndex + 1) % state.history.length;
@@ -76,7 +128,9 @@ const searchSlice = createSlice({
 export const {
   setKeyword,
   clearKeyword,
+  setSearchFocused,
   pushHistory,
+  applyTagKeyword,
   clearHistory,
   refreshDiscovery,
   setRankTab,
@@ -102,5 +156,7 @@ export const selectRotateKeyword = (s: {homeSearch: SearchState}) => {
   if (history.length === 0) {
     return '';
   }
-  return history[rotateIndex % history.length];
+  return history[rotateIndex % history.length] ?? '';
 };
+export const selectShowRotatingOverlay = (s: {homeSearch: SearchState}) =>
+  shouldShowOverlay(s.homeSearch);
