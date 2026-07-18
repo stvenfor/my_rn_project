@@ -30,7 +30,8 @@ function createRootStackNavigator(): StackNavigator {
       const createSharedElementStackNavigator =
         require('react-navigation-shared-element')
           .createSharedElementStackNavigator as typeof import('react-navigation-shared-element').createSharedElementStackNavigator;
-      return createSharedElementStackNavigator<RootStackParamList>();
+      // Shared-element stack predates Navigation 7 Group API; cast to StackNavigator.
+      return createSharedElementStackNavigator<RootStackParamList>() as unknown as StackNavigator;
     } catch {
       // Fall back when shared-element stack cannot load.
     }

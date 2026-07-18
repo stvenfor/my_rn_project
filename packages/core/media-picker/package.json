@@ -6,6 +6,6 @@
   "types": "src/index.ts",
   "dependencies": {
     "@react-native-ohos/react-native-image-picker": "8.2.4",
-    "react-native-image-picker": "7.1.2"
+    "react-native-image-picker": "8.2.0"
   }
 }

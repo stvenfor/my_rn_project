@@ -13,11 +13,14 @@ import {
   View,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
+import type {ThunkDispatch, UnknownAction} from '@reduxjs/toolkit';
 import {AppToast, colors} from '@ui/design-system';
 import type {CommentModel} from '../models/commentModel';
 import type {PostModel} from '../models/postModel';
 import {fetchComments, sendComment} from '../store/communitySlice';
 import {communityTheme, communityTypography} from '../theme/communityTheme';
+
+type CommunityDispatch = ThunkDispatch<unknown, unknown, UnknownAction>;
 
 interface CommentBottomSheetProps {
   visible: boolean;
@@ -30,7 +33,7 @@ export function CommentBottomSheet({
   post,
   onClose,
 }: CommentBottomSheetProps) {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<CommunityDispatch>();
   const [comments, setComments] = useState<CommentModel[]>([]);
   const [loading, setLoading] = useState(true);
   const [input, setInput] = useState('');
@@ -45,7 +48,9 @@ export function CommentBottomSheet({
     setReplyTo(null);
     dispatch(fetchComments(post.id))
       .unwrap()
-      .then(result => setComments(result.comments))
+      .then((result: {comments: CommentModel[]}) =>
+        setComments(result.comments),
+      )
       .finally(() => setLoading(false));
   }, [visible, post, dispatch]);
 

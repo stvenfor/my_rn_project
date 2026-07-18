@@ -22,10 +22,7 @@ function needsToggle(text: string): boolean {
 export function ExpandTextContent({post}: ExpandTextContentProps) {
   const dispatch = useDispatch();
   const expanded = useSelector(state =>
-    selectIsExpanded(
-      state as {community: {expandedPostIds: string[]}},
-      post.id,
-    ),
+    selectIsExpanded(state as Parameters<typeof selectIsExpanded>[0], post.id),
   );
   const showToggle = needsToggle(post.content);
 

@@ -4,9 +4,13 @@ import {getMediaPickerService} from '@core/media-picker';
 import {getPermissionsService} from '@core/permissions';
 import type {MediaPickSource} from '../components/MediaSourceBottomSheet';
 
+function isHarmonyOS(): boolean {
+  return (Platform.OS as string) === 'harmony';
+}
+
 function showFeedback(message: string, options?: {alert?: boolean}) {
   AppToast.show(message);
-  if (Platform.OS === 'harmony' || options?.alert) {
+  if (isHarmonyOS() || options?.alert) {
     Alert.alert('提示', message);
   }
 }

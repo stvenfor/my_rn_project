@@ -2,6 +2,7 @@ import {
   allServicesReducer,
   loadAllServicesFavorites,
   removeFavorite,
+  selectFavoriteIds,
   selectFavoriteItems,
 } from '../store/allServicesSlice';
 
@@ -53,6 +54,20 @@ describe('allServicesSlice', () => {
     );
     const next = allServicesReducer(base.allServices, action);
     expect(selectFavoriteItems({allServices: next})).toHaveLength(3);
+  });
+
+  it('selectFavoriteIds is memoized for the same favoriteItems reference', () => {
+    const state = {
+      allServices: {
+        ...base.allServices,
+        favoriteItems: mockItems,
+      },
+    };
+    const first = selectFavoriteIds(state);
+    const second = selectFavoriteIds(state);
+    expect(first).toBe(second);
+    expect(first.has('a')).toBe(true);
+    expect(first.size).toBe(3);
   });
 
   it('removeFavorite persists when above minimum', async () => {

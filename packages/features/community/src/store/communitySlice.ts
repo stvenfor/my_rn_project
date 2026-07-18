@@ -212,7 +212,10 @@ export function selectPostById(state: RootWithCommunity, id: string) {
   return state.community.posts.find(p => p.id === id);
 }
 
-export function selectIsExpanded(state: RootWithCommunity, postId: string) {
+export function selectIsExpanded(
+  state: {community: Pick<CommunityState, 'expandedPostIds'>},
+  postId: string,
+) {
   return state.community.expandedPostIds.includes(postId);
 }
 

@@ -1,6 +1,7 @@
 import {
   createSlice,
   createAsyncThunk,
+  createSelector,
   type PayloadAction,
 } from '@reduxjs/toolkit';
 import type {User} from '@core/domain';
@@ -102,21 +103,23 @@ export const selectHomeRefreshing = (state: {home: HomeState}) =>
   state.home.refreshing;
 export const selectHomeError = (state: {home: HomeState}) => state.home.error;
 
-export const selectCurrentMetrics = (state: {
-  home: HomeState;
-}): HomeMetric[] => {
-  const data = state.home.dashboard;
-  if (!data) {
-    return [];
-  }
-  switch (state.home.selectedMetricTab) {
-    case 1:
-      return data.metricsYesterday;
-    case 2:
-      return data.metricsMonth;
-    default:
-      return data.metricsToday;
-  }
-};
+const EMPTY_METRICS: HomeMetric[] = [];
+
+export const selectCurrentMetrics = createSelector(
+  [selectHomeDashboard, selectHomeMetricTab],
+  (data, tab): HomeMetric[] => {
+    if (!data) {
+      return EMPTY_METRICS;
+    }
+    switch (tab) {
+      case 1:
+        return data.metricsYesterday;
+      case 2:
+        return data.metricsMonth;
+      default:
+        return data.metricsToday;
+    }
+  },
+);
 
 export {METRIC_TABS};

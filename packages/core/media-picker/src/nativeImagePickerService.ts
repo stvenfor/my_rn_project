@@ -1,6 +1,7 @@
 import {Platform} from 'react-native';
 import {launchImagePicker} from './imagePickerLauncher';
 import {resolveNativeImagePickerModule} from './harmonyImagePickerBridge';
+import {isHarmonyOS} from './platform';
 import type {
   MediaPickerService,
   PickImageOptions,
@@ -57,7 +58,7 @@ export class NativeImagePickerService implements MediaPickerService {
   async pickImage(options: PickImageOptions = {}): Promise<PickedMedia | null> {
     if (!isNativeImagePickerAvailable()) {
       throw new Error(
-        Platform.OS === 'harmony'
+        isHarmonyOS()
           ? '相册模块未就绪，请重新编译 Harmony 应用'
           : '相册模块未就绪，请重新编译应用',
       );
@@ -107,5 +108,5 @@ export function isNativeImagePickerAvailable(): boolean {
   if (resolveNativeImagePickerModule()) {
     return true;
   }
-  return Platform.OS === 'harmony';
+  return isHarmonyOS();
 }

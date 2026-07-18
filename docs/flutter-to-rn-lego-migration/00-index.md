@@ -70,7 +70,7 @@ Phase 4 BFUI and Long-tail
 ## 全局默认
 
 - 包管理：沿用当前 RN 仓库的 npm + `package-lock.json`。
-- React Native：沿用当前 RN 0.72.5 和 HarmonyOS 依赖。
+- React Native：沿用当前 RN 0.77.1 和 HarmonyOS（RNOH 0.77.72）依赖。
 - 状态管理：Redux Toolkit。
 - 路由：React Navigation。
 - UI 令牌：所有颜色、字体、间距来自 `@ui/design-system/theme`。

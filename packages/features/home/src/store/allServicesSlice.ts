@@ -1,6 +1,7 @@
 import {
   createSlice,
   createAsyncThunk,
+  createSelector,
   type PayloadAction,
 } from '@reduxjs/toolkit';
 import {AppToast} from '@ui/design-system';
@@ -103,8 +104,11 @@ export const selectFavoriteItems = (state: {allServices: AllServicesState}) =>
 export const selectAllServicesEditing = (state: {
   allServices: AllServicesState;
 }) => state.allServices.isEditing;
-export const selectFavoriteIds = (state: {allServices: AllServicesState}) =>
-  new Set(state.allServices.favoriteItems.map(item => item.id));
+/** Memoized: `new Set(...)` must not run on every useSelector call. */
+export const selectFavoriteIds = createSelector(
+  [selectFavoriteItems],
+  items => new Set(items.map(item => item.id)),
+);
 export const selectCanRemoveFavorite = (state: {
   allServices: AllServicesState;
 }) => state.allServices.favoriteItems.length > MIN_FAVORITE_COUNT;

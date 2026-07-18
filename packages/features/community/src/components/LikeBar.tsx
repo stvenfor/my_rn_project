@@ -1,9 +1,12 @@
 import React, {useEffect, useRef} from 'react';
 import {Animated, Pressable, StyleSheet, Text, View} from 'react-native';
 import {useDispatch} from 'react-redux';
+import type {ThunkDispatch, UnknownAction} from '@reduxjs/toolkit';
 import type {PostModel} from '../models/postModel';
 import {toggleLike} from '../store/communitySlice';
 import {communityTheme, communityTypography} from '../theme/communityTheme';
+
+type CommunityDispatch = ThunkDispatch<unknown, unknown, UnknownAction>;
 
 interface LikeBarProps {
   post: PostModel;
@@ -30,7 +33,7 @@ function ActionButton({
 }
 
 export function LikeBar({post, onCommentPress}: LikeBarProps) {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<CommunityDispatch>();
   const scale = useRef(new Animated.Value(1)).current;
   const color = communityTheme.actionColor;
   const activeColor = post.isLiked ? communityTheme.likeActiveColor : color;

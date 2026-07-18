@@ -75,7 +75,7 @@ Known gaps:
   "types": "src/index.ts",
   "peerDependencies": {
     "react": "18.2.0",
-    "react-native": "0.72.5"
+    "react-native": "0.77.1"
   }
 }
 ```

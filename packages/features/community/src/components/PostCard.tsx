@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {useDispatch} from 'react-redux';
+import type {ThunkDispatch, UnknownAction} from '@reduxjs/toolkit';
 import {AppToast} from '@ui/design-system';
 import type {PostModel} from '../models/postModel';
 import {hasImages, hasVideo} from '../models/postModel';
@@ -15,12 +16,14 @@ import {UserInfoRow} from './UserInfoRow';
 import {VideoCard} from './VideoCard';
 import {communityTheme} from '../theme/communityTheme';
 
+type CommunityDispatch = ThunkDispatch<unknown, unknown, UnknownAction>;
+
 interface PostCardProps {
   post: PostModel;
 }
 
 export function PostCard({post}: PostCardProps) {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<CommunityDispatch>();
   const [moreVisible, setMoreVisible] = useState(false);
   const [commentVisible, setCommentVisible] = useState(false);
 

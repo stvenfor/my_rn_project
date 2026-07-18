@@ -2,35 +2,37 @@
 
 三端 React Native 项目，同时支持 **iOS**、**Android**、**HarmonyOS (OpenHarmony / RNOH)**。
 
-基于 [React Native 0.72.5](https://reactnative.cn/) 与 [CPF-RN / RNOH 生态](https://gitcode.com/org/CPF-RN/repos) 搭建，集成 Stack 导航常用栈。
+基于 [React Native 0.77.1](https://reactnative.cn/) 与 [CPF-RN / RNOH 生态](https://gitcode.com/org/CPF-RN/repos) 搭建，集成 Stack 导航常用栈。
 
 ## 技术栈
 
 | 组件 | 版本 |
 |------|------|
-| React Native | 0.72.5 |
-| @react-native-oh/react-native-harmony | 0.72.140 |
-| @react-native-oh/react-native-harmony-cli | 0.72.140 |
-| @rnoh/react-native-openharmony (ohpm) | 0.72.140 |
-| TypeScript | 5.3.3 |
+| React Native | 0.77.1 |
+| @react-native-oh/react-native-harmony | 0.77.72 |
+| @react-native-oh/react-native-harmony-cli | 0.77.72 |
+| @rnoh/react-native-openharmony (ohpm) | 0.77.72 |
+| TypeScript | 5.0.4 |
 
 ## 已安装三方库
 
 | 用途 | npm 包 | 版本 |
 |------|--------|------|
-| 导航容器 | @react-navigation/native | 6.1.17 |
-| 栈导航 (Harmony 适配) | @react-native-ohos/stack | 6.4.1-1.rc.1 |
-| 手势 (Harmony 适配) | @react-native-ohos/react-native-gesture-handler | 2.14.18 |
-| 原生屏 (Harmony 适配) | @react-native-ohos/react-native-screens | 3.34.1 |
-| 安全区 (Harmony 适配) | @react-native-ohos/react-native-safe-area-context | 4.7.5 |
-| iOS/Android 手势 | react-native-gesture-handler | 2.14.1 |
-| iOS/Android 原生屏 | react-native-screens | 3.34.0 |
-| 底部 Tab | @react-navigation/bottom-tabs | 6.5.20 |
+| 导航容器 | @react-navigation/native | 7.1.6 |
+| 栈导航 (Harmony 适配) | @react-native-ohos/stack | 7.2.11 |
+| 手势 (Harmony 适配) | @react-native-ohos/react-native-gesture-handler | 2.23.4 |
+| 原生屏 (Harmony 适配) | @react-native-ohos/react-native-screens | 4.8.3-rc.2 |
+| 动画 (Harmony 适配) | @react-native-ohos/react-native-reanimated | 3.18.2 |
+| 安全区 (Harmony 适配) | @react-native-ohos/react-native-safe-area-context | 5.1.1 |
+| iOS/Android 手势 | react-native-gesture-handler | 2.25.0 |
+| iOS/Android 原生屏 | react-native-screens | 4.8.0 |
+| iOS/Android 动画 | react-native-reanimated | 3.18.0 |
+| 底部 Tab | @react-navigation/bottom-tabs | 7.3.10 |
 | 状态管理 | @reduxjs/toolkit + react-redux | 2.2.7 / 9.1.2 |
-| 持久化 | @react-native-async-storage/async-storage | 1.21.0 |
-| 持久化 (Harmony) | @react-native-ohos/async-storage | 1.21.1 |
-| WebView | react-native-webview | 13.10.5 |
-| WebView (Harmony) | @react-native-ohos/react-native-webview | 13.10.5 |
+| 持久化 | @react-native-async-storage/async-storage | 2.2.0 |
+| 持久化 (Harmony) | @react-native-ohos/async-storage | 2.2.1 |
+| WebView | react-native-webview | 13.15.0 |
+| WebView (Harmony) | @react-native-ohos/react-native-webview | 13.15.2 |
 
 Harmony 端原生库通过 `react-native link-harmony` 自动链接（Autolinking）。
 
