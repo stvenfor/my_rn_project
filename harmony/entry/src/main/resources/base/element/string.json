@@ -19,6 +19,14 @@
     {
       "name": "read_imagevideo_permission_reason",
       "value": "用于从相册选择头像图片"
+    },
+    {
+      "name": "bluetooth_permission_reason",
+      "value": "用于扫描并连接附近的蓝牙设备"
+    },
+    {
+      "name": "bluetooth_location_permission_reason",
+      "value": "用于扫描附近的蓝牙设备"
     }
   ]
 }

@@ -1,9 +1,8 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {useTranslation} from 'react-i18next';
-import {RoutePath, type RootStackParamList} from '@core/navigation';
+import {type RootStackParamList} from '@core/navigation';
 import type {RootStackScreenProps} from '@core/navigation';
-import {getBluetoothService, type BleDevice} from '@core/bluetooth';
 import {getImAdapter} from '@core/im';
 import {getLinkingService, type PendingNavigation} from '@core/linking';
 import {getRealtimeAdapter} from '@core/realtime';
@@ -14,54 +13,12 @@ import type {StackNavigationProp} from '@react-native-ohos/stack';
 import {
   AppNavBar,
   AppPageScaffold,
-  ListRow,
   PrimaryButton,
   spacing,
   typography,
 } from '@ui/design-system';
 
-export function DebugBleScreen({navigation}: RootStackScreenProps<'DebugBle'>) {
-  const {t} = useTranslation();
-  const [devices, setDevices] = useState<BleDevice[]>([]);
-  const [connected, setConnected] = useState<string | null>(null);
-
-  useEffect(() => {
-    getBluetoothService().scan().then(setDevices);
-  }, []);
-
-  return (
-    <AppPageScaffold
-      contentStyle={{padding: spacing.md}}
-      navBar={
-        <AppNavBar
-          title={t('debugBleTitle')}
-          showBackButton
-          onBack={() => navigation.goBack()}
-        />
-      }>
-      <Text style={styles.hint}>{t('debugBleHint')}</Text>
-      <FlatList
-        data={devices}
-        keyExtractor={item => item.id}
-        renderItem={({item}) => (
-          <ListRow
-            title={item.name}
-            subtitle={`${item.id} · RSSI ${item.rssi ?? 'n/a'}`}
-            onPress={async () => {
-              await getBluetoothService().connect(item.id);
-              setConnected(item.name);
-            }}
-          />
-        )}
-      />
-      {connected ? (
-        <Text style={styles.status}>
-          {t('debugBleConnected')}: {connected}
-        </Text>
-      ) : null}
-    </AppPageScaffold>
-  );
-}
+export {DebugBleScreen} from './DebugBleScreen';
 
 export function DebugLinkingScreen({
   navigation,
@@ -141,7 +98,10 @@ export function DebugLinkingScreen({
         onPress={() => emitUrl('myapp://app/community')}
       />
       <View style={styles.gap} />
-      <PrimaryButton title={t('debugLinkingApplyPending')} onPress={applyPending} />
+      <PrimaryButton
+        title={t('debugLinkingApplyPending')}
+        onPress={applyPending}
+      />
       <Text style={styles.status}>
         {t('debugLinkingLast')}: {lastUrl ?? '—'}
       </Text>
@@ -151,9 +111,7 @@ export function DebugLinkingScreen({
           ? `${pending.route} ${JSON.stringify(pending.params ?? {})}`
           : '—'}
       </Text>
-      <Text style={styles.status}>
-        最近应用: {lastApplied ?? '—'}
-      </Text>
+      <Text style={styles.status}>最近应用: {lastApplied ?? '—'}</Text>
     </AppPageScaffold>
   );
 }

@@ -96,7 +96,7 @@ export const PAGE_PARITY_ENTRIES: PageParityEntry[] = [
   {id: 'bfui-invite', module: 'bfui', flutterPath: 'packages/features/bfui/lib/invite_friend_screen.dart', rnRoute: 'BfuiTemplate', rnComponent: 'InviteFriendTemplate', status: 'Migrated'},
   {id: 'bfui-nav-drawer', module: 'bfui', flutterPath: 'packages/features/bfui/lib/navigation_home_screen.dart', rnRoute: 'BfuiTemplate', rnComponent: 'NavigationDrawerTemplate', status: 'Migrated'},
 
-  {id: 'debug-ble', module: 'infrastructure', flutterPath: 'packages/infrastructure/bluetooth/lib/debug/ble_demo_page.dart', rnRoute: 'DebugBle', rnComponent: 'DebugBleScreen', status: 'Migrated', note: 'App shell debug route via @core/bluetooth'},
+  {id: 'debug-ble', module: 'infrastructure', flutterPath: 'packages/infrastructure/bluetooth/lib/debug/ble_demo_page.dart', rnRoute: 'DebugBle', rnComponent: 'DebugBleScreen', status: 'Migrated', note: '1:1 BleDemo UI + MockBluetoothService state machine; Settings entry; no image assets'},
   {id: 'debug-linking', module: 'infrastructure', flutterPath: 'packages/infrastructure/linking/lib/debug/linking_debug_page.dart', rnRoute: 'DebugLinking', rnComponent: 'DebugLinkingScreen', status: 'Migrated', note: 'App shell debug route via @core/linking'},
   {id: 'debug-realtime', module: 'infrastructure', flutterPath: 'packages/infrastructure/realtime/lib/debug/realtime_debug_page.dart', rnRoute: 'DebugRealtime', rnComponent: 'DebugRealtimeScreen', status: 'Migrated', note: 'App shell debug route via @core/realtime'},
   {id: 'debug-im', module: 'infrastructure', flutterPath: 'packages/infrastructure/rongcloud_im/lib/debug/im_debug_page.dart', rnRoute: 'DebugIm', rnComponent: 'DebugImScreen', status: 'Migrated', note: 'App shell debug route via @core/im'},
