@@ -163,16 +163,23 @@ export function buildDubbingHomeFeed(): DubbingHomeFeed {
       },
       {
         id: 'editor_2',
-        title: '热门影视跟读',
+        title: '英语启蒙课堂',
         cover: dubbingHomeAssets.cover_02,
-        subtitle: '原声台词练习',
-        badge: 'HOT',
+        subtitle: '零基础也能开口说',
+        badge: 'New',
       },
       {
         id: 'editor_3',
-        title: '少儿启蒙精选',
+        title: '趣味配音挑战',
         cover: dubbingHomeAssets.cover_03,
-        subtitle: '分级阅读配套',
+        subtitle: '模仿经典电影片段',
+      },
+      {
+        id: 'editor_4',
+        title: '每日跟读练习',
+        cover: dubbingHomeAssets.cover_04,
+        subtitle: '坚持打卡领奖励',
+        badge: 'New',
       },
     ],
     albums: [

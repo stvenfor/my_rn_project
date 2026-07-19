@@ -1,13 +1,14 @@
 import React, {useState} from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import type {RootStackScreenProps} from '@core/navigation';
 import {RoutePath} from '@core/navigation';
 import {AppNavBar, AppPageScaffold} from '@ui/design-system';
+import {StrategyFearGreedGauge} from '../components/StrategyFearGreedGauge';
 import {homeDashboardTheme as t} from '../theme/homeDashboardTheme';
 
-const SUB_TABS = ['推荐', '逆向', '趋势'];
-const PERIODS = ['今年来', '近1周', '近1月', '近3月', '近1年'];
+const SUB_TABS = ['推荐', '逆向', '趋势'] as const;
+const PERIODS = ['今年来', '近1周', '近1月', '近3月', '近1年'] as const;
 const GRID: {label: string; value: string; positive: boolean}[] = [
   {label: 'A股', value: '+19.22%', positive: true},
   {label: '中债', value: '+3.15%', positive: true},
@@ -20,6 +21,12 @@ const GRID: {label: string; value: string; positive: boolean}[] = [
   {label: '现金', value: '+1.20%', positive: true},
 ];
 
+const INTRO =
+  '「大类资产九宫格策略」通过分散配置降低波动，帮助你在不同市场环境下保持稳健收益。';
+
+const FOOTNOTE =
+  '在恐慌时买入、贪婪时卖出，通过定期定额降低择时压力，适合长期持有的投资者。';
+
 export function HomeStrategyScreen({
   navigation,
 }: RootStackScreenProps<typeof RoutePath.homeStrategy>) {
@@ -29,8 +36,16 @@ export function HomeStrategyScreen({
 
   return (
     <AppPageScaffold layout="standard" backgroundColor={t.background}>
-      <AppNavBar title="策略" onBack={() => navigation.goBack()} />
-      <View style={[styles.body, {paddingBottom: insets.bottom + 24}]}>
+      <AppNavBar
+        title="策略"
+        showBackButton
+        onBack={() => navigation.goBack()}
+      />
+      <ScrollView
+        contentContainerStyle={[
+          styles.body,
+          {paddingBottom: insets.bottom + 24},
+        ]}>
         <View style={styles.subTabs}>
           {SUB_TABS.map((label, index) => {
             const active = index === subTab;
@@ -43,44 +58,49 @@ export function HomeStrategyScreen({
                   style={[styles.subTabText, active && styles.subTabActive]}>
                   {label}
                 </Text>
-                {active ? <View style={styles.subUnderline} /> : null}
+                <View
+                  style={[
+                    styles.subUnderline,
+                    active && styles.subUnderlineActive,
+                  ]}
+                />
               </Pressable>
             );
           })}
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.intro}>
-            资产九宫格展示主要大类资产区间表现，数据仅供参考。
-          </Text>
+          <Text style={styles.intro}>{INTRO}</Text>
           <View style={styles.grid}>
             {GRID.map(cell => (
               <View
                 key={cell.label}
                 style={[
                   styles.cell,
-                  {
-                    backgroundColor: cell.positive
-                      ? 'rgba(255,59,48,0.08)'
-                      : 'rgba(52,199,89,0.08)',
-                  },
+                  cell.positive ? styles.cellUp : styles.cellDown,
                 ]}>
                 <Text style={styles.cellLabel}>{cell.label}</Text>
                 <Text
                   style={[
                     styles.cellValue,
-                    {color: cell.positive ? '#FF3B30' : '#34C759'},
+                    cell.positive ? styles.cellValueUp : styles.cellValueDown,
                   ]}>
                   {cell.value}
                 </Text>
               </View>
             ))}
           </View>
-          <View style={styles.periods}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.periodScroll}>
             {PERIODS.map((label, index) => {
               const active = index === period;
               return (
-                <Pressable key={label} onPress={() => setPeriod(index)}>
+                <Pressable
+                  key={label}
+                  style={styles.periodBtn}
+                  onPress={() => setPeriod(index)}>
                   <Text
                     style={[
                       styles.period,
@@ -91,55 +111,65 @@ export function HomeStrategyScreen({
                 </Pressable>
               );
             })}
-          </View>
+          </ScrollView>
         </View>
 
         <View style={styles.card}>
           <View style={styles.strategyHeader}>
-            <Text style={styles.strategyTitle}>黄金恐贪定投 · 第一期</Text>
-            <View style={styles.tag}>
-              <Text style={styles.tagText}>逆向</Text>
+            <View style={styles.strategyHeaderLeft}>
+              <Text style={styles.strategyTitle}>黄金恐贪定投 · 第一期</Text>
+              <View style={styles.tag}>
+                <Text style={styles.tagText}>逆向</Text>
+              </View>
             </View>
             <Text style={styles.link}>如何跟投</Text>
           </View>
-          <Text style={styles.returnValue}>-11.35%</Text>
-          <Text style={styles.returnLabel}>本期收益率</Text>
-          <View style={styles.gauge}>
-            <Text style={styles.gaugeText}>63 中立</Text>
+
+          <View style={styles.returnRow}>
+            <View>
+              <Text style={styles.returnValue}>-11.35%</Text>
+              <Text style={styles.returnLabel}>本期收益率</Text>
+            </View>
+            <StrategyFearGreedGauge />
           </View>
+
           <Text style={styles.progressLabel}>定投进度</Text>
           <View style={styles.progressTrack}>
-            <View style={[styles.progressFill, {width: '72%'}]} />
+            <View style={styles.progressFill} />
             <Text style={styles.progressOverlay}>36 / 50</Text>
           </View>
+
           <View style={styles.footerRow}>
             <Text style={styles.footerText}>本周已投 1 份</Text>
-            <Pressable style={styles.subscribe}>
+            <Pressable style={styles.subscribe} onPress={() => {}}>
               <Text style={styles.subscribeText}>订阅</Text>
             </Pressable>
           </View>
-          <Text style={styles.footnote}>
-            策略内容仅供合格投资者参考，不构成投资建议。
-          </Text>
+
+          <Text style={styles.footnote}>{FOOTNOTE}</Text>
         </View>
-      </View>
+      </ScrollView>
     </AppPageScaffold>
   );
 }
 
 const styles = StyleSheet.create({
   body: {paddingHorizontal: 16, paddingTop: 8},
-  subTabs: {flexDirection: 'row', marginBottom: 12},
-  subTab: {marginRight: 32, alignItems: 'center'},
-  subTabText: {fontSize: 16, color: t.labelSecondary},
+  subTabs: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
+  subTab: {marginHorizontal: 16, alignItems: 'center'},
+  subTabText: {fontSize: 16, color: t.labelSecondary, fontWeight: '400'},
   subTabActive: {color: t.labelPrimary, fontWeight: '600'},
   subUnderline: {
-    marginTop: 6,
-    width: 24,
+    marginTop: 8,
+    width: 0,
     height: 3,
     borderRadius: 2,
-    backgroundColor: t.accent,
   },
+  subUnderlineActive: {width: 24, backgroundColor: t.accent},
   card: {
     backgroundColor: t.surface,
     borderRadius: t.radiusMd,
@@ -150,9 +180,9 @@ const styles = StyleSheet.create({
   },
   intro: {
     fontSize: 13,
-    color: t.labelSecondary,
+    color: t.labelPrimary,
     lineHeight: 20,
-    marginBottom: 12,
+    marginBottom: 16,
   },
   grid: {
     flexDirection: 'row',
@@ -166,55 +196,53 @@ const styles = StyleSheet.create({
     padding: 8,
     marginBottom: 8,
     justifyContent: 'center',
+    alignItems: 'center',
   },
+  cellUp: {backgroundColor: 'rgba(255,59,48,0.08)'},
+  cellDown: {backgroundColor: 'rgba(52,199,89,0.08)'},
   cellLabel: {fontSize: 12, color: t.labelPrimary},
   cellValue: {marginTop: 4, fontSize: 14, fontWeight: '700'},
-  periods: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 8,
-  },
+  cellValueUp: {color: '#FF3B30'},
+  cellValueDown: {color: '#34C759'},
+  periodScroll: {marginTop: 8},
+  periodBtn: {marginRight: 16},
   period: {fontSize: 13},
   periodActive: {color: t.accent, fontWeight: '600'},
-  periodInactive: {color: t.labelSecondary},
+  periodInactive: {color: t.labelSecondary, fontWeight: '400'},
   strategyHeader: {
     flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
   },
+  strategyHeaderLeft: {flex: 1, marginRight: 12},
   strategyTitle: {
     fontSize: 17,
     fontWeight: '600',
     color: t.labelPrimary,
-    marginRight: 8,
   },
   tag: {
+    marginTop: 6,
+    alignSelf: 'flex-start',
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 4,
     backgroundColor: 'rgba(0,122,255,0.1)',
-    marginRight: 8,
   },
   tagText: {fontSize: 11, fontWeight: '600', color: t.accent},
-  link: {fontSize: 13, color: t.accent, fontWeight: '500'},
+  link: {fontSize: 14, color: t.accent, fontWeight: '500'},
+  returnRow: {
+    marginTop: 20,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+  },
   returnValue: {
-    marginTop: 12,
     fontSize: 32,
     fontWeight: '700',
     color: '#34C759',
   },
-  returnLabel: {fontSize: 13, color: t.labelSecondary, marginTop: 4},
-  gauge: {
-    marginTop: 12,
-    width: 88,
-    height: 56,
-    borderRadius: 8,
-    backgroundColor: t.fillSecondary,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  gaugeText: {fontSize: 12, fontWeight: '600', color: t.labelPrimary},
-  progressLabel: {marginTop: 12, fontSize: 13, color: t.labelSecondary},
+  returnLabel: {fontSize: 13, color: t.labelSecondary, marginTop: 2},
+  progressLabel: {marginTop: 20, fontSize: 13, color: t.labelSecondary},
   progressTrack: {
     marginTop: 8,
     height: 24,
@@ -228,13 +256,14 @@ const styles = StyleSheet.create({
     left: 0,
     top: 0,
     bottom: 0,
+    width: '72%',
     backgroundColor: t.accent,
   },
   progressOverlay: {
     textAlign: 'center',
     fontSize: 12,
     fontWeight: '600',
-    color: '#fff',
+    color: t.labelPrimary,
   },
   footerRow: {
     marginTop: 12,
@@ -242,7 +271,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  footerText: {fontSize: 14, color: t.labelPrimary},
+  footerText: {fontSize: 13, color: t.labelSecondary},
   subscribe: {
     minWidth: 72,
     height: 36,
@@ -254,9 +283,9 @@ const styles = StyleSheet.create({
   },
   subscribeText: {color: '#fff', fontWeight: '600'},
   footnote: {
-    marginTop: 12,
-    fontSize: 12,
+    marginTop: 16,
+    fontSize: 13,
     color: t.labelSecondary,
-    lineHeight: 18,
+    lineHeight: 20,
   },
 });

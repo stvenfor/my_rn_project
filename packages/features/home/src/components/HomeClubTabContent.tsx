@@ -1,15 +1,8 @@
-import React, {useState} from 'react';
-import {
-  Image,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import React from 'react';
+import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import {homeDashboardTheme as t} from '../theme/homeDashboardTheme';
 
-const FILTERS = ['最新', '嘉宾分享', '资料'];
+const FILTERS = ['最新', '嘉宾分享', '资料'] as const;
 
 const POSTS = [
   {
@@ -27,14 +20,17 @@ const POSTS = [
     content: '当星舰遇到算力：嘉宾分享回顾与延伸阅读。',
     hasPdf: false,
   },
-];
+] as const;
 
 interface Props {
+  /** Aligns with Flutter join + “进入社区查看更多” → Community. */
+  onOpenCommunity?: () => void;
+  /** @deprecated use onOpenCommunity */
   onJoin?: () => void;
 }
 
-export function HomeClubTabContent({onJoin}: Props) {
-  const [filter, setFilter] = useState(0);
+export function HomeClubTabContent({onOpenCommunity, onJoin}: Props) {
+  const openCommunity = onOpenCommunity ?? onJoin;
 
   return (
     <View>
@@ -46,36 +42,37 @@ export function HomeClubTabContent({onJoin}: Props) {
           <Text style={styles.clubTitle}>莫听Club</Text>
           <Text style={styles.clubMeta}>动态 127 | 成员 1040</Text>
         </View>
-        <Pressable style={styles.joinBtn} onPress={onJoin}>
+        <Pressable style={styles.joinBtn} onPress={openCommunity}>
           <Text style={styles.joinText}>+ 加入</Text>
         </Pressable>
       </View>
 
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.filterScroll}
-        contentContainerStyle={styles.filterRow}>
+      {/* Flutter filters are display-only; first tab stays active. */}
+      <View style={styles.filterRow}>
         {FILTERS.map((label, index) => {
-          const active = index === filter;
+          const active = index === 0;
           return (
-            <Pressable
-              key={label}
-              style={[styles.chip, active && styles.chipActive]}
-              onPress={() => setFilter(index)}>
-              <Text style={[styles.chipText, active && styles.chipTextActive]}>
+            <View key={label} style={styles.filterItem}>
+              <Text
+                style={[styles.filterText, active && styles.filterTextActive]}>
                 {label}
               </Text>
-            </Pressable>
+              <View
+                style={[
+                  styles.filterUnderline,
+                  active && styles.filterUnderlineActive,
+                ]}
+              />
+            </View>
           );
         })}
-      </ScrollView>
+      </View>
 
       {POSTS.map(post => (
         <View key={post.author + post.date} style={styles.post}>
           <View style={styles.postHeader}>
             <Image source={{uri: post.avatar}} style={styles.avatar} />
-            <View style={{flex: 1}}>
+            <View style={styles.flex1}>
               <Text style={styles.author}>{post.author}</Text>
               <Text style={styles.date}>{post.date}</Text>
             </View>
@@ -89,13 +86,32 @@ export function HomeClubTabContent({onJoin}: Props) {
               </Text>
             </View>
           ) : null}
+          <View style={styles.actions}>
+            <Action label="分享" glyph="↗" />
+            <Action label="评论" glyph="💬" />
+            <Action label="点赞" glyph="♡" />
+          </View>
         </View>
       ))}
+
+      <Pressable style={styles.moreBtn} onPress={openCommunity}>
+        <Text style={styles.moreText}>进入社区查看更多</Text>
+      </Pressable>
+    </View>
+  );
+}
+
+function Action({label, glyph}: {label: string; glyph: string}) {
+  return (
+    <View style={styles.action}>
+      <Text style={styles.actionGlyph}>{glyph}</Text>
+      <Text style={styles.actionLabel}>{label}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  flex1: {flex: 1},
   headerCard: {
     marginHorizontal: 16,
     marginTop: 8,
@@ -126,39 +142,68 @@ const styles = StyleSheet.create({
     backgroundColor: t.accent,
   },
   joinText: {color: '#fff', fontSize: 14},
-  filterScroll: {marginTop: 12, maxHeight: 36},
-  filterRow: {paddingHorizontal: 16, alignItems: 'center'},
-  chip: {
-    height: 32,
-    paddingHorizontal: 14,
-    borderRadius: 16,
-    backgroundColor: t.fillSecondary,
-    justifyContent: 'center',
-    marginRight: 8,
+  filterRow: {
+    marginTop: 12,
+    paddingHorizontal: 16,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
   },
-  chipActive: {backgroundColor: t.accent},
-  chipText: {fontSize: 13, color: t.labelPrimary},
-  chipTextActive: {color: '#fff', fontWeight: '600'},
+  filterItem: {marginRight: 24, alignItems: 'center'},
+  filterText: {fontSize: 15, color: t.labelSecondary, fontWeight: '400'},
+  filterTextActive: {color: t.labelPrimary, fontWeight: '600'},
+  filterUnderline: {marginTop: 6, height: 2, width: 0},
+  filterUnderlineActive: {width: 20, backgroundColor: t.accent},
   post: {
     marginHorizontal: 16,
     marginTop: 12,
     padding: 16,
     borderRadius: t.radiusMd,
     backgroundColor: t.surface,
+    borderWidth: 0.5,
+    borderColor: t.separator,
   },
   postHeader: {flexDirection: 'row', alignItems: 'center'},
-  avatar: {width: 36, height: 36, borderRadius: 18, marginRight: 10},
+  avatar: {width: 40, height: 40, borderRadius: 20, marginRight: 10},
   author: {fontSize: 15, fontWeight: '600', color: t.labelPrimary},
   date: {fontSize: 12, color: t.labelSecondary, marginTop: 2},
-  content: {marginTop: 10, fontSize: 15, color: t.labelPrimary, lineHeight: 22},
+  content: {
+    marginTop: 12,
+    fontSize: 15,
+    color: t.labelPrimary,
+    lineHeight: 22,
+  },
   pdfRow: {
     marginTop: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
-    borderRadius: 8,
+    padding: 12,
+    borderRadius: 10,
     backgroundColor: t.fillSecondary,
   },
   pdfIcon: {marginRight: 8},
   pdfName: {flex: 1, fontSize: 13, color: t.labelPrimary},
+  actions: {
+    marginTop: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  action: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 20,
+  },
+  actionGlyph: {fontSize: 14, color: t.labelSecondary, marginRight: 4},
+  actionLabel: {fontSize: 13, color: t.labelSecondary},
+  moreBtn: {
+    marginHorizontal: 16,
+    marginTop: 4,
+    marginBottom: 8,
+    paddingVertical: 14,
+    borderRadius: t.radiusMd,
+    backgroundColor: t.surface,
+    borderWidth: 0.5,
+    borderColor: t.separator,
+    alignItems: 'center',
+  },
+  moreText: {color: t.accent, fontWeight: '600', fontSize: 15},
 });

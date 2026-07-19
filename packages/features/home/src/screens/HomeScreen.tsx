@@ -192,7 +192,7 @@ export function HomeScreen({navigation}: MainTabScreenProps<'HomeTab'>) {
         />
       ) : topTab === 2 ? (
         <HomeClubTabContent
-          onJoin={() => navigation.navigate('CommunityTab')}
+          onOpenCommunity={() => navigation.navigate('CommunityTab')}
         />
       ) : (
         <>
