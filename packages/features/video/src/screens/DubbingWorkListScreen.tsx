@@ -27,12 +27,17 @@ export function DubbingWorkListScreen({
   const cardWidth = (width - 16 * 2 - 12) / 2;
 
   return (
-    <AppPageScaffold layout="standard" backgroundColor={BG}>
-      <AppNavBar
-        title="作品列表"
-        onBack={() => navigation.goBack()}
-        backgroundColor={BG}
-      />
+    <AppPageScaffold
+      layout="standard"
+      backgroundColor={BG}
+      navBar={
+        <AppNavBar
+          title="作品列表"
+          showBackButton
+          onBack={() => navigation.goBack()}
+          backgroundColor={BG}
+        />
+      }>
       <FlatList
         data={items}
         keyExtractor={item => item.id}

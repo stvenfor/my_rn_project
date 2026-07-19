@@ -137,18 +137,19 @@ npm run test
 
 | 项 | P0 | 结果 | 证据 |
 |----|----|------|------|
-| Video 列表 | P0 | ☐ | |
-| ShortVideo / ShortVideoPlay | P0 | ☐ | |
-| 播放器经 toolkit/core，不泄漏到 Redux | P0 | ☐ | |
-| Lottie/横屏/弹幕等降级已 note | — | ☐ | |
+| Video 列表 | P0 | ✅ | VideoScreen + ShortVideo 入口 |
+| ShortVideo / ShortVideoPlay | P0 | ✅ | immersive StatusBar；danmaku/landscape Degraded |
+| 播放器经 toolkit/core，不泄漏到 Redux | P0 | ✅ | ShortVideoPlayerKit + WebView header |
+| Lottie/横屏/弹幕等降级已 note | — | ✅ | manifest notes |
+| Dubbing 详情 1:1 | P0 | ✅ | `acceptance-records/2026-07-19-video-dubbing-detail-parity.md` |
 
 ### B8. `@features/bfui`
 
 | 项 | P0 | 结果 | 证据 |
 |----|----|------|------|
-| 模板目录可进入各模板 | P0 | ☐ | |
-| 本地 assets/fonts 可加载 | P0 | ☐ | |
-| `bfuiCatalog` 状态与视觉降级有记录 | — | ☐ | |
+| 模板目录可进入各模板 | P0 | ✅ | All Services → Gallery → 17; template AppNavBar back |
+| 本地 assets/fonts 可加载 | P0 | ✅ | meals/tabs/hotel/course + WorkSans/Roboto smoke |
+| `bfuiCatalog` 状态与视觉降级有记录 | — | ✅ | `acceptance-records/2026-07-19-bfui-b8.md` + manifest notes |
 
 ### B9. `@features/live` / `friend` / `pay`
 

@@ -1,5 +1,5 @@
-import React, {useMemo} from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useMemo} from 'react';
+import {Pressable, StatusBar, StyleSheet, Text, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {ShortVideoPlayerKit, type ShortVideoItem} from '@commons/toolkit';
 import {RoutePath, type RootStackScreenProps} from '@core/navigation';
@@ -43,6 +43,13 @@ export function ShortVideoPlayScreen({
     () => toPlayerItems(getShortVideoListItems()),
     [],
   );
+
+  useEffect(() => {
+    StatusBar.setHidden(true, 'fade');
+    return () => {
+      StatusBar.setHidden(false, 'fade');
+    };
+  }, []);
 
   if (playerItems.length === 0) {
     return (

@@ -18,12 +18,17 @@ export function DubbingVideoListScreen({
   const items = getDubbingVideos();
 
   return (
-    <AppPageScaffold layout="standard" backgroundColor={BG}>
-      <AppNavBar
-        title="视频列表"
-        onBack={() => navigation.goBack()}
-        backgroundColor={BG}
-      />
+    <AppPageScaffold
+      layout="standard"
+      backgroundColor={BG}
+      navBar={
+        <AppNavBar
+          title="视频列表"
+          showBackButton
+          onBack={() => navigation.goBack()}
+          backgroundColor={BG}
+        />
+      }>
       <FlatList
         data={items}
         keyExtractor={item => item.id}

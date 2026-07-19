@@ -63,6 +63,9 @@ export function HomeAllServicesScreen({
       case RoutePath.dubbingWorkList:
         navigation.navigate(RoutePath.dubbingWorkList);
         break;
+      case RoutePath.bfuiGallery:
+        navigation.navigate(RoutePath.bfuiGallery);
+        break;
       default:
         break;
     }

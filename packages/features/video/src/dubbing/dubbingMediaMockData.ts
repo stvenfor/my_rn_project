@@ -1,7 +1,20 @@
-import {
-  SHORT_VIDEO_MOCK_COVERS,
-  VIDEO_MOCK_SOURCES,
-} from '@commons/toolkit';
+import {SHORT_VIDEO_MOCK_COVERS, VIDEO_MOCK_SOURCES} from '@commons/toolkit';
+
+export interface DubbingAlbumPart {
+  id: string;
+  title: string;
+  badge?: string;
+}
+
+export interface DubbingLeaderboardEntry {
+  rank: number;
+  userName: string;
+  avatarUrl: string;
+  date: string;
+  location: string;
+  likeCount: number;
+  level: string;
+}
 
 export interface DubbingVideoItem {
   id: string;
@@ -15,7 +28,13 @@ export interface DubbingVideoItem {
   sentenceCount: number;
   difficulty: string;
   uploaderName: string;
+  subtitleEn: string;
+  subtitleZh: string;
+  albumCount: number;
   tags: string[];
+  albumParts: DubbingAlbumPart[];
+  latestWorkAvatars: string[];
+  leaderboard?: DubbingLeaderboardEntry;
 }
 
 export interface DubbingWorkItem {
@@ -61,6 +80,13 @@ function coverAt(index: number): string {
   return SHORT_VIDEO_MOCK_COVERS[index % SHORT_VIDEO_MOCK_COVERS.length];
 }
 
+export function resolveDubbingId(raw?: string | number | null): string {
+  if (raw == null) {
+    return '';
+  }
+  return String(raw);
+}
+
 export function getDubbingVideos(): DubbingVideoItem[] {
   return VIDEO_MOCK_SOURCES.map((source, i) => ({
     id: String(source.id),
@@ -74,15 +100,42 @@ export function getDubbingVideos(): DubbingVideoItem[] {
     sentenceCount: 10 - i * 2,
     difficulty: `PreA${i + 1}`,
     uploaderName: authors[i % authors.length]![0],
+    subtitleEn: "It's said they can accelerate faster than a Ferrari.",
+    subtitleZh: '据说他们能比法拉利更快地加速',
+    albumCount: 20,
     tags:
       i === 0
         ? ['合作', '10句', '难度 PreA1', '漫威', '经典大片', '超级英雄']
-        : [
-            '合作',
-            `${10 - i * 2}句`,
-            `难度 PreA${i + 1}`,
-            source.category,
-          ],
+        : ['合作', `${10 - i * 2}句`, `难度 PreA${i + 1}`, source.category],
+    albumParts: [
+      {
+        id: `part_${i}_1`,
+        title: i === 0 ? '制服牛油果小怪兽' : `Part 1 ${source.title}`,
+        badge: '试听',
+      },
+      {
+        id: `part_${i}_2`,
+        title: i === 0 ? '想到制服牛油果...' : 'Part 2 续集片段...',
+        badge: i === 0 || i === 1 ? '付费' : undefined,
+      },
+      {
+        id: `part_${i}_3`,
+        title: '顺利制服...',
+      },
+    ],
+    latestWorkAvatars: Array.from(
+      {length: 6},
+      (_, j) => `https://picsum.photos/seed/work_${i}_${j}/80/80`,
+    ),
+    leaderboard: {
+      rank: 1,
+      userName: '美诺明年夏天见',
+      avatarUrl: `https://picsum.photos/seed/leader_${i}/80/80`,
+      date: '2023-11-20',
+      location: '杭州市',
+      likeCount: 12800 - i * 1000,
+      level: 'Lv.12',
+    },
   }));
 }
 
@@ -104,11 +157,19 @@ export function getDubbingWorks(): DubbingWorkItem[] {
 }
 
 export function findDubbingVideo(id?: string): DubbingVideoItem | undefined {
+  const resolved = resolveDubbingId(id);
   const list = getDubbingVideos();
-  return list.find(v => v.id === id) ?? list[0];
+  if (!resolved) {
+    return undefined;
+  }
+  return list.find(v => v.id === resolved);
 }
 
 export function findDubbingWork(id?: string): DubbingWorkItem | undefined {
+  const resolved = resolveDubbingId(id);
   const list = getDubbingWorks();
-  return list.find(v => v.id === id) ?? list[0];
+  if (!resolved) {
+    return undefined;
+  }
+  return list.find(v => v.id === resolved);
 }

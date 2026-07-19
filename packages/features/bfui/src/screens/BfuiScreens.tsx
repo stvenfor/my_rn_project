@@ -97,7 +97,18 @@ export function BfuiTemplateScreen({
     );
   }
 
-  return <TemplateComponent />;
+  return (
+    <AppPageScaffold
+      navBar={
+        <AppNavBar
+          title={t(template.titleKey)}
+          showBackButton
+          onBack={() => navigation.goBack()}
+        />
+      }>
+      <TemplateComponent />
+    </AppPageScaffold>
+  );
 }
 
 const styles = StyleSheet.create({

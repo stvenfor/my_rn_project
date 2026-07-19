@@ -92,6 +92,18 @@ export function HotelBookingTemplate() {
         meta="$156 / night"
         imageSource={bfuiImages.hotel_hotel_3}
       />
+      <BfuiListCard
+        title="City Lodge"
+        subtitle="Canary Wharf"
+        meta="$110 / night"
+        imageSource={bfuiImages.hotel_hotel_4}
+      />
+      <BfuiListCard
+        title="Park Inn"
+        subtitle="Hyde Park"
+        meta="$142 / night"
+        imageSource={bfuiImages.hotel_hotel_5}
+      />
     </BfuiPage>
   );
 }
@@ -136,12 +148,24 @@ export function FitnessAppTemplate() {
         title="Morning Run"
         subtitle="5.2 km · 32 min"
         meta="Completed"
+        imageSource={bfuiImages.fitness_app_runner}
       />
       <BfuiListCard
         title="HIIT Workout"
         subtitle="20 min · Core"
         meta="Scheduled"
+        imageSource={bfuiImages.fitness_app_area1}
       />
+      <View style={styles.tabRow}>
+        {[
+          bfuiImages.fitness_app_tab_1s,
+          bfuiImages.fitness_app_tab_2,
+          bfuiImages.fitness_app_tab_3,
+          bfuiImages.fitness_app_tab_4,
+        ].map((src, i) => (
+          <Image key={i} source={src} style={styles.tabIcon} />
+        ))}
+      </View>
     </BfuiPage>
   );
 }
@@ -149,24 +173,43 @@ export function FitnessAppTemplate() {
 export function MyDiaryTemplate() {
   return (
     <BfuiPage backgroundColor={bfuiColors.fitnessBg}>
-      <BfuiHeroCard title="My Diary" subtitle="Today, March 12" />
-      <Text style={styles.section}>Water intake</Text>
-      <BfuiStatRow
-        items={[
-          {label: 'Glasses', value: '6/8'},
-          {label: 'Liters', value: '1.5L'},
-        ]}
+      <BfuiHeroCard
+        title="My Diary"
+        subtitle="Today, March 12"
+        imageSource={bfuiImages.fitness_app_bottle}
       />
+      <Text style={styles.section}>Water intake</Text>
+      <View style={styles.mealRow}>
+        <Image
+          source={bfuiImages.fitness_app_glass}
+          style={styles.mealThumb}
+          resizeMode="contain"
+        />
+        <BfuiStatRow
+          items={[
+            {label: 'Glasses', value: '6/8'},
+            {label: 'Liters', value: '1.5L'},
+          ]}
+        />
+      </View>
       <Text style={styles.section}>Meals</Text>
       <BfuiListCard
         title="Breakfast"
         subtitle="Oatmeal & berries"
         meta="320 kcal"
+        imageSource={bfuiImages.fitness_app_breakfast}
       />
       <BfuiListCard
         title="Lunch"
         subtitle="Grilled chicken salad"
         meta="480 kcal"
+        imageSource={bfuiImages.fitness_app_lunch}
+      />
+      <BfuiListCard
+        title="Dinner"
+        subtitle="Salmon & veggies"
+        meta="510 kcal"
+        imageSource={bfuiImages.fitness_app_dinner}
       />
     </BfuiPage>
   );
@@ -213,11 +256,19 @@ export function DesignCourseTemplate() {
         title="UI Design Masterclass"
         subtitle="24 lessons"
         meta="4.8 ★"
+        imageSource={bfuiImages.design_course_interFace1}
       />
       <BfuiListCard
         title="Design Thinking"
         subtitle="18 lessons"
         meta="4.6 ★"
+        imageSource={bfuiImages.design_course_interFace2}
+      />
+      <BfuiListCard
+        title="Motion Basics"
+        subtitle="12 lessons"
+        meta="4.5 ★"
+        imageSource={bfuiImages.design_course_interFace3}
       />
     </BfuiPage>
   );
@@ -226,8 +277,14 @@ export function DesignCourseTemplate() {
 export function CourseInfoTemplate() {
   return (
     <BfuiPage>
-      <View style={styles.courseHero} />
-      <Text style={styles.courseTitle}>UI Design Masterclass</Text>
+      <Image
+        source={bfuiImages.design_course_webInterFace}
+        style={styles.courseHeroImage}
+        resizeMode="cover"
+      />
+      <Text style={[styles.courseTitle, {fontFamily: BFUI_FONTS.robotoBold}]}>
+        UI Design Masterclass
+      </Text>
       <Text style={styles.courseMeta}>By Angela · 24 lessons · 12h</Text>
       <Text style={styles.section}>About this course</Text>
       <Text style={styles.paragraph}>
@@ -302,8 +359,17 @@ export function NavigationDrawerTemplate() {
   return (
     <BfuiPage>
       <View style={styles.drawerHeader}>
-        <View style={styles.avatar} />
-        <Text style={styles.drawerName}>BFUI User</Text>
+        <Image
+          source={bfuiImages.images_userImage}
+          style={styles.avatarImage}
+        />
+        <Text
+          style={[
+            styles.drawerName,
+            {fontFamily: BFUI_FONTS.workSansSemiBold},
+          ]}>
+          BFUI User
+        </Text>
         <Text style={styles.drawerEmail}>user@example.com</Text>
       </View>
       {items.map(item => (
@@ -318,6 +384,11 @@ export function NavigationDrawerTemplate() {
 export function GlassViewTemplate() {
   return (
     <BfuiPage backgroundColor={bfuiColors.fitnessBg}>
+      <Image
+        source={bfuiImages.fitness_app_glass}
+        style={styles.effectHero}
+        resizeMode="contain"
+      />
       <View style={styles.glassCard}>
         <Text style={styles.glassTitle}>Glass Card</Text>
         <Text style={styles.glassSub}>
@@ -350,6 +421,11 @@ export function WaveViewTemplate() {
 export function RunningViewTemplate() {
   return (
     <BfuiPage backgroundColor={bfuiColors.fitnessBg}>
+      <Image
+        source={bfuiImages.fitness_app_runner}
+        style={styles.effectHero}
+        resizeMode="contain"
+      />
       <BfuiStatRow
         items={[
           {label: 'Distance', value: '5.2km'},
@@ -454,7 +530,33 @@ const styles = StyleSheet.create({
     backgroundColor: bfuiColors.coursePrimary,
     marginBottom: 16,
   },
+  courseHeroImage: {
+    width: '100%',
+    height: 180,
+    borderRadius: 12,
+    marginBottom: 16,
+  },
   courseTitle: {fontSize: 22, fontWeight: '700', color: bfuiColors.darkerText},
+  tabRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 16,
+    paddingVertical: 12,
+  },
+  tabIcon: {width: 28, height: 28},
+  mealRow: {flexDirection: 'row', alignItems: 'center', gap: 8},
+  mealThumb: {width: 48, height: 48},
+  effectHero: {
+    width: '100%',
+    height: 120,
+    marginBottom: 12,
+  },
+  avatarImage: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    marginBottom: 8,
+  },
   courseMeta: {fontSize: 14, color: bfuiColors.lightText, marginBottom: 12},
   paragraph: {
     fontSize: 15,

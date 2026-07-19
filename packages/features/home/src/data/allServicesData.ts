@@ -154,6 +154,17 @@ const dubbingWorkList = item(
 );
 const dubbingHome = item('配音首页', 'dubbing_home', RoutePath.homeDubbingFeed);
 const membershipRenew = item('会员续费', 'marketing', RoutePath.payMembership);
+const bfuiGallery = item(
+  'BFUI 模板目录',
+  'all_functions',
+  RoutePath.bfuiGallery,
+);
+const inviteFriend = item(
+  '邀请好友',
+  'online_customer_acquisition',
+  RoutePath.bfuiTemplate,
+  'invite_friend',
+);
 
 export const defaultFavoriteItems: AllServiceItem[] = [
   introductionAnimation,
@@ -196,7 +207,15 @@ export const catalogSections: AllServiceSection[] = [
   },
   {
     title: '其他服务',
-    items: [membershipRenew, help, feedback, navigationDrawer, musicPlayer],
+    items: [
+      membershipRenew,
+      bfuiGallery,
+      inviteFriend,
+      help,
+      feedback,
+      navigationDrawer,
+      musicPlayer,
+    ],
   },
 ];
 

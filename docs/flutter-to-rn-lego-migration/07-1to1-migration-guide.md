@@ -43,8 +43,8 @@
 | chat | chat | 会话列表/详情 |
 | community | community | iOS 主题已对齐；视频播放器 Degraded（无 scrubber） |
 | music | music | 控件/顶栏/seek 已对齐；Harmony blur/Hero 能力门控 |
-| video | video | 列表/短视频 |
-| bfui | bfui | Best-Flutter-UI 模板画廊 |
+| video | video | 短视频+配音详情已迁；WebView scrubber / Lottie Degraded |
+| bfui | bfui | Gallery+17 模板已迁；wave/glass/drawer Degraded |
 | live | live | UI 迁完；真 realtime 可 Deferred |
 | friend | friend | |
 | pay | pay | UI 迁完；支付 SDK 可 Deferred |

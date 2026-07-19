@@ -27,6 +27,7 @@ jest.mock('react-redux', () => ({
 jest.mock('@core/navigation', () => ({
   RoutePath: {
     bfuiTemplate: 'BfuiTemplate',
+    bfuiGallery: 'BfuiGallery',
     musicList: 'MusicList',
     homeAllServices: 'HomeAllServices',
   },
