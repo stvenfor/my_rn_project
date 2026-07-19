@@ -128,6 +128,6 @@ Harness 报告：`.cursor/agent-harness/harness-report.json`（不入库）。
 ## 8. 当前入口
 
 - 最新 Program：[`2026-07-19-program.md`](./2026-07-19-program.md)  
-- 队首 Epic：**B10 静默页清点**（`epics/b10-inventory.md` 待建）  
+- 队首 Epic：**A 全局门禁政策**（`epics/a-gates-policy.md` 待建；需人拍板 A1）  
 
-已 Accept：B1 auth · B2 home · B3 settings · B4–B9（除非回归或升档 Degraded）。
+已 Accept：B1–B10（及 B4–B9）。

@@ -4,15 +4,14 @@
 
 | 字段 | 值 |
 |------|-----|
-| Active slice | `docs/flutter-to-rn-lego-migration/plans/slices/b10-inventory-audit.md` |
+| Active slice | `docs/flutter-to-rn-lego-migration/plans/slices/b10-evidence.md` |
 | Epic | `docs/flutter-to-rn-lego-migration/plans/epics/b10-inventory.md` |
-| Role | executor（audit Done） |
+| Role | executor |
 | agent:pre | ok |
 | agent:post | ok |
-| 08 tick | **no**（本刀禁止勾选） |
-| Next | `b10-evidence`（待建 Slice：record + 澄清 §B10 文案 + 勾选） |
+| 08 tick | §B10 ✅ |
+| Next | A 门禁政策（等人拍板 A1 typecheck 口径） |
 
 ## Notes
 
-- B10 审计：Flutter `*_page.dart` 51/51 零静默  
-- Soft：可选登记 `bfui/home_screen.dart`  
+- B10 Accept：51/51 零静默；record `2026-07-19-b10-inventory.md`

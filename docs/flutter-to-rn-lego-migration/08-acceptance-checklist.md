@@ -160,12 +160,12 @@ npm run test
 | Pay 页布局；SDK 未接则 Degraded/Deferred+note | P0 | ✅ | MockPay + WeChat/Alipay Deferred note |
 | Realtime 真连未做则 mock + Deferred note | — | ✅ | `acceptance-records/2026-07-19-b9-live-friend-pay.md` |
 
-### B10. 未迁移 Flutter 模块
+### B10. 未迁移 Flutter 模块 / 静默页
 
 | 项 | P0 | 结果 | 证据 |
 |----|----|------|------|
-| `classroom` 等已在清单登记 Deferred/Removed | P0 | ☐ | |
-| 无「静默消失」的 Flutter 业务页 | P0 | ☐ | |
+| Flutter 业务页（含 `classroom`）均已在 manifest 登记且 status 合法 | P0 | ✅ | 51/51 `*_page.dart`；classroom 8/8（Migrated×7 + Degraded×1）；见 `acceptance-records/2026-07-19-b10-inventory.md` |
+| 无「静默消失」的 Flutter 业务页 | P0 | ✅ | 同上；`bfui/home_screen.dart` 由 `bfui-gallery` note 覆盖（非独立业务路由页） |
 
 ---
 
