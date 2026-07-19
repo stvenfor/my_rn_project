@@ -35,7 +35,11 @@ export function MineScreenContainer(
 
   const handleLogout = async () => {
     await dispatch(logoutThunk());
-    props.navigation.navigate(RoutePath.login);
+    // Align Flutter Get.offAllNamed(Login): clear stack so back cannot return to Mine.
+    props.navigation.reset({
+      index: 0,
+      routes: [{name: RoutePath.login}],
+    });
   };
 
   const handleUpdateAvatar = (uri: string) => {

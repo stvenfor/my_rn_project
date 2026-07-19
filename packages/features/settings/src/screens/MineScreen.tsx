@@ -8,11 +8,15 @@ import {RoutePath} from '@core/navigation';
 import {AppToast} from '@ui/design-system';
 import {MineFunctionSection} from '../components/MineFunctionSection';
 import {MineHeader, SwitchStoreDialog} from '../components/MineHeader';
+import {MineMenuList} from '../components/MineMenuList';
+import {MineQuickServices} from '../components/MineQuickServices';
 import {
   MediaSourceBottomSheet,
   type MediaPickSource,
 } from '../components/MediaSourceBottomSheet';
 import type {MineFunctionItem} from '../models/mineFunctionItem';
+import type {MineMenuItem, MineQuickServiceItem} from '../models/mineMenuData';
+import {openMineGatedRoute} from '../navigation/mineGatedNavigation';
 import {
   applySelectedStore,
   initializeMine,
@@ -24,7 +28,7 @@ import {
   selectMineSelectedStoreId,
   syncMineUser,
 } from '../store/mineSlice';
-import {mineLayout, mineTheme} from '../theme/mineTheme';
+import {mineTheme} from '../theme/mineTheme';
 import {pickMineAvatarMedia} from '../services/mineAvatarPicker';
 import type {MineScreenProps} from '../types';
 
@@ -76,16 +80,59 @@ export function MineScreen({
         return;
       }
       if (item.id === 'short_video') {
-        if (!isLoggedIn) {
-          navigation.navigate(RoutePath.login);
-          return;
-        }
-        navigation.navigate(RoutePath.shortVideo);
+        openMineGatedRoute({
+          isLoggedIn,
+          navigate: name => navigation.navigate(name),
+          target: RoutePath.shortVideo,
+        });
+        return;
+      }
+      if (item.id === 'used_car') {
+        openMineGatedRoute({
+          isLoggedIn,
+          navigate: name => navigation.navigate(name),
+          target: RoutePath.homeUsedCarList,
+        });
         return;
       }
       AppToast.show(`${item.title} 开发中`);
     },
     [isLoggedIn, navigation],
+  );
+
+  const handleQuickServiceTap = useCallback((item: MineQuickServiceItem) => {
+    AppToast.show(`${item.label} 开发中`);
+  }, []);
+
+  const handleMenuTap = useCallback(
+    (item: MineMenuItem) => {
+      if (item.id === 'settings') {
+        navigation.navigate(RoutePath.settings);
+        return;
+      }
+      if (item.id === 'feedback') {
+        AppToast.show('意见反馈');
+        return;
+      }
+      if (item.id === 'fan_group') {
+        AppToast.show('粉丝群');
+        return;
+      }
+      if (item.id === 'invite') {
+        AppToast.show('邀请好友');
+        return;
+      }
+      if (item.id === 'reminder') {
+        AppToast.show('提醒事项');
+        return;
+      }
+      if (item.id === 'cooperation') {
+        AppToast.show('商务合作');
+        return;
+      }
+      AppToast.show(`${item.label} 开发中`);
+    },
+    [navigation],
   );
 
   const handleStoreTap = useCallback(() => {
@@ -162,13 +209,14 @@ export function MineScreen({
             <View style={styles.headerPlaceholder} />
           )}
         </View>
-        <View style={styles.sectionSpacer} />
+        <MineQuickServices onTap={handleQuickServiceTap} />
         <MineFunctionSection
           items={functions}
           onReorder={handleReorder}
           onItemTap={handleFunctionTap}
           onDragActiveChange={setFunctionGridDragging}
         />
+        <MineMenuList onTap={handleMenuTap} />
       </ScrollView>
 
       <SwitchStoreDialog
@@ -196,8 +244,5 @@ const styles = StyleSheet.create({
   },
   headerPlaceholder: {
     height: 220,
-  },
-  sectionSpacer: {
-    height: mineLayout.statsBarBottomOffset * -1 + 12,
   },
 });

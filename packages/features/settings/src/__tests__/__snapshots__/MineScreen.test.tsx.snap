@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`MineScreen renders guest profile header and function section 1`] = `
+exports[`MineScreen renders guest profile header, quick services, functions, and menu list 1`] = `
 <View
   style={
     {
@@ -1154,10 +1154,573 @@ exports[`MineScreen renders guest profile header and function section 1`] = `
       <View
         style={
           {
-            "height": 40,
+            "paddingHorizontal": 16,
+            "paddingTop": 16,
           }
         }
-      />
+      >
+        <Text
+          style={
+            {
+              "color": "#000000",
+              "fontSize": 17,
+              "fontWeight": "600",
+              "marginBottom": 12,
+            }
+          }
+        >
+          常用服务
+        </Text>
+        <View
+          style={
+            {
+              "backgroundColor": "#FFFFFF",
+              "borderColor": "#C6C6C8",
+              "borderRadius": 12,
+              "borderWidth": 0.5,
+              "paddingHorizontal": 8,
+              "paddingVertical": 20,
+            }
+          }
+        >
+          <View
+            style={
+              {
+                "flexDirection": "row",
+              }
+            }
+          >
+            <View
+              accessibilityLabel="商城"
+              accessibilityRole="button"
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                {
+                  "alignItems": "center",
+                  "flex": 1,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "marginBottom": 8,
+                    "position": "relative",
+                  }
+                }
+              >
+                <View
+                  style={
+                    [
+                      {
+                        "alignItems": "center",
+                        "borderRadius": 12,
+                        "height": 44,
+                        "justifyContent": "center",
+                        "width": 44,
+                      },
+                      {
+                        "backgroundColor": "#007AFF1F",
+                      },
+                    ]
+                  }
+                >
+                  <View
+                    style={
+                      {
+                        "alignItems": "center",
+                        "height": 22,
+                        "justifyContent": "center",
+                        "width": 22,
+                      }
+                    }
+                  >
+                    <View
+                      style={
+                        [
+                          {
+                            "borderRadius": 2,
+                            "borderWidth": 1.5,
+                            "height": 12,
+                            "marginTop": 4,
+                            "width": 14,
+                          },
+                          {
+                            "borderColor": "#007AFF",
+                          },
+                        ]
+                      }
+                    />
+                    <View
+                      style={
+                        [
+                          {
+                            "borderBottomWidth": 0,
+                            "borderTopLeftRadius": 4,
+                            "borderTopRightRadius": 4,
+                            "borderWidth": 1.5,
+                            "height": 6,
+                            "position": "absolute",
+                            "top": 2,
+                            "width": 8,
+                          },
+                          {
+                            "borderColor": "#007AFF",
+                          },
+                        ]
+                      }
+                    />
+                  </View>
+                </View>
+                <View
+                  style={
+                    {
+                      "backgroundColor": "#FF3B30",
+                      "borderRadius": 6,
+                      "paddingHorizontal": 5,
+                      "paddingVertical": 2,
+                      "position": "absolute",
+                      "right": -8,
+                      "top": -6,
+                    }
+                  }
+                >
+                  <Text
+                    style={
+                      {
+                        "color": "#FFFFFF",
+                        "fontSize": 9,
+                        "fontWeight": "700",
+                      }
+                    }
+                  >
+                    HOT
+                  </Text>
+                </View>
+              </View>
+              <Text
+                numberOfLines={1}
+                style={
+                  {
+                    "color": "#000000",
+                    "fontSize": 12,
+                  }
+                }
+              >
+                商城
+              </Text>
+            </View>
+            <View
+              accessibilityLabel="我的钱包"
+              accessibilityRole="button"
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                {
+                  "alignItems": "center",
+                  "flex": 1,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "marginBottom": 8,
+                    "position": "relative",
+                  }
+                }
+              >
+                <View
+                  style={
+                    [
+                      {
+                        "alignItems": "center",
+                        "borderRadius": 12,
+                        "height": 44,
+                        "justifyContent": "center",
+                        "width": 44,
+                      },
+                      {
+                        "backgroundColor": "#5856D61F",
+                      },
+                    ]
+                  }
+                >
+                  <View
+                    style={
+                      {
+                        "alignItems": "center",
+                        "height": 22,
+                        "justifyContent": "center",
+                        "width": 22,
+                      }
+                    }
+                  >
+                    <View
+                      style={
+                        [
+                          {
+                            "borderRadius": 2,
+                            "borderWidth": 1.5,
+                            "height": 12,
+                            "overflow": "hidden",
+                            "width": 18,
+                          },
+                          {
+                            "borderColor": "#5856D6",
+                          },
+                        ]
+                      }
+                    >
+                      <View
+                        style={
+                          [
+                            {
+                              "height": 2,
+                              "marginTop": 3,
+                              "width": "100%",
+                            },
+                            {
+                              "backgroundColor": "#5856D6",
+                            },
+                          ]
+                        }
+                      />
+                    </View>
+                  </View>
+                </View>
+              </View>
+              <Text
+                numberOfLines={1}
+                style={
+                  {
+                    "color": "#000000",
+                    "fontSize": 12,
+                  }
+                }
+              >
+                我的钱包
+              </Text>
+            </View>
+            <View
+              accessibilityLabel="我的课程"
+              accessibilityRole="button"
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                {
+                  "alignItems": "center",
+                  "flex": 1,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "marginBottom": 8,
+                    "position": "relative",
+                  }
+                }
+              >
+                <View
+                  style={
+                    [
+                      {
+                        "alignItems": "center",
+                        "borderRadius": 12,
+                        "height": 44,
+                        "justifyContent": "center",
+                        "width": 44,
+                      },
+                      {
+                        "backgroundColor": "#FF95001F",
+                      },
+                    ]
+                  }
+                >
+                  <View
+                    style={
+                      {
+                        "alignItems": "center",
+                        "height": 22,
+                        "justifyContent": "center",
+                        "width": 22,
+                      }
+                    }
+                  >
+                    <View
+                      style={
+                        [
+                          {
+                            "alignItems": "center",
+                            "borderRadius": 2,
+                            "borderWidth": 1.5,
+                            "height": 12,
+                            "justifyContent": "center",
+                            "width": 18,
+                          },
+                          {
+                            "borderColor": "#FF9500",
+                          },
+                        ]
+                      }
+                    >
+                      <View
+                        style={
+                          [
+                            {
+                              "borderBottomColor": "transparent",
+                              "borderBottomWidth": 4,
+                              "borderLeftWidth": 6,
+                              "borderTopColor": "transparent",
+                              "borderTopWidth": 4,
+                              "height": 0,
+                              "marginLeft": 2,
+                              "width": 0,
+                            },
+                            {
+                              "borderLeftColor": "#FF9500",
+                            },
+                          ]
+                        }
+                      />
+                    </View>
+                  </View>
+                </View>
+              </View>
+              <Text
+                numberOfLines={1}
+                style={
+                  {
+                    "color": "#000000",
+                    "fontSize": 12,
+                  }
+                }
+              >
+                我的课程
+              </Text>
+            </View>
+            <View
+              accessibilityLabel="我的订单"
+              accessibilityRole="button"
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                {
+                  "alignItems": "center",
+                  "flex": 1,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "marginBottom": 8,
+                    "position": "relative",
+                  }
+                }
+              >
+                <View
+                  style={
+                    [
+                      {
+                        "alignItems": "center",
+                        "borderRadius": 12,
+                        "height": 44,
+                        "justifyContent": "center",
+                        "width": 44,
+                      },
+                      {
+                        "backgroundColor": "#34C7591F",
+                      },
+                    ]
+                  }
+                >
+                  <View
+                    style={
+                      {
+                        "alignItems": "center",
+                        "height": 22,
+                        "justifyContent": "center",
+                        "width": 22,
+                      }
+                    }
+                  >
+                    <View
+                      style={
+                        [
+                          {
+                            "alignItems": "flex-start",
+                            "borderRadius": 2,
+                            "borderWidth": 1.5,
+                            "height": 16,
+                            "paddingHorizontal": 2,
+                            "paddingTop": 3,
+                            "width": 12,
+                          },
+                          {
+                            "borderColor": "#34C759",
+                          },
+                        ]
+                      }
+                    >
+                      <View
+                        style={
+                          [
+                            {
+                              "borderRadius": 1,
+                              "height": 1.5,
+                              "marginBottom": 2,
+                              "width": 6,
+                            },
+                            {
+                              "backgroundColor": "#34C759",
+                            },
+                          ]
+                        }
+                      />
+                      <View
+                        style={
+                          [
+                            {
+                              "borderRadius": 1,
+                              "height": 1.5,
+                              "width": 8,
+                            },
+                            {
+                              "backgroundColor": "#34C759",
+                            },
+                          ]
+                        }
+                      />
+                    </View>
+                  </View>
+                </View>
+              </View>
+              <Text
+                numberOfLines={1}
+                style={
+                  {
+                    "color": "#000000",
+                    "fontSize": 12,
+                  }
+                }
+              >
+                我的订单
+              </Text>
+            </View>
+          </View>
+        </View>
+      </View>
       <View>
         <View
           style={
@@ -1193,118 +1756,1105 @@ exports[`MineScreen renders guest profile header and function section 1`] = `
           </Text>
         </View>
         <View
-          collapsable={false}
-          onLayout={[Function]}
+          testID="MineReorderableFunctionGrid"
+        >
+          <Text>
+            sms
+          </Text>
+        </View>
+      </View>
+      <View
+        style={
+          {
+            "paddingHorizontal": 16,
+            "paddingTop": 16,
+          }
+        }
+      >
+        <View
           style={
             {
-              "flexDirection": "row",
-              "flexWrap": "wrap",
-              "paddingHorizontal": 16,
-              "position": "relative",
+              "backgroundColor": "#FFFFFF",
+              "borderColor": "#C6C6C8",
+              "borderRadius": 12,
+              "borderWidth": 0.5,
+              "overflow": "hidden",
             }
           }
         >
-          <View
-            collapsable={false}
-            onMoveShouldSetResponder={[Function]}
-            onMoveShouldSetResponderCapture={[Function]}
-            onResponderEnd={[Function]}
-            onResponderGrant={[Function]}
-            onResponderMove={[Function]}
-            onResponderReject={[Function]}
-            onResponderRelease={[Function]}
-            onResponderStart={[Function]}
-            onResponderTerminate={[Function]}
-            onResponderTerminationRequest={[Function]}
-            onStartShouldSetResponder={[Function]}
-            onStartShouldSetResponderCapture={[Function]}
-            style={
-              [
-                {
-                  "borderRadius": 12,
-                  "overflow": "hidden",
-                },
-                {
-                  "height": 336.1904761904762,
-                  "marginBottom": 12,
-                  "marginRight": 12,
-                  "width": 353,
-                },
-                null,
-                null,
-              ]
-            }
-          >
+          <View>
             <View
+              accessibilityLabel="商务合作"
+              accessibilityRole="button"
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
               style={
                 {
-                  "backgroundColor": "#FFFFFF",
-                  "borderRadius": 12,
-                  "flex": 1,
-                  "overflow": "hidden",
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "paddingHorizontal": 16,
+                  "paddingVertical": 14,
                 }
               }
             >
               <View
                 style={
                   {
-                    "paddingBottom": 8,
-                    "paddingHorizontal": 14,
-                    "paddingTop": 14,
+                    "alignItems": "center",
+                    "height": 22,
+                    "justifyContent": "center",
+                    "width": 22,
                   }
                 }
               >
-                <Text
-                  numberOfLines={1}
+                <View
                   style={
-                    {
-                      "color": "#1A1A1A",
-                      "fontSize": 16,
-                      "fontWeight": "700",
-                    }
+                    [
+                      {
+                        "borderRadius": 4,
+                        "height": 8,
+                        "marginRight": 6,
+                        "width": 8,
+                      },
+                      {
+                        "backgroundColor": "#007AFF",
+                      },
+                    ]
                   }
-                >
-                  短信模板
-                </Text>
-                <Text
-                  numberOfLines={1}
+                />
+                <View
                   style={
-                    {
-                      "color": "#757575",
-                      "fontSize": 12,
-                      "marginTop": 4,
-                    }
+                    [
+                      {
+                        "borderTopLeftRadius": 6,
+                        "borderTopRightRadius": 6,
+                        "bottom": 2,
+                        "height": 7,
+                        "left": 1,
+                        "position": "absolute",
+                        "width": 12,
+                      },
+                      {
+                        "backgroundColor": "#007AFF",
+                      },
+                    ]
                   }
-                >
-                  一键发送 轻松快捷
-                </Text>
+                />
+                <View
+                  style={
+                    [
+                      {
+                        "height": 8,
+                        "position": "absolute",
+                        "right": 2,
+                        "width": 1.5,
+                      },
+                      {
+                        "backgroundColor": "#007AFF",
+                      },
+                    ]
+                  }
+                />
+                <View
+                  style={
+                    [
+                      {
+                        "height": 1.5,
+                        "position": "absolute",
+                        "right": -1,
+                        "width": 8,
+                      },
+                      {
+                        "backgroundColor": "#007AFF",
+                      },
+                    ]
+                  }
+                />
               </View>
-              <View
+              <Text
                 style={
                   [
                     {
-                      "alignItems": "flex-end",
-                      "borderRadius": 8,
                       "flex": 1,
-                      "justifyContent": "center",
-                      "marginBottom": 10,
-                      "marginHorizontal": 10,
-                      "minHeight": 56,
-                      "paddingRight": 12,
+                      "fontSize": 15,
+                      "marginLeft": 14,
                     },
                     {
-                      "backgroundColor": "#E8F8EF",
+                      "color": "#000000",
                     },
                   ]
                 }
               >
-                <Image
-                  resizeMode="contain"
-                  source={1}
+                商务合作
+              </Text>
+              <View
+                style={
+                  [
+                    {
+                      "alignItems": "center",
+                      "justifyContent": "center",
+                    },
+                    {
+                      "height": 16,
+                      "width": 16,
+                    },
+                  ]
+                }
+              >
+                <View
                   style={
                     {
-                      "height": 44,
-                      "width": 44,
+                      "borderColor": "rgba(60,60,67,0.3)",
+                      "borderRightWidth": 1.7777777777777777,
+                      "borderTopWidth": 1.7777777777777777,
+                      "height": 7.111111111111111,
+                      "marginLeft": -1.7777777777777777,
+                      "transform": [
+                        {
+                          "rotate": "45deg",
+                        },
+                      ],
+                      "width": 7.111111111111111,
+                    }
+                  }
+                />
+              </View>
+            </View>
+            <View
+              style={
+                {
+                  "backgroundColor": "#C6C6C8",
+                  "height": 0.5,
+                  "marginLeft": 52,
+                }
+              }
+            />
+          </View>
+          <View>
+            <View
+              accessibilityLabel="提醒事项"
+              accessibilityRole="button"
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "paddingHorizontal": 16,
+                  "paddingVertical": 14,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignItems": "center",
+                    "height": 22,
+                    "justifyContent": "center",
+                    "width": 22,
+                  }
+                }
+              >
+                <View
+                  style={
+                    [
+                      {
+                        "borderBottomLeftRadius": 6,
+                        "borderBottomRightRadius": 6,
+                        "borderTopLeftRadius": 6,
+                        "borderTopRightRadius": 6,
+                        "borderWidth": 1.5,
+                        "height": 12,
+                        "width": 12,
+                      },
+                      {
+                        "borderColor": "#007AFF",
+                      },
+                    ]
+                  }
+                />
+                <View
+                  style={
+                    [
+                      {
+                        "borderRadius": 1,
+                        "height": 2,
+                        "marginTop": 1,
+                        "width": 4,
+                      },
+                      {
+                        "backgroundColor": "#007AFF",
+                      },
+                    ]
+                  }
+                />
+              </View>
+              <Text
+                style={
+                  [
+                    {
+                      "flex": 1,
+                      "fontSize": 15,
+                      "marginLeft": 14,
+                    },
+                    {
+                      "color": "#000000",
+                    },
+                  ]
+                }
+              >
+                提醒事项
+              </Text>
+              <View
+                style={
+                  [
+                    {
+                      "alignItems": "center",
+                      "justifyContent": "center",
+                    },
+                    {
+                      "height": 16,
+                      "width": 16,
+                    },
+                  ]
+                }
+              >
+                <View
+                  style={
+                    {
+                      "borderColor": "rgba(60,60,67,0.3)",
+                      "borderRightWidth": 1.7777777777777777,
+                      "borderTopWidth": 1.7777777777777777,
+                      "height": 7.111111111111111,
+                      "marginLeft": -1.7777777777777777,
+                      "transform": [
+                        {
+                          "rotate": "45deg",
+                        },
+                      ],
+                      "width": 7.111111111111111,
+                    }
+                  }
+                />
+              </View>
+            </View>
+            <View
+              style={
+                {
+                  "backgroundColor": "#C6C6C8",
+                  "height": 0.5,
+                  "marginLeft": 52,
+                }
+              }
+            />
+          </View>
+          <View>
+            <View
+              accessibilityLabel="邀请好友"
+              accessibilityRole="button"
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "paddingHorizontal": 16,
+                  "paddingVertical": 14,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignItems": "center",
+                    "height": 22,
+                    "justifyContent": "center",
+                    "width": 22,
+                  }
+                }
+              >
+                <View
+                  style={
+                    [
+                      {
+                        "borderRadius": 3,
+                        "height": 6,
+                        "position": "absolute",
+                        "top": 2,
+                        "width": 6,
+                      },
+                      {
+                        "backgroundColor": "#007AFF",
+                        "left": 2,
+                      },
+                    ]
+                  }
+                />
+                <View
+                  style={
+                    [
+                      {
+                        "borderTopLeftRadius": 5,
+                        "borderTopRightRadius": 5,
+                        "bottom": 2,
+                        "height": 6,
+                        "position": "absolute",
+                        "width": 10,
+                      },
+                      {
+                        "backgroundColor": "#007AFF",
+                        "left": 0,
+                      },
+                    ]
+                  }
+                />
+                <View
+                  style={
+                    [
+                      {
+                        "borderRadius": 3,
+                        "height": 6,
+                        "position": "absolute",
+                        "top": 2,
+                        "width": 6,
+                      },
+                      {
+                        "backgroundColor": "#007AFF",
+                        "left": 10,
+                      },
+                    ]
+                  }
+                />
+                <View
+                  style={
+                    [
+                      {
+                        "borderTopLeftRadius": 5,
+                        "borderTopRightRadius": 5,
+                        "bottom": 2,
+                        "height": 6,
+                        "position": "absolute",
+                        "width": 10,
+                      },
+                      {
+                        "backgroundColor": "#007AFF",
+                        "left": 8,
+                      },
+                    ]
+                  }
+                />
+              </View>
+              <Text
+                style={
+                  [
+                    {
+                      "flex": 1,
+                      "fontSize": 15,
+                      "marginLeft": 14,
+                    },
+                    {
+                      "color": "#000000",
+                    },
+                  ]
+                }
+              >
+                邀请好友
+              </Text>
+              <View
+                style={
+                  [
+                    {
+                      "alignItems": "center",
+                      "justifyContent": "center",
+                    },
+                    {
+                      "height": 16,
+                      "width": 16,
+                    },
+                  ]
+                }
+              >
+                <View
+                  style={
+                    {
+                      "borderColor": "rgba(60,60,67,0.3)",
+                      "borderRightWidth": 1.7777777777777777,
+                      "borderTopWidth": 1.7777777777777777,
+                      "height": 7.111111111111111,
+                      "marginLeft": -1.7777777777777777,
+                      "transform": [
+                        {
+                          "rotate": "45deg",
+                        },
+                      ],
+                      "width": 7.111111111111111,
+                    }
+                  }
+                />
+              </View>
+            </View>
+            <View
+              style={
+                {
+                  "backgroundColor": "#C6C6C8",
+                  "height": 0.5,
+                  "marginLeft": 52,
+                }
+              }
+            />
+          </View>
+          <View>
+            <View
+              accessibilityLabel="粉丝群"
+              accessibilityRole="button"
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "paddingHorizontal": 16,
+                  "paddingVertical": 14,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignItems": "center",
+                    "height": 22,
+                    "justifyContent": "center",
+                    "width": 22,
+                  }
+                }
+              >
+                <View
+                  style={
+                    [
+                      {
+                        "borderRadius": 3,
+                        "borderWidth": 1.5,
+                        "height": 10,
+                        "position": "absolute",
+                        "width": 12,
+                      },
+                      {
+                        "borderColor": "#007AFF",
+                        "left": 0,
+                        "top": 2,
+                      },
+                    ]
+                  }
+                />
+                <View
+                  style={
+                    [
+                      {
+                        "borderRadius": 3,
+                        "borderWidth": 1.5,
+                        "height": 10,
+                        "position": "absolute",
+                        "width": 12,
+                      },
+                      {
+                        "borderColor": "#007AFF",
+                        "left": 4,
+                        "top": 6,
+                      },
+                    ]
+                  }
+                />
+              </View>
+              <Text
+                style={
+                  [
+                    {
+                      "flex": 1,
+                      "fontSize": 15,
+                      "marginLeft": 14,
+                    },
+                    {
+                      "color": "#000000",
+                    },
+                  ]
+                }
+              >
+                粉丝群
+              </Text>
+              <View
+                style={
+                  {
+                    "backgroundColor": "#FF3B30",
+                    "borderRadius": 4,
+                    "height": 8,
+                    "marginRight": 8,
+                    "width": 8,
+                  }
+                }
+              />
+              <View
+                style={
+                  [
+                    {
+                      "alignItems": "center",
+                      "justifyContent": "center",
+                    },
+                    {
+                      "height": 16,
+                      "width": 16,
+                    },
+                  ]
+                }
+              >
+                <View
+                  style={
+                    {
+                      "borderColor": "rgba(60,60,67,0.3)",
+                      "borderRightWidth": 1.7777777777777777,
+                      "borderTopWidth": 1.7777777777777777,
+                      "height": 7.111111111111111,
+                      "marginLeft": -1.7777777777777777,
+                      "transform": [
+                        {
+                          "rotate": "45deg",
+                        },
+                      ],
+                      "width": 7.111111111111111,
+                    }
+                  }
+                />
+              </View>
+            </View>
+            <View
+              style={
+                {
+                  "backgroundColor": "#C6C6C8",
+                  "height": 0.5,
+                  "marginLeft": 52,
+                }
+              }
+            />
+          </View>
+          <View>
+            <View
+              accessibilityLabel="意见反馈"
+              accessibilityRole="button"
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "paddingHorizontal": 16,
+                  "paddingVertical": 14,
+                }
+              }
+            >
+              <View
+                style={
+                  {
+                    "alignItems": "center",
+                    "height": 22,
+                    "justifyContent": "center",
+                    "width": 22,
+                  }
+                }
+              >
+                <View
+                  style={
+                    [
+                      {
+                        "borderRadius": 2,
+                        "borderWidth": 1.5,
+                        "height": 10,
+                        "transform": [
+                          {
+                            "rotate": "-20deg",
+                          },
+                        ],
+                        "width": 14,
+                      },
+                      {
+                        "borderColor": "#007AFF",
+                      },
+                    ]
+                  }
+                />
+                <View
+                  style={
+                    [
+                      {
+                        "borderRadius": 1.5,
+                        "height": 3,
+                        "left": 4,
+                        "position": "absolute",
+                        "width": 3,
+                      },
+                      {
+                        "backgroundColor": "#007AFF",
+                      },
+                    ]
+                  }
+                />
+              </View>
+              <Text
+                style={
+                  [
+                    {
+                      "flex": 1,
+                      "fontSize": 15,
+                      "marginLeft": 14,
+                    },
+                    {
+                      "color": "#000000",
+                    },
+                  ]
+                }
+              >
+                意见反馈
+              </Text>
+              <View
+                style={
+                  [
+                    {
+                      "alignItems": "center",
+                      "justifyContent": "center",
+                    },
+                    {
+                      "height": 16,
+                      "width": 16,
+                    },
+                  ]
+                }
+              >
+                <View
+                  style={
+                    {
+                      "borderColor": "rgba(60,60,67,0.3)",
+                      "borderRightWidth": 1.7777777777777777,
+                      "borderTopWidth": 1.7777777777777777,
+                      "height": 7.111111111111111,
+                      "marginLeft": -1.7777777777777777,
+                      "transform": [
+                        {
+                          "rotate": "45deg",
+                        },
+                      ],
+                      "width": 7.111111111111111,
+                    }
+                  }
+                />
+              </View>
+            </View>
+            <View
+              style={
+                {
+                  "backgroundColor": "#C6C6C8",
+                  "height": 0.5,
+                  "marginLeft": 52,
+                }
+              }
+            />
+          </View>
+          <View>
+            <View
+              accessibilityLabel="设置"
+              accessibilityRole="button"
+              accessibilityState={
+                {
+                  "busy": undefined,
+                  "checked": undefined,
+                  "disabled": undefined,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              collapsable={false}
+              focusable={true}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                {
+                  "alignItems": "center",
+                  "flexDirection": "row",
+                  "paddingHorizontal": 16,
+                  "paddingVertical": 14,
+                }
+              }
+            >
+              <View
+                style={
+                  [
+                    {
+                      "alignItems": "center",
+                      "justifyContent": "center",
+                    },
+                    {
+                      "height": 22,
+                      "width": 22,
+                    },
+                  ]
+                }
+              >
+                <View
+                  style={
+                    {
+                      "borderColor": "#007AFF",
+                      "borderRadius": 4,
+                      "borderWidth": 1.5,
+                      "height": 8,
+                      "width": 8,
+                    }
+                  }
+                />
+                <View
+                  style={
+                    {
+                      "backgroundColor": "#007AFF",
+                      "borderRadius": 1,
+                      "height": 5,
+                      "position": "absolute",
+                      "transform": [
+                        {
+                          "rotate": "0deg",
+                        },
+                        {
+                          "translateY": -9,
+                        },
+                      ],
+                      "width": 2,
+                    }
+                  }
+                />
+                <View
+                  style={
+                    {
+                      "backgroundColor": "#007AFF",
+                      "borderRadius": 1,
+                      "height": 5,
+                      "position": "absolute",
+                      "transform": [
+                        {
+                          "rotate": "45deg",
+                        },
+                        {
+                          "translateY": -9,
+                        },
+                      ],
+                      "width": 2,
+                    }
+                  }
+                />
+                <View
+                  style={
+                    {
+                      "backgroundColor": "#007AFF",
+                      "borderRadius": 1,
+                      "height": 5,
+                      "position": "absolute",
+                      "transform": [
+                        {
+                          "rotate": "90deg",
+                        },
+                        {
+                          "translateY": -9,
+                        },
+                      ],
+                      "width": 2,
+                    }
+                  }
+                />
+                <View
+                  style={
+                    {
+                      "backgroundColor": "#007AFF",
+                      "borderRadius": 1,
+                      "height": 5,
+                      "position": "absolute",
+                      "transform": [
+                        {
+                          "rotate": "135deg",
+                        },
+                        {
+                          "translateY": -9,
+                        },
+                      ],
+                      "width": 2,
+                    }
+                  }
+                />
+                <View
+                  style={
+                    {
+                      "backgroundColor": "#007AFF",
+                      "borderRadius": 1,
+                      "height": 5,
+                      "position": "absolute",
+                      "transform": [
+                        {
+                          "rotate": "180deg",
+                        },
+                        {
+                          "translateY": -9,
+                        },
+                      ],
+                      "width": 2,
+                    }
+                  }
+                />
+                <View
+                  style={
+                    {
+                      "backgroundColor": "#007AFF",
+                      "borderRadius": 1,
+                      "height": 5,
+                      "position": "absolute",
+                      "transform": [
+                        {
+                          "rotate": "225deg",
+                        },
+                        {
+                          "translateY": -9,
+                        },
+                      ],
+                      "width": 2,
+                    }
+                  }
+                />
+                <View
+                  style={
+                    {
+                      "backgroundColor": "#007AFF",
+                      "borderRadius": 1,
+                      "height": 5,
+                      "position": "absolute",
+                      "transform": [
+                        {
+                          "rotate": "270deg",
+                        },
+                        {
+                          "translateY": -9,
+                        },
+                      ],
+                      "width": 2,
+                    }
+                  }
+                />
+                <View
+                  style={
+                    {
+                      "backgroundColor": "#007AFF",
+                      "borderRadius": 1,
+                      "height": 5,
+                      "position": "absolute",
+                      "transform": [
+                        {
+                          "rotate": "315deg",
+                        },
+                        {
+                          "translateY": -9,
+                        },
+                      ],
+                      "width": 2,
+                    }
+                  }
+                />
+              </View>
+              <Text
+                style={
+                  [
+                    {
+                      "flex": 1,
+                      "fontSize": 15,
+                      "marginLeft": 14,
+                    },
+                    {
+                      "color": "#000000",
+                    },
+                  ]
+                }
+              >
+                设置
+              </Text>
+              <View
+                style={
+                  [
+                    {
+                      "alignItems": "center",
+                      "justifyContent": "center",
+                    },
+                    {
+                      "height": 16,
+                      "width": 16,
+                    },
+                  ]
+                }
+              >
+                <View
+                  style={
+                    {
+                      "borderColor": "rgba(60,60,67,0.3)",
+                      "borderRightWidth": 1.7777777777777777,
+                      "borderTopWidth": 1.7777777777777777,
+                      "height": 7.111111111111111,
+                      "marginLeft": -1.7777777777777777,
+                      "transform": [
+                        {
+                          "rotate": "45deg",
+                        },
+                      ],
+                      "width": 7.111111111111111,
                     }
                   }
                 />

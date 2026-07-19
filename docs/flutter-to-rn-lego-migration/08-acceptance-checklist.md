@@ -100,10 +100,10 @@ npm run test
 
 | 项 | P0 | 结果 | 证据 |
 |----|----|------|------|
-| MineTab / Settings 可进入 | P0 | ☐ | |
-| Dialog Demo / Invoice Demo·Upload / HTTP Test（已 Migrated 的）可用 | P0 | ☐ | |
-| 设置项列表顺序与 Flutter 对齐 | P0 | ☐ | |
-| 退出登录链路正确 | P0 | ☐ | |
+| MineTab / Settings 可进入 | P0 | ✅ | `acceptance-records/2026-07-19-settings-b3.md`；Mine shell 含 QuickServices+MenuList |
+| Dialog Demo / Invoice Demo·Upload / HTTP Test（已 Migrated 的）可用 | P0 | ✅ | Settings 列表入口；既有 Migrated 路由 |
+| 设置项列表顺序与 Flutter 对齐 | P0 | ✅ | DEV：Dialog→Linking→Realtime→IM；Live/Friend/Pay smoke 追加（manifest note） |
+| 退出登录链路正确 | P0 | ✅ | `logoutThunk` + `navigation.reset`→Login |
 
 ### B4. `@features/chat`
 

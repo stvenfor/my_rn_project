@@ -149,6 +149,16 @@ export function SettingsScreen({
               borderColor={rowBorder}
             />
             <SettingsRow
+              title="融云 IM 调试"
+              subtitle="imUserId、连接态、备份队列"
+              onPress={() => navigation.navigate(RoutePath.debugIm)}
+              showChevron
+              titleColor={titleColor}
+              subtitleColor={subtitleColor}
+              borderColor={rowBorder}
+            />
+            {/* RN-only B9 smoke entries (after Flutter DEV order Dialog→Linking→Realtime→IM) */}
+            <SettingsRow
               title="直播列表 smoke"
               subtitle="Live → LiveRoom（Mock realtime）"
               onPress={() => navigation.navigate(RoutePath.live)}
@@ -170,15 +180,6 @@ export function SettingsScreen({
               title="支付页 smoke"
               subtitle="布局 + Mock 支付；微信/支付宝 SDK Deferred"
               onPress={() => navigation.navigate(RoutePath.pay)}
-              showChevron
-              titleColor={titleColor}
-              subtitleColor={subtitleColor}
-              borderColor={rowBorder}
-            />
-            <SettingsRow
-              title="融云 IM 调试"
-              subtitle="imUserId、连接态、备份队列"
-              onPress={() => navigation.navigate(RoutePath.debugIm)}
               showChevron
               titleColor={titleColor}
               subtitleColor={subtitleColor}

@@ -6,6 +6,42 @@ jest.mock('react-native-safe-area-context', () => ({
   useSafeAreaInsets: () => ({top: 44, bottom: 34, left: 0, right: 0}),
 }));
 
+jest.mock('react-native-gesture-handler', () => {
+  const ReactMock = require('react');
+  const RN = require('react-native');
+  const createHandler = (displayName: string) => {
+    const Handler = ReactMock.forwardRef(
+      ({children, ...props}: {children?: React.ReactNode}, ref: unknown) =>
+        ReactMock.createElement(
+          RN.View,
+          {...props, ref, testID: displayName},
+          children,
+        ),
+    );
+    Handler.displayName = displayName;
+    return Handler;
+  };
+  return {
+    ScrollView: RN.ScrollView,
+    PanGestureHandler: createHandler('PanGestureHandler'),
+    TapGestureHandler: createHandler('TapGestureHandler'),
+    State: {END: 5, ACTIVE: 4, FAILED: 1, CANCELLED: 3},
+  };
+});
+
+jest.mock('../components/MineReorderableFunctionGrid', () => ({
+  MineReorderableFunctionGrid: ({items}: {items: Array<{id: string}>}) => {
+    const {View, Text} = require('react-native');
+    return (
+      <View testID="MineReorderableFunctionGrid">
+        {items.map(item => (
+          <Text key={item.id}>{item.id}</Text>
+        ))}
+      </View>
+    );
+  },
+}));
+
 jest.mock('../assets/settingsAssets', () => ({
   mineFunctionIcons: {
     sms: 1,
@@ -60,11 +96,18 @@ jest.mock('@core/navigation', () => ({
     personalizedSettings: 'PersonalizedSettings',
     login: 'Login',
     shortVideo: 'ShortVideo',
+    homeUsedCarList: 'HomeUsedCarList',
+  },
+  LoginRedirect: {
+    setPending: jest.fn(),
+    clear: jest.fn(),
+    peek: jest.fn(),
+    takePending: jest.fn(),
   },
 }));
 
 describe('MineScreen', () => {
-  it('renders guest profile header and function section', () => {
+  it('renders guest profile header, quick services, functions, and menu list', () => {
     const tree = renderer.create(
       <MineScreen
         navigation={{navigate: jest.fn()} as never}
