@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {useTranslation} from 'react-i18next';
-import {type RootStackParamList} from '@core/navigation';
+import {RoutePath, type RootStackParamList} from '@core/navigation';
 import type {RootStackScreenProps} from '@core/navigation';
 import {getImAdapter} from '@core/im';
 import {getLinkingService, type PendingNavigation} from '@core/linking';
@@ -141,6 +141,13 @@ export function DebugRealtimeScreen({
         />
       }>
       <PrimaryButton title={t('debugRealtimeConnect')} onPress={connect} />
+      <View style={styles.gap} />
+      <PrimaryButton
+        title={t('debugRealtimeEnterLiveRoom')}
+        onPress={() =>
+          navigation.navigate(RoutePath.liveRoom, {roomId: 'mock_room_001'})
+        }
+      />
       <Text style={styles.status}>
         {t('debugRealtimeState')}: {state}
       </Text>

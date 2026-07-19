@@ -155,10 +155,10 @@ npm run test
 
 | 项 | P0 | 结果 | 证据 |
 |----|----|------|------|
-| Live / LiveRoom 路由 smoke | P0 | ☐ | |
-| Friend 路由 smoke | P0 | ☐ | |
-| Pay 页布局；SDK 未接则 Degraded/Deferred+note | P0 | ☐ | |
-| Realtime 真连未做则 mock + Deferred note | — | ☐ | |
+| Live / LiveRoom 路由 smoke | P0 | ✅ | Settings DEV + DebugRealtime → Mock room |
+| Friend 路由 smoke | P0 | ✅ | Settings DEV stub（Flutter 对齐） |
+| Pay 页布局；SDK 未接则 Degraded/Deferred+note | P0 | ✅ | MockPay + WeChat/Alipay Deferred note |
+| Realtime 真连未做则 mock + Deferred note | — | ✅ | `acceptance-records/2026-07-19-b9-live-friend-pay.md` |
 
 ### B10. 未迁移 Flutter 模块
 

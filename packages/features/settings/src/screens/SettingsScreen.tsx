@@ -149,6 +149,33 @@ export function SettingsScreen({
               borderColor={rowBorder}
             />
             <SettingsRow
+              title="直播列表 smoke"
+              subtitle="Live → LiveRoom（Mock realtime）"
+              onPress={() => navigation.navigate(RoutePath.live)}
+              showChevron
+              titleColor={titleColor}
+              subtitleColor={subtitleColor}
+              borderColor={rowBorder}
+            />
+            <SettingsRow
+              title="好友模块 smoke"
+              subtitle="Friend 占位页（与 Flutter stub 对齐）"
+              onPress={() => navigation.navigate(RoutePath.friend)}
+              showChevron
+              titleColor={titleColor}
+              subtitleColor={subtitleColor}
+              borderColor={rowBorder}
+            />
+            <SettingsRow
+              title="支付页 smoke"
+              subtitle="布局 + Mock 支付；微信/支付宝 SDK Deferred"
+              onPress={() => navigation.navigate(RoutePath.pay)}
+              showChevron
+              titleColor={titleColor}
+              subtitleColor={subtitleColor}
+              borderColor={rowBorder}
+            />
+            <SettingsRow
               title="融云 IM 调试"
               subtitle="imUserId、连接态、备份队列"
               onPress={() => navigation.navigate(RoutePath.debugIm)}

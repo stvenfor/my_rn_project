@@ -45,9 +45,9 @@
 | music | music | 控件/顶栏/seek 已对齐；Harmony blur/Hero 能力门控 |
 | video | video | 短视频+配音详情已迁；WebView scrubber / Lottie Degraded |
 | bfui | bfui | Gallery+17 模板已迁；wave/glass/drawer Degraded |
-| live | live | UI 迁完；真 realtime 可 Deferred |
-| friend | friend | |
-| pay | pay | UI 迁完；支付 SDK 可 Deferred |
+| live | live | Smoke OK；Mock realtime；真 WS/推流 Deferred |
+| friend | friend | Stub 与 Flutter 对齐；Settings DEV 入口 |
+| pay | pay | 布局+Mock；微信/支付宝 SDK Deferred v0.2 |
 | classroom | classroom | 8 页 mock UI 已迁；视频播放 Degraded |
 
 ## 4. 单模块执行步骤
