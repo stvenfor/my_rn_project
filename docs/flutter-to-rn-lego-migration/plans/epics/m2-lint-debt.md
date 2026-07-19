@@ -23,6 +23,7 @@
 
 | Slice | 范围示意 |
 |-------|----------|
+| `m2-lint-baseline` | docs-only 基线 — Ready [`../slices/m2-lint-baseline.md`](../slices/m2-lint-baseline.md)（≈40e/112w） |
 | `m2-lint-src` | `src/` |
 | `m2-lint-features-*` | 按 feature 分包 |
 | `m2-lint-core-ui` | `packages/core*` / `packages/ui*` |

@@ -21,9 +21,14 @@
   - docs/flutter-to-rn-lego-migration/
 - 文件黑名单:
   - packages/features/music/
-- 验证命令:
+- 机跑验证:   # agent:post run-verify 执行（旧字段「验证命令」仍兼容）
   - npx jest packages/features/<mod> --no-coverage
   - npx jest src/__tests__/pageParity.test.ts
+- 人证清单:   # 截图/日志路径；不进入 run-verify
+  - acceptance-records/assets/<id>/*.png
+- Accept 模式: Full | Partial
+- Partial 时未证项:
+  - [仅 Partial 时填写；须在证据 Record 写 Deferred/未证表]
 - 证据: docs/flutter-to-rn-lego-migration/acceptance-records/YYYY-MM-DD-<id>.md
 - 工具: .cursor/skills/flutter-to-rn-lego-module ；先 Flutter 再 RN
 ```
@@ -46,12 +51,13 @@
 - [ ] 降级则准备 manifest note  
 - [ ] 无 feature→feature  
 - [ ] 二级页 navBar + showBackButton（若适用）  
-- [ ] 验证命令可复制  
+- [ ] 机跑验证可复制（人证勿塞进机跑）  
 - [ ] 已跑 `npm run agent:pre` 且绿  
 
 ## 结束后 Context Card
 
-> `agent:post` 的 `check-dod` 要求本文件存在 `## Context Card` 标题。
+> `agent:post` 的 `check-dod` 要求本文件存在 `## Context Card` 标题。  
+> Accept 模式=Partial 时，证据 Record 须含 Deferred / 未证 / Partial 表或标题。
 
 ```md
 ## Context Card — <slice-id>

@@ -155,7 +155,21 @@ export function parseBrief(markdown) {
 
   const whitelist = listField(['文件白名单', 'Whitelist', '白名单']);
   const blacklist = listField(['文件黑名单', 'Blacklist', '黑名单']);
-  const verifyCommands = listField(['验证命令', 'Verify', '验证']);
+  // H4: prefer 机跑验证; fallback 验证命令 for older slices. Never merge 人证清单.
+  const machineVerify = listField(['机跑验证', 'Machine verify']);
+  const legacyVerify = listField(['验证命令', 'Verify', '验证']);
+  const verifyCommands =
+    machineVerify.length > 0 ? machineVerify : legacyVerify;
+  const humanEvidence = listField(['人证清单', 'Human evidence', '人证']);
+  const acceptModeRaw = field(['Accept 模式', 'Accept mode']);
+  const acceptMode = /partial/i.test(acceptModeRaw || '')
+    ? 'Partial'
+    : 'Full';
+  const partialGaps = listField([
+    'Partial 时未证项',
+    'Partial gaps',
+    '未证项',
+  ]);
 
   const isAudit =
     /audit|只读|不改代码|不改业务|差距表/i.test(only || '') ||
@@ -171,6 +185,9 @@ export function parseBrief(markdown) {
     whitelist,
     blacklist,
     verifyCommands,
+    humanEvidence,
+    acceptMode,
+    partialGaps,
     isAudit,
     raw: text,
   };

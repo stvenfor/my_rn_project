@@ -1,7 +1,8 @@
 # Migration Planning（本仓规划操作系统）
 
 > 不另起验收标准。验收认 [`08-acceptance-checklist.md`](../08-acceptance-checklist.md)；页/资源状态认 [`page-resource-parity-manifest.ts`](../page-resource-parity-manifest.ts)；Agent 方法认 [`09-agent-programming-playbook.md`](../09-agent-programming-playbook.md)。  
-> **提示词合同 + 机检：** [`10-agent-prompt-harness.md`](../10-agent-prompt-harness.md)（`agent:pre` / `agent:post` + Cursor Hooks）。
+> **提示词合同 + 机检：** [`10-agent-prompt-harness.md`](../10-agent-prompt-harness.md)（`agent:pre` / `agent:post` + Cursor Hooks）。  
+> **Agent 入口地图：** 仓库根 [`AGENTS.md`](../../../AGENTS.md)（路径 `/AGENTS.md`）。
 
 本文定义 **怎么选下一刀、怎么写合同、怎么多角色协作**。实现细节仍跟 skill + `07`。
 
@@ -126,6 +127,8 @@ Harness 报告：`.cursor/agent-harness/harness-report.json`（不入库）。
 ---
 
 ## 8. 当前入口
+
+> Agents 应先读仓库根 [`/AGENTS.md`](../../../AGENTS.md)，再以本节为「当前 Program」唯一指针（勿在 AGENTS 里硬编码 Epic）。
 
 - **当前 Program：** [`2026-07-19-m2-program.md`](./2026-07-19-m2-program.md)（**M2 Open**）  
 - 历史：[`2026-07-19-program.md`](./2026-07-19-program.md)（M-close-gap 条件关闭）  

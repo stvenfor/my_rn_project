@@ -9,9 +9,22 @@ npm run agent:pre -- --slice docs/flutter-to-rn-lego-migration/plans/slices/<id>
 npm run agent:post
 ```
 
-Nested Brief list items (白名单 / 验证命令) **must be indented** under their label, e.g.:
+Nested Brief list items (白名单 / 机跑验证) **must be indented** under their label, e.g.:
 
 ```md
-- 验证命令:
+- 机跑验证:
   - npx jest packages/features/settings --no-coverage
+- 人证清单:
+  - acceptance-records/assets/<id>/shot.png
+- Accept 模式: Full
+```
+
+- **`run-verify`** runs only **机跑验证** (fallback: legacy **验证命令**). It never runs **人证清单**.
+- **`check-dod`**: if **Accept 模式=Partial**, the evidence Record must contain a Deferred / 未证 / Partial heading or table.
+- Template: `docs/flutter-to-rn-lego-migration/plans/slices/_template.md`
+
+Self-check for Brief parsing:
+
+```bash
+node scripts/agent-harness/lib/parse-brief.selfcheck.mjs
 ```

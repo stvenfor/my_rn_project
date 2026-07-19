@@ -1,0 +1,180 @@
+{
+  "tech_stack_java8_example": {
+    "note": "PDF 示例栈；本仓库 RN 迁移可对照「信息层/约束层/自动化层」思想，不必照搬 Java 工具",
+    "components": [
+      { "name": "JDK", "version": "1.8", "note": "禁止 record/var/text blocks 等 Java 9+" },
+      { "name": "Spring Boot", "version": "2.7.x (2.7.18)", "note": "最后支持 Java 8 的 LTS 主版本" },
+      { "name": "Maven", "version": "3.6.3", "note": "enforcer 强制" },
+      { "name": "ArchUnit", "version": "1.3.0", "note": "分层依赖测试" },
+      { "name": "Checkstyle", "version": "9.3", "note": "10.x 起要 Java 11" },
+      { "name": "SpotBugs", "version": "4.7.x", "note": "兼容 Java 8" },
+      { "name": "JaCoCo", "version": "0.8.11", "note": "行覆盖率 ≥80%" },
+      { "name": "MyBatis-Plus", "version": "3.5.3.2", "note": "替代 JPA" },
+      { "name": "MySQL", "version": "5.7", "note": "utf8mb4；URL 带 serverTimezone & useSSL=false" },
+      { "name": "Flyway", "version": "8.5.x", "note": "含 flyway-mysql" }
+    ]
+  },
+  "phases": [
+    {
+      "id": 1,
+      "name": "信息层",
+      "goal": "让 Agent「看得懂」项目",
+      "duration": "1–2 天",
+      "fit": "所有项目",
+      "benefit": "Agent 输出一致性 ↑",
+      "deliverables": [
+        "AGENTS.md 地图模式（50–100 行）",
+        "docs/ 结构化知识库",
+        "编码规范文档化",
+        "设计文档模板（含 Status）"
+      ],
+      "agents_md_rules": [
+        "控制在 50–100 行；超过则拆到 docs/ 只留链接",
+        "「你想做什么 → 去哪里看」优于「这是什么」",
+        "硬性规则单独列出（CI 会验证）",
+        "文档头加 last_updated / status / owner 供 doc-gardening"
+      ],
+      "docs_tree": [
+        "docs/architecture/{overview,boundaries,data-flow}.md",
+        "docs/conventions/{README,naming,error-handling,testing,logging}.md",
+        "docs/design/feature-*.md",
+        "docs/plans/{current-sprint,backlog}.md",
+        "docs/reference/{api-spec.yaml,error-codes.md}"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "约束层",
+      "goal": "让 Agent「不能犯错」",
+      "duration": "3–5 天",
+      "fit": "中期项目",
+      "benefit": "代码质量可控（质变点）",
+      "deliverables": [
+        "分层架构 + Linter（错误信息含修复指令）",
+        "CI 约束检查",
+        "把主观品味翻译成机械规则"
+      ],
+      "rule_of_thumb": "Code Review 提过 3 次以上的约定 → 写成 Linter 规则",
+      "taste_to_rules": [
+        { "oral": "方法要短", "rule": "单方法 ≤50 行", "impl": "Checkstyle MethodLength" },
+        { "oral": "文件要短", "rule": "单文件 ≤300 行", "impl": "Checkstyle FileLength" },
+        { "oral": "日志要规范", "rule": "禁 System.out / printStackTrace", "impl": "Checkstyle 正则" },
+        { "oral": "HTTP 调用要统一", "rule": "禁裸 RestTemplate/HttpURLConnection", "impl": "ArchUnit" },
+        { "oral": "Controller 要纯", "rule": "Controller 不得直接调 Mapper", "impl": "ArchUnit 分层" },
+        { "oral": "依赖要构造器注入", "rule": "禁字段级 @Autowired", "impl": "ArchUnit" },
+        { "oral": "测试要充分", "rule": "行覆盖率 ≥80%", "impl": "JaCoCo" },
+        { "oral": "锁定构建工具版本", "rule": "Maven≥3.6.3，JDK=1.8", "impl": "maven-enforcer" }
+      ],
+      "linter_prompt_formula": "❌ [什么错了]\n✅ FIX: [怎么改，给出代码片段]\n📖 See: [哪个文档]"
+    },
+    {
+      "id": 3,
+      "name": "自动化层",
+      "goal": "让 Agent 自我验证和自我修复",
+      "duration": "1–2 周",
+      "fit": "长期维护项目",
+      "benefit": "人工审查量 ↓↓↓",
+      "deliverables": [
+        "Git Worktree 隔离验证（含健康检查）",
+        "后台清理 Agent 定时任务",
+        "可观测性（Actuator + Loki + Prometheus）",
+        "文档新鲜度自动检查"
+      ]
+    }
+  ],
+  "pitfalls": [
+    {
+      "id": "agents_md_too_long",
+      "symptom": "输出质量下降，经常忽略部分规则",
+      "cause": "上下文被指令占满",
+      "fix": "砍到 50–100 行；细节进 docs/ 只留链接"
+    },
+    {
+      "id": "linter_death_loop",
+      "symptom": "修一条触发另一条，反复循环",
+      "cause": "规则过多或互相冲突；FIX 信息不具体",
+      "fix": ["逐条加规则并试跑", "FIX 给具体代码片段", "冲突规则只留一条"]
+    },
+    {
+      "id": "java8_version_drift",
+      "symptom": "UnsupportedClassVersionError",
+      "cause": "工具最新版不再支持 Java 8",
+      "fix": ["pom 显式锁定兼容版本", "Dependabot ignore 主版本升级"]
+    },
+    {
+      "id": "arch_too_strict",
+      "symptom": "合理模式被拦截，团队绕过规则",
+      "cause": "无豁免机制",
+      "fix": "白名单包（如 controller.legacy）"
+    },
+    {
+      "id": "stale_docs",
+      "symptom": "Agent 按过时文档写出错误假设代码",
+      "cause": "doc-gardening 无人管",
+      "fix": ["CI 文档新鲜度", "每两周 doc-gardening", "status 字段"]
+    },
+    {
+      "id": "forget_env_review",
+      "symptom": "过度依赖 Agent，环境腐化",
+      "cause": "只审代码不审环境",
+      "fix": "每周 30 分钟环境审查（CI 失败率、规则覆盖、文档一致性、版本漂移）"
+    }
+  ],
+  "checklist": {
+    "phase1": [
+      "AGENTS.md（50–100 行，含版本基线）",
+      "docs/ 结构化目录",
+      "架构 + 编码规范文档",
+      "设计文档模板（含 Status）"
+    ],
+    "phase2": [
+      "enforcer 锁定工具链版本",
+      "ArchUnit / 等价分层约束",
+      "Checkstyle/ESLint 等 + 错误信息即 Prompt",
+      "覆盖率门禁 + CI verify",
+      "口头约定 → 机械规则"
+    ],
+    "phase3": [
+      "Worktree/隔离验证脚本",
+      "后台清理 Agent",
+      "可观测性接入 Agent",
+      "文档新鲜度 + Dependabot 防误升"
+    ],
+    "ongoing": [
+      "每周 30 分钟环境审查",
+      "每月回顾约束规则",
+      "每两周 doc-gardening"
+    ]
+  },
+  "tools": [
+    { "name": "Aider", "stars": "30k+", "type": "CLI 结对", "best_for": "个人快速体验", "harness": 5 },
+    { "name": "Cline", "stars": "40k+", "type": "VS Code Agent", "best_for": "小团队 Plan/Act", "harness": 4 },
+    { "name": "Claude Code", "stars": "-", "type": "CLI Agent", "best_for": "深度自主（6h+）", "harness": 5 },
+    { "name": "OpenHands", "stars": "50k+", "type": "平台", "best_for": "沙箱隔离团队部署", "harness": 5 },
+    { "name": "SWE-agent", "stars": "15k+", "type": "CLI Agent", "best_for": "自动修 GitHub Issue", "harness": 3 },
+    { "name": "Superpowers", "stars": "127k", "type": "技能框架", "best_for": "强制 TDD + 子 Agent", "harness": 5 },
+    { "name": "Cursor / Codex", "stars": "-", "type": "IDE/Agent", "best_for": "生产开发日常", "harness": 5 }
+  ],
+  "resources": [
+    { "name": "Mitchell Hashimoto — My AI Adoption Journey", "url": "https://mitchellh.com/writing/my-ai-adoption-journey" },
+    { "name": "OpenAI — Harness engineering", "url": "https://openai.com/index/harness-engineering/" },
+    { "name": "Anthropic — Effective harnesses for long-running agents", "url": "https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents" },
+    { "name": "Anthropic — Harness design for long-running apps", "url": "https://www.anthropic.com/engineering/harness-design-long-running-apps" },
+    { "name": "LangChain — Anatomy of an Agent Harness", "url": "https://www.langchain.com/blog/the-anatomy-of-an-agent-harness" },
+    { "name": "Martin Fowler — Harness Engineering memo", "url": "https://martinfowler.com/articles/exploring-gen-ai/harness-engineering-memo.html" },
+    { "name": "Martin Fowler — for coding agent users", "url": "https://martinfowler.com/articles/harness-engineering.html" },
+    { "name": "deusyu/harness-engineering", "url": "https://github.com/deusyu/harness-engineering" },
+    { "name": "harness-engineering.ai 知识图谱", "url": "https://harness-engineering.ai" }
+  ],
+  "map_to_this_repo": {
+    "note": "本仓库 Flutter→RN LEGO 迁移已落地的对等物",
+    "items": [
+      { "pdf_concept": "AGENTS.md / 地图", "repo": "Slice Brief + 09 playbook + Context Card" },
+      { "pdf_concept": "约束机械化", "repo": "agent:pre / agent:post + status enums + check-manifest" },
+      { "pdf_concept": "思考与执行分离", "repo": "Program → Epic → Slice；禁止整模块一把梭" },
+      { "pdf_concept": "诚实完成态", "repo": "Migrated|Degraded|Placeholder|Deferred|Removed" },
+      { "pdf_concept": "双事实源", "repo": "08-acceptance.md + parity-manifest" },
+      { "pdf_concept": "人类闸门", "repo": "Brief 定范围；降级决策；显式要求才 commit/push" }
+    ]
+  }
+}

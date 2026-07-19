@@ -99,6 +99,19 @@ agent:post 绿
 
 ---
 
+## 3.4 证据目录约定（截图 / 真机日志）
+
+| 用途 | 路径 |
+|------|------|
+| **Canonical（新 Slice 一律用）** | `docs/flutter-to-rn-lego-migration/acceptance-records/evidence/<slice-id>/` |
+| Legacy alias（已有资产，勿删勿迁） | `docs/flutter-to-rn-lego-migration/acceptance-records/assets/m2-device-smoke/` |
+
+- Brief「证据」字段应写 canonical 路径（或相对 `evidence/<slice-id>/` 的文件名）。
+- Packaging / Metro / `npm run dev` 成功 **不算** 真机交互证据；须有截图或设备日志落在上述目录。
+- 本约定只统一文档与新入库位置；**不要求**把 legacy `assets/m2-device-smoke/` 迁并（避免大图 churn）。索引说明见 [`acceptance-records/evidence/README.md`](./acceptance-records/evidence/README.md)。
+
+---
+
 ## 4. Brief 合同字段（机检）
 
 `check-brief` 解析 `## Slice Brief` 列表项（中英标签均可）：
@@ -254,6 +267,7 @@ Program（队首 Epic）
 |------|------|
 | 2026-07-19 | 初版：A 脚本 + B hooks + npm `agent:pre`/`agent:post` |
 | 2026-07-19 | 增加 `.harness/` 编排层（agents/rules/skills/changes/wiki） |
+| 2026-07-19 | §3.4 证据目录约定：canonical `evidence/<slice-id>/`；`assets/m2-device-smoke/` 为 legacy |
 
 ## 12. `.harness/` 编排层（与图示目录对齐）
 

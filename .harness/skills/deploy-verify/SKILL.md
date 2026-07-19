@@ -24,3 +24,5 @@
 ## Refs
 
 - `docs/flutter-to-rn-lego-migration/08-acceptance-checklist.md` §D
+- 证据采集（Packaging ≠ Interactive）：`.harness/skills/device-smoke-evidence/SKILL.md`
+- Record：`.harness/skills/acceptance-record-writer/SKILL.md`

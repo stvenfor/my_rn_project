@@ -23,8 +23,9 @@ Required Brief fields:
   - 本轮 ONLY
   - 不做
   - 验收
-  - 验证命令 (audit-only may be empty / "无")
+  - 机跑验证 (or legacy 验证命令; audit-only may be empty / "无")
   - 文件白名单 (audit-only optional)
+Optional: 人证清单, Accept 模式 (Full|Partial), Partial 时未证项
 `);
   process.exit(args.help ? 0 : 1);
 }
@@ -52,10 +53,10 @@ if (!brief.isAudit && brief.whitelist.length === 0) {
   errors.push('实现类 Slice 必须填写「文件白名单」');
 }
 if (!brief.isAudit && brief.verifyCommands.length === 0) {
-  errors.push('实现类 Slice 必须填写「验证命令」');
+  errors.push('实现类 Slice 必须填写「机跑验证」或旧字段「验证命令」');
 }
 if (brief.isAudit && brief.verifyCommands.length === 0) {
-  warn('audit Slice 无验证命令（允许）；建议写「无 / 只读」');
+  warn('audit Slice 无机跑验证（允许）；建议写「无 / 只读」');
 }
 
 if (errors.length) {
@@ -69,5 +70,13 @@ if (brief.whitelist.length) {
   console.log(`  whitelist: ${brief.whitelist.join(', ')}`);
 }
 if (brief.verifyCommands.length) {
-  console.log(`  verify: ${brief.verifyCommands.join(' && ')}`);
+  console.log(`  verify (机跑): ${brief.verifyCommands.join(' && ')}`);
+}
+if (brief.humanEvidence?.length) {
+  console.log(`  人证 (not run-verify): ${brief.humanEvidence.join('; ')}`);
+}
+if (brief.acceptMode === 'Partial') {
+  console.log(
+    `  Accept 模式: Partial${brief.partialGaps?.length ? ` — 未证: ${brief.partialGaps.join('; ')}` : ''}`,
+  );
 }

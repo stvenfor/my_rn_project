@@ -1,0 +1,156 @@
+{
+  "cases": [
+    {
+      "id": "openai-million-loc",
+      "org": "OpenAI",
+      "title": "百万行代码的零手写实验",
+      "metrics": {
+        "team_size": 3,
+        "duration": "5 个月（2025.8 起）",
+        "loc": "~1,000,000",
+        "handwritten_loc": 0,
+        "merged_prs": "~1,500",
+        "prs_per_person_per_day": 3.5,
+        "efficiency_gain": "~10x"
+      },
+      "principles": [
+        {
+          "id": 1,
+          "title": "设计环境，而非编写代码",
+          "detail": "卡住时诊断「缺少什么能力」，让 Agent 自己构建该能力"
+        },
+        {
+          "id": 2,
+          "title": "机械化执行架构约束",
+          "detail": "Types→Config→Repo→Service→Runtime→UI；自定义 Linter + 结构测试"
+        },
+        {
+          "id": 3,
+          "title": "仓库作为唯一事实源",
+          "detail": "Slack/Google Docs 知识对 Agent 等于不存在"
+        },
+        {
+          "id": 4,
+          "title": "可观测性连接到 Agent",
+          "detail": "Chrome DevTools / 日志指标 → 「启动时间 <800ms」可度量"
+        },
+        {
+          "id": 5,
+          "title": "对抗熵",
+          "detail": "周五 20% 清 AI Slop → 自动化为后台 Codex；清理吞吐与生成吞吐同比扩展"
+        }
+      ]
+    },
+    {
+      "id": "anthropic-c-compiler",
+      "org": "Anthropic / Carlini",
+      "title": "16 个 Agent 构建 C 编译器",
+      "metrics": {
+        "duration": "~2 周",
+        "parallel_agents": 16,
+        "claude_code_sessions": "~2,000",
+        "rust_loc": 100000,
+        "gcc_torture_pass_rate": "99%",
+        "real_projects_compilable": "150+ (PostgreSQL, Redis, FFmpeg, CPython, Linux 6.9…)",
+        "api_cost_usd": 20000
+      },
+      "harness_designs": [
+        {
+          "title": "上下文窗口污染缓解",
+          "detail": "日志写文件；grep 友好 ERROR: [reason] 单行；预计算聚合统计"
+        },
+        {
+          "title": "Agent 时间盲区",
+          "detail": "确定性测试子采样：单 Agent 随机 1–10%，跨 VM 随机 → 集体覆盖全套件"
+        },
+        {
+          "title": "专业化而非通用化",
+          "detail": "编译器核心 / 去重 / 性能 / 代码质量与文档"
+        },
+        {
+          "title": "CI 作为 Harness",
+          "detail": "用更严 CI 应对「实现新功能破坏旧功能」"
+        }
+      ],
+      "quote": "我必须不断提醒自己，我是在为 Claude 写这个测试框架，不是为自己写。"
+    },
+    {
+      "id": "anthropic-long-running",
+      "org": "Anthropic",
+      "title": "长时间运行 Agent 的有效 Harness",
+      "pain": "跨会话失忆：像轮班工程师，上岗时对之前进展一脸懵",
+      "two_phase": {
+        "init_agent": "专用 prompt 建 init.sh、claude-progress.txt、初始 git",
+        "coding_agent": "每次增量进展 + 留下结构化更新"
+      },
+      "failure_matrix": [
+        {
+          "problem": "过早宣布项目完成",
+          "init": "建结构化 JSON 功能列表",
+          "coding": "会话开始读列表，选单个功能"
+        },
+        {
+          "problem": "环境遗留 bug / 未文档化进度",
+          "init": "初始 git + 进度记录文件",
+          "coding": "开始读进度+git；结束提交+更新进度"
+        },
+        {
+          "problem": "过早标记功能完成",
+          "init": "建功能列表文件",
+          "coding": "仔细测试后才标 passing"
+        },
+        {
+          "problem": "不知如何运行应用",
+          "init": "可启动开发服务器的 init.sh",
+          "coding": "会话开始读 init.sh"
+        }
+      ],
+      "extra": "浏览器自动化（Puppeteer MCP）可修代码层看不见的 bug"
+    },
+    {
+      "id": "stripe-minions",
+      "org": "Stripe",
+      "title": "千级 PR 的 Minions 系统",
+      "flow": "Slack 发任务 → Agent 写代码→跑 CI→提 PR → 人只审最后环节",
+      "elements": [
+        "Toolshed MCP：近 500 工具，覆盖内部系统与 SaaS",
+        "隔离预热 Devbox：与人类同环境，与生产/互联网隔离",
+        "Agent 与人类工程师同等上下文与工具——一等公民，非事后集成"
+      ]
+    },
+    {
+      "id": "langchain-terminal-bench",
+      "org": "LangChain",
+      "title": "仅改 Harness 的排名跃升",
+      "metrics": {
+        "model_changed": false,
+        "score_before": "52.8%",
+        "score_after": "66.5%",
+        "rank_before": 30,
+        "rank_after": 5,
+        "bench": "Terminal Bench 2.0"
+      },
+      "lesson": "底层模型一个参数都没动；优化文档结构、验证回路、追踪系统即可跃升"
+    },
+    {
+      "id": "hashimoto-ghostty",
+      "org": "HashiCorp / Hashimoto",
+      "title": "Ghostty AGENTS.md 活反馈",
+      "practices": [
+        "AGENTS.md 每一行对应一次历史 Agent 失败",
+        "每天最后 30 分钟启动 Agent，非工作时间暖启动",
+        "约 10–20% 工作日有后台 Agent 运行"
+      ]
+    },
+    {
+      "id": "huntley-ralph-loop",
+      "org": "Huntley",
+      "title": "Ralph Wiggum Loop",
+      "loop": "while :; do cat PROMPT.md | claude-code; done",
+      "core": "核心不是循环，而是反压（Backpressure）",
+      "upstream": "确定性设置、一致上下文、现有代码模式引导首选实现",
+      "downstream": "测试、类型检查、Lint、构建、安全扫描、自定义验证器拒绝无效工作",
+      "extreme_setup": "NixOS 裸金属；直推 master；无人审；30 秒部署；出错反馈进活跃会话自修复"
+    }
+  ]
+}

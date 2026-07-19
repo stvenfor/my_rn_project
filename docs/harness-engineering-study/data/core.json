@@ -1,0 +1,213 @@
+{
+  "meta": {
+    "source": "285.Harness Engineering 从入门到精通实战.pdf",
+    "term_coined": "2026-02-05",
+    "coined_by": "Mitchell Hashimoto (HashiCorp)",
+    "philosophy": "Human Steer, Agent Execute",
+    "one_liner": "不优化模型本身，而优化模型运行的环境。Agent 每次失败都是环境设计不完善的信号。"
+  },
+  "definition": {
+    "zh": "围绕 AI 智能体设计和构建约束机制、反馈回路、工作流控制和持续改进循环的系统工程实践。",
+    "hashimoto": "anytime you find an agent makes a mistake, you take the time to engineer a solution such that the agent will not make that mistake again in the future."
+  },
+  "analogy": {
+    "prompt_engineering": "对马喊话的技巧",
+    "context_engineering": "给马看的地图",
+    "harness_engineering": "给马造高速公路：护栏、限速牌、加油站"
+  },
+  "paradigm_shifts": [
+    {
+      "id": "prompt",
+      "name": "提示词工程",
+      "core_question": "怎么把话说清楚",
+      "optimize": "Prompt 的措辞、格式、示例",
+      "interaction": "一问一答"
+    },
+    {
+      "id": "context",
+      "name": "上下文工程",
+      "core_question": "怎么给 AI 喂信息",
+      "optimize": "文档、代码片段、历史对话",
+      "interaction": "信息注入 → 生成"
+    },
+    {
+      "id": "harness",
+      "name": "驾驭工程",
+      "core_question": "怎么让 Agent 可靠工作",
+      "optimize": "约束、反馈回路、控制系统",
+      "interaction": "人类掌舵，Agent 执行"
+    }
+  ],
+  "vs_framework": {
+    "position": "位于 SDK/脚手架/Agent 框架之上的一层",
+    "framework_solves": "如何构建 AI 智能体",
+    "harness_solves": "智能体如何可靠地运行",
+    "model_absorbs_framework_pct": 80,
+    "harness_owns_remainder": [
+      "持久化",
+      "确定性重放",
+      "成本控制",
+      "可观测性",
+      "错误恢复"
+    ]
+  },
+  "failure_modes": [
+    {
+      "id": "one_shotting",
+      "name": "试图一步到位",
+      "desc": "一个会话里做完所有功能 → 上下文耗尽 → 半成品无文档 → 下会话只能猜测",
+      "mitigation": "功能列表 JSON + 每次只选一个最高优先级功能"
+    },
+    {
+      "id": "premature_project_done",
+      "name": "过早宣布胜利",
+      "desc": "看到部分进展就宣布项目完成，忽略大量未实现功能",
+      "mitigation": "结构化 feature list；会话开始时强制读取并选单功能"
+    },
+    {
+      "id": "premature_feature_done",
+      "name": "过早标记功能完成",
+      "desc": "写完代码就标完成，无端到端测试；单测/curl 通过 ≠ 功能可用",
+      "mitigation": "自我验证 + 端到端测试后才标 passing"
+    },
+    {
+      "id": "pattern_amplification",
+      "name": "坏模式放大",
+      "desc": "Agent 擅长模式复制，会忠实复制并放大坏模式与架构漂移",
+      "mitigation": "架构约束机械化（Linter/CI）+ 熵管理"
+    }
+  ],
+  "components": [
+    {
+      "id": "context",
+      "name": "上下文工程",
+      "alias": "新员工手册",
+      "principle": "恰好获得当前任务所需上下文——不多不少",
+      "key_practices": [
+        "分层上下文 + 渐进式披露",
+        "AGENTS.md 作为活反馈循环（每行对应历史失败）",
+        "地图模式：写导航不写百科全书（50–100 行）"
+      ],
+      "tiers": [
+        {
+          "tier": 1,
+          "name": "会话常驻",
+          "when": "每次会话自动加载",
+          "examples": "AGENTS.md / CLAUDE.md，项目结构概览",
+          "cost": "最小"
+        },
+        {
+          "tier": 2,
+          "name": "按需加载",
+          "when": "特定子 Agent 或技能被调用时",
+          "examples": "专业化 Agent 上下文、领域知识",
+          "cost": "中等"
+        },
+        {
+          "tier": 3,
+          "name": "持久化知识库",
+          "when": "Agent 主动查询时",
+          "examples": "研究文档、规格说明、历史会话",
+          "cost": "按需"
+        }
+      ]
+    },
+    {
+      "id": "specialization",
+      "name": "Agent 专业化",
+      "principle": "领域受限工具的专家 Agent 优于全权限通用 Agent",
+      "roles": [
+        { "role": "研究 Agent", "scope": "探索代码库、分析实现", "tools": "只读 Read/Grep/Glob" },
+        { "role": "规划 Agent", "scope": "需求分解为结构化任务", "tools": "只读，无写入" },
+        { "role": "执行 Agent", "scope": "实现单个具体任务", "tools": "限定范围读写" },
+        { "role": "审查 Agent", "scope": "审计完成工作、标记问题", "tools": "只读 + 标记" },
+        { "role": "调试 Agent", "scope": "修复审查发现问题", "tools": "限定范围修复" },
+        { "role": "清理 Agent", "scope": "对抗熵、清理低质量代码", "tools": "读写" }
+      ]
+    },
+    {
+      "id": "persistent_memory",
+      "name": "持久化记忆",
+      "principle": "进度持久化在文件系统上，而非上下文窗口中",
+      "anthropic_pattern": {
+        "init_agent": "init.sh + claude-progress.txt + 初始 git 提交",
+        "coding_agent_boot": [
+          "pwd",
+          "读 git log + 进度文件",
+          "读 feature list，选最高优先级未完成功能",
+          "启动开发服务器，跑基础 E2E",
+          "确认基本功能后开始新功能"
+        ],
+        "insight": "JSON 追踪 feature 状态比 Markdown 更有效（不易被不当覆盖）"
+      }
+    },
+    {
+      "id": "structured_execution",
+      "name": "结构化执行",
+      "principle": "思考与执行分离",
+      "sequence": ["理解", "规划", "执行", "验证"],
+      "checkpoint_value": "审查计划远比审查代码快；规格错可在 500 行代码生成前纠正"
+    },
+    {
+      "id": "architecture_constraints",
+      "name": "架构约束",
+      "alias": "缰绳",
+      "principle": "文档记录不够；不能机械化强制执行，Agent 就会偏离",
+      "openai_layers": ["Types", "Config", "Repo", "Service", "Runtime", "UI"],
+      "linter_as_prompt": "错误信息三要素：❌ 什么错了 / ✅ FIX 怎么改（含代码片段）/ 📖 See 文档"
+    },
+    {
+      "id": "feedback_loop",
+      "name": "反馈循环",
+      "alias": "智能体审智能体",
+      "practices": [
+        "Agent-to-Agent Review 直到通过",
+        "失败测试带错误信息回流模型",
+        "AI 写的测试通过带 Bug 代码 → 判定测试无效，强制重思边界"
+      ]
+    },
+    {
+      "id": "entropy_management",
+      "name": "熵管理",
+      "alias": "垃圾回收",
+      "principle": "技术债务像高息贷款；持续小额偿还，不攒到集中处理",
+      "practices": [
+        "后台扫描偏差、更新质量等级、针对性重构 PR",
+        "Doc-gardening Agent：文档与代码不一致时自动提 PR"
+      ]
+    }
+  ],
+  "industry_consensus": [
+    {
+      "id": 1,
+      "title": "瓶颈在基础设施，不在模型智能",
+      "detail": "仅改 Harness，LangChain Terminal Bench 排名 30→5；得分 52.8%→66.5%"
+    },
+    {
+      "id": 2,
+      "title": "文档必须是活的反馈循环",
+      "detail": "静态文档是坟场；后台 Agent 定期清理过时文档并提交 PR"
+    },
+    {
+      "id": 3,
+      "title": "思考与执行分离",
+      "detail": "Orchestrator + Worker；状态持久化到外部存储"
+    },
+    {
+      "id": 4,
+      "title": "上下文不是越多越好",
+      "detail": "按需检索、动态注入；巨大指令文件会挤掉任务空间"
+    },
+    {
+      "id": 5,
+      "title": "约束必须自动化",
+      "detail": "护栏编码为 Linter、CI、类型系统；机器执行而非人"
+    },
+    {
+      "id": 6,
+      "title": "工程师角色在转变",
+      "detail": "从代码编写者变成环境建筑师；设计让 Agent 可靠工作的控制系统"
+    }
+  ],
+  "closed_loop": ["约束", "告知", "验证", "纠正"]
+}

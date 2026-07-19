@@ -19,3 +19,16 @@ buildscript {
         classpath("com.facebook.react:react-native-gradle-plugin")
     }
 }
+
+// Keep androidx.core on 1.12.x so compileSdk 33 (RN 0.72 / AGP 7.4) remains valid.
+subprojects { subproject ->
+    subproject.configurations.configureEach { configuration ->
+        configuration.resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == 'androidx.core' &&
+                (details.requested.name == 'core' || details.requested.name == 'core-ktx')) {
+                details.useVersion('1.12.0')
+                details.because('M2 Android smoke: avoid compileSdk 34 requirement from androidx.core 1.13+')
+            }
+        }
+    }
+}

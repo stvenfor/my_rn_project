@@ -56,9 +56,11 @@ description: >-
 4. 产出 UX contract（主 skill `references/ux-1to1-gates.md`）。
 5. 在 Brief **白名单**内实现 `packages/features/<name>/`。
 6. 接线：`register*Feature` → `moduleManifest` → `RoutePath`。
-7. 更新 `page-resource-parity-manifest.ts`（每页/每资源必须有 status）。
+7. 更新 `page-resource-parity-manifest.ts`（每页/每资源必须有 status；见 `parity-manifest-hygiene`）。
 8. `npm run agent:post`（跑 Brief 验证命令 + 边界/白名单/DoD 信号）。
 9. 按 `08-acceptance-checklist.md` 自检；**未过 post 不得勾 08 / 自称 Accept**。
+10. 写 `acceptance-records/`（`acceptance-record-writer`）；真机 §D 用 `device-smoke-evidence`，证据目录：`acceptance-records/evidence/<slice-id>/`。
+11. **Partial Accept** 合法：门禁可证 ≠ Login 成功；未证项进 Deferred 表，禁止用 packaging/单测假勾交互格。
 
 ```bash
 npm run agent:pre -- --slice docs/flutter-to-rn-lego-migration/plans/slices/<id>.md

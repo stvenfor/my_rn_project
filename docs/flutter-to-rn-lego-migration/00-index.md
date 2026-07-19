@@ -4,14 +4,20 @@
 
 目标 RN 仓库：`/Users/mac/Desktop/github/my_rn_project`
 
+## Agent 入口
+
+仓库根 **[`AGENTS.md`](../../AGENTS.md)** — Agent 导航地图（栈基线、硬规则、迁移最短路径）。细节仍在本目录 docs；当前 Program / 队首 Slice 以 [`plans/README.md`](./plans/README.md) 为准。
+
 ## 文档导航
 
 | 文档 | 用途 | 主要读者 |
 |---|---|---|
+| **[`AGENTS.md`](../../AGENTS.md)**（仓库根） | **Agent 入口地图（非百科）** | Cursor, Codex |
 | **`07-1to1-migration-guide.md`** | **1:1 迁移执行指南（路径约定、步骤、parity）** | Cursor, Codex |
 | **`08-acceptance-checklist.md`** | **验收权威清单（后续按此验收）** | Codex, QA, Cursor |
 | **`09-agent-programming-playbook.md`** | **Agent 编程方法（拆解/上下文/测试闭环/边界/复盘/交互验证）** | Cursor, Codex, 人 |
 | **`10-agent-prompt-harness.md`** | **提示词合同 + Harness（agent:pre/post）与 Cursor Hooks** | Cursor, Codex, 人 |
+| **`11-conversion-retrospective-and-extraction.md`** | **转换复盘：Skill 抽取 / Prompt / Harness / AGENTS / 架构优化** | 人, Tech Lead, Cursor |
 | **[`.harness/`](../../.harness/README.md)** | **Agent 编排层（agents/rules/skills/changes/wiki）** | Cursor, Codex, 人 |
 | **`plans/README.md`** | **Planning 操作系统（Program / Epic / Slice）** | 人, Cursor, Codex |
 | `01-flutter-analysis-report.md` | Flutter 项目结构、包职责、路由、状态和依赖分析 | Cursor, Codex |

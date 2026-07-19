@@ -1,5 +1,7 @@
 # LEGO Monorepo 架构设计
 
+> **路径现状（2026-07-19）：** 仓库实际包路径为 `packages/features/*`、`packages/core/*`、`packages/ui/*`；根目录即 app 壳（`App.tsx` / `src/`），**尚未**迁入 `packages/apps/mobile`。下文「目标目录结构」含历史命名（`feature-modules` / `core-blocks` 等），**以代码与 [`AGENTS.md`](../../AGENTS.md) 为准**。迁入与 E2E 见 [`12-architecture-optimization-notes.md`](./12-architecture-optimization-notes.md)（DEFER）。
+
 ## 目标目录结构
 
 ```text

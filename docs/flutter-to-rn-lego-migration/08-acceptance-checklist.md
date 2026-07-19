@@ -193,8 +193,8 @@ npm run test
 | 平台 | Packaging | Splash→Tabs | Login | 主业务抽检 |
 |------|-----------|-------------|-------|------------|
 | iOS | ✅ Metro bundle（180 assets） | ✅ Sim iPhone 16 Pro（`2026-07-19-m2-device-smoke-ios.md`） | ☐ gate 可证（Chat→Login）；**Mock 登录成功未证** | ✅ Home + Mine 访客 |
-| Android | ✅ Metro bundle（182 assets） | ☐ Deferred 真机 | ☐ Deferred | ☐ Deferred |
-| HarmonyOS | ✅ `npm run dev`（183 assets） | ☐ Deferred 真机 | ☐ Deferred | ☐ Deferred |
+| Android | ✅ Metro bundle（182 assets） | ☐ Blocked assemble（见 `2026-07-19-m2-device-smoke-android.md`） | ☐ | ☐ |
+| HarmonyOS | ✅ `npm run dev`（183 assets） | ✅ hdc `127.0.0.1:5555`（`2026-07-19-m2-device-smoke-harmony.md`） | ☐ 门禁未复测（已登录态 Chat/Mine 可证） | ✅ Chat + Mine |
 
 - 仅验收单端时：其余标 N/A，并在 Record 中写明范围。  
 - 专项（WebView / BLE / 真支付 / 真 IM）失败不阻塞基础壳，但必须进风险台账。

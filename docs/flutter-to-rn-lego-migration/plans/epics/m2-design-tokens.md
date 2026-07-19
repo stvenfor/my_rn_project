@@ -26,7 +26,7 @@
 
 | Slice | 状态 |
 |-------|------|
-| `m2-design-tokens-audit`（只读审计） | 待建 |
+| `m2-design-tokens-audit`（只读审计） | Ready — [`../slices/m2-design-tokens-audit.md`](../slices/m2-design-tokens-audit.md) |
 | `m2-design-tokens-fix`（按白名单修） | 待建 |
 
 ## 不做

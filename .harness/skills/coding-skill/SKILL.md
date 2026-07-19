@@ -10,6 +10,7 @@
 2. 先 Flutter 源再 RN；资源 → registry → UI → 路由 → manifest  
 3. 遵守 `.harness/rules/module-boundary.md` 与 status enums  
 4. 栈细节：`.cursor/skills/flutter-to-rn-lego-module/SKILL.md` + docs `07`  
+5. 改页/资源 → `.harness/skills/parity-manifest-hygiene/SKILL.md`  
 
 ## Don't
 
@@ -19,4 +20,4 @@
 
 ## Out
 
-可跑测的 diff；准备交给 `unit-test-write` / `unit-test-ci`。
+可跑测的 diff；准备交给 `unit-test-write` / `unit-test-ci`；收口用 `acceptance-record-writer`。

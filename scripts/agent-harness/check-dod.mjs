@@ -16,6 +16,9 @@ import {
   warn,
 } from './lib/common.mjs';
 
+const TEMPLATE_HINT =
+  'docs/flutter-to-rn-lego-migration/plans/slices/_template.md';
+
 const args = parseArgs();
 if (!args.slice) {
   fail('check-dod requires --slice (or active-slice.txt from agent:pre)');
@@ -46,19 +49,54 @@ if (!hasContextCard) {
   errors.push('Slice 文件缺少 Context Card 段落（结束后填写）');
 }
 
-if (brief.evidence) {
-  const ev = brief.evidence.replace(/^[`\s]+|[`\s]+$/g, '');
-  if (ev.includes('acceptance-records/')) {
-    const rel = ev.match(
+/** Resolve evidence markdown path from Brief 「证据」 field. */
+function resolveEvidenceAbs(evidenceField) {
+  if (!evidenceField) {
+    return null;
+  }
+  const ev = evidenceField.replace(/^[`\s]+|[`\s]+$/g, '');
+  const rel =
+    ev.match(
       /docs\/flutter-to-rn-lego-migration\/acceptance-records\/[^\s`]+/,
-    )?.[0];
-    if (rel) {
-      const abs = path.join(REPO_ROOT, rel);
-      if (!fs.existsSync(abs)) {
-        warn(`证据路径尚未落盘: ${rel}`);
-      } else {
-        ok(`Evidence file present: ${rel}`);
-      }
+    )?.[0] ||
+    ev.match(/acceptance-records\/[^\s`]+/)?.[0] ||
+    (ev.endsWith('.md') && !/\s/.test(ev) ? ev : null);
+  if (!rel) {
+    return null;
+  }
+  const normalized = rel.startsWith('docs/')
+    ? rel
+    : path.join('docs/flutter-to-rn-lego-migration', rel);
+  return path.join(REPO_ROOT, normalized);
+}
+
+if (brief.evidence) {
+  const abs = resolveEvidenceAbs(brief.evidence);
+  if (abs) {
+    const rel = path.relative(REPO_ROOT, abs);
+    if (!fs.existsSync(abs)) {
+      warn(`证据路径尚未落盘: ${rel}`);
+    } else {
+      ok(`Evidence file present: ${rel}`);
+    }
+  }
+}
+
+// H1: Partial Accept requires Deferred/未证/Partial marker in evidence Record
+if (String(brief.acceptMode).toLowerCase() === 'partial') {
+  const abs = resolveEvidenceAbs(brief.evidence);
+  if (!abs || !fs.existsSync(abs)) {
+    errors.push(
+      `Accept 模式=Partial：证据 Record 必须存在且含 Deferred/未证/Partial 表或标题。填写「证据」路径并落盘；模板见 ${TEMPLATE_HINT}`,
+    );
+  } else {
+    const content = fs.readFileSync(abs, 'utf8');
+    if (!/Deferred|未证|Partial/i.test(content)) {
+      errors.push(
+        `Accept 模式=Partial：${path.relative(REPO_ROOT, abs)} 须含 Deferred 表或标题（匹配 /Deferred|未证|Partial/i）。见 ${TEMPLATE_HINT}`,
+      );
+    } else {
+      ok('Partial Accept: evidence contains Deferred/未证/Partial marker');
     }
   }
 }
