@@ -51,16 +51,18 @@ Harness 报告：`.cursor/agent-harness/harness-report.json`（不入库）。
 ## 3. 标准节奏
 
 ```text
-每周: 更新 Program（对照 08 勾选）
-  → 取队首 Epic → 先 Audit 再写 Epic Plan
-  → 取队首 Slice → 落盘 Brief（人批）
-  → npm run agent:pre -- --slice ...
+新任务 → conductor 路由
+每周: 更新 Program（对照 08 勾选）— 可由 planner 起草
+  → 取队首 Epic → 先 Audit 再写 Epic Plan（planner）
+  → 取队首 Slice → 落盘 Brief（planner）→ 人批
+  → npm run agent:pre -- --slice ...（executor）
   → T1–T6 执行（白名单内）
   → npm run agent:post
-  → Record + 勾 08 + Context Card
+  → Record + Context Card
+  → reviewer → 人勾 08 / commit
+  → Rework/Blocked → conductor 再派
   → Epic 清空则 Accept → 回 Program
 ```
-
 单 Slice 内步骤（与 `09` + `10` 一致）：
 
 1. Brief 落盘并确认  
@@ -102,16 +104,29 @@ Harness 报告：`.cursor/agent-harness/harness-report.json`（不入库）。
 
 ## 6. 多 Agent 规则
 
-| 角色 | 输入 | 输出 |
-|------|------|------|
-| 人 | Program / 产品降级决策 | 批 Brief、commit/push |
-| 执行 Agent | L0 契约 + Slice 文件 + Flutter/RN 锚点 | diff + harness 绿 + Delivery |
-| 审查 Agent | 08 行 + Brief DoD + diff + **harness-report.json** | Approve / Rework / Blocked |
+| 角色 | 输入 | 输出 | 可写代码？ |
+|------|------|------|------------|
+| 人 | Program / 产品降级 | 批 Brief、commit/push | 全权 |
+| **conductor** 统筹 | 新任务 + `current.md` + Program 队首 | Handoff、路由、并行锁、更新 `current.md` | 否（仅 changes 指针） |
+| **planner** 架构师 | `08` + manifest + `02`/`12` + Program 队首 | Epic/Slice Brief 草案、差距表、架构裁决 | 仅 plans/架构文档 |
+| **executor** 执行 | 已批 Brief + Flutter/RN 锚点 | diff + harness 绿 + Delivery / Context Card | 白名单内 |
+| **reviewer** 审查 | `08` 行 + Brief DoD + diff + **harness-report.json** | Approve / Rework / Blocked | 否 |
 
-- 仅文件白名单不相交才可并行  
+合同文件：`.harness/agents/{conductor,planner,executor,reviewer}.md`
+
+- **新任务默认先 conductor**，再进其余角色  
+- 仅文件白名单不相交才可并行（多为多个 executor；conductor 在 Notes 写清单写者）  
 - `08`、manifest、`EXPECTED_*_COUNT`：**单写者**，末棒合并  
 - Slice 结束写 **Context Card**（见模板），下轮只带 Card + Brief  
-- `post.ok !== true` → 审查默认 **Rework**
+- `post.ok !== true` → 审查默认 **Rework**  
+- 范围漂移 / 跨 feature 依赖 → **Blocked → conductor → planner 重切**  
+
+标准交接：
+
+```text
+conductor 路由 → planner 落盘 Brief → 人批 → executor (pre→实现→post) → reviewer → 人 commit
+                 ↖ Rework/Blocked 时回 conductor 再派 ↗
+```
 
 ---
 

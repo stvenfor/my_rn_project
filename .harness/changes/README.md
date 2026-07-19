@@ -4,8 +4,11 @@
 
 `docs/flutter-to-rn-lego-migration/plans/slices/<id>.md`
 
-本目录只记录「现在跑哪一轮」，避免多 Agent 抢错上下文。
+本目录记录「现在跑哪一轮」，避免多 Agent 抢错上下文。
 
-| 文件 | 用途 |
-|------|------|
-| [current.md](./current.md) | active slice + harness 摘要 + 下一步 |
+| 文件 | 用途 | 主写 |
+|------|------|------|
+| [current.md](./current.md) | active slice + Role + harness 摘要 + Next | **conductor**（Role/Next/Notes）；executor/planner 可补 pre/post |
+| [handoff-template.md](./handoff-template.md) | conductor Handoff 填空模板 | conductor |
+
+新任务 → 先开 `.harness/agents/conductor.md`。

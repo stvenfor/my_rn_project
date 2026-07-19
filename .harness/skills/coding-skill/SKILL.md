@@ -2,11 +2,12 @@
 
 ## When
 
-`agent:pre` 已绿；Brief 为实现类（非只读审计）。
+**executor** 主用；`agent:pre` 已绿；Brief 为实现类（非只读审计）。  
+范围不清 → 停，交回 `.harness/agents/planner.md`。
 
 ## Do
 
-1. 严格文件白名单  
+1. 严格文件白名单（角色合同：`.harness/agents/executor.md`）  
 2. 先 Flutter 源再 RN；资源 → registry → UI → 路由 → manifest  
 3. 遵守 `.harness/rules/module-boundary.md`、status enums、`.harness/rules/metro-babel-aliases.md`  
 4. 栈细节：`.cursor/skills/flutter-to-rn-lego-module/SKILL.md` + docs `07`  
@@ -18,6 +19,7 @@
 - 一口吞整模块  
 - 假 Migrated  
 - 改 Brief「不做」中的模块  
+- 无人批准扩大 ONLY  
 
 ## Out
 

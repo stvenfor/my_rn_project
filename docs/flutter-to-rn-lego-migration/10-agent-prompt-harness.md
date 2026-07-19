@@ -268,6 +268,8 @@ Program（队首 Epic）
 | 2026-07-19 | 初版：A 脚本 + B hooks + npm `agent:pre`/`agent:post` |
 | 2026-07-19 | 增加 `.harness/` 编排层（agents/rules/skills/changes/wiki） |
 | 2026-07-19 | §3.4 证据目录约定：canonical `evidence/<slice-id>/`；`assets/m2-device-smoke/` 为 legacy |
+| 2026-07-19 | 增加 `planner` 架构师；细化 planner/executor/reviewer 职责 |
+| 2026-07-19 | 增加 `conductor` 统筹：新任务路由、Handoff、`current.md` 主写 |
 
 ## 12. `.harness/` 编排层（与图示目录对齐）
 
@@ -275,20 +277,23 @@ Program（队首 Epic）
 
 | 目录 | 作用 | 本仓要点 |
 |------|------|----------|
-| `agents/` | 角色 | `executor` 可写代码；`reviewer` 只读 |
-| `rules/` | 硬规则 | dual-truth、slice-contract、boundary、status-enums、no-silent-accept |
-| `skills/` | 可组合能力 | request-analysis → coding → unit-test-* → expert-reviewer；deploy-verify 可选 |
-| `changes/` | 本轮指针 | `current.md`；**Slice 文件仍是合同源** |
+| `agents/` | 角色 | `conductor`（路由）；`planner`（Brief）；`executor`（实现）；`reviewer`（裁决） |
+| `rules/` | 硬规则 | dual-truth、slice-contract、boundary、status-enums、no-silent-accept、metro-babel-aliases |
+| `skills/` | 可组合能力 | conductor-handoff → request-analysis → coding → unit-test-* → expert-reviewer |
+| `changes/` | 本轮指针 | `current.md`（conductor 主写 Role/Next）+ `handoff-template.md`；**Slice 仍是合同源** |
 | `wiki/` | 索引 | 链到 `docs/flutter-to-rn-lego-migration/*`，不搬长文 |
 
 ```text
-人批 Slice
-  → .harness/agents/executor + skills/*
-  → scripts/agent-harness (agent:pre/post)     ← 硬门禁
-  → .harness/changes/current.md
-  → .harness/agents/reviewer + skills/expert-reviewer
+新任务 → .harness/agents/conductor + skills/conductor-handoff
+  → （若需）planner 落盘 Brief → 人批
+  → executor + skills/* + agent:pre/post     ← 硬门禁
+  → changes/current.md
+  → reviewer + expert-reviewer
   → 人 commit/push
+  （Rework/Blocked → 回 conductor）
 ```
+
+conductor **不替代** harness 引擎，只标准化「开谁、何时并行、指针写哪」。
 
 **禁止双份维护：** skill 正文只写何时用/输入输出；实现细节继续指 `.cursor/skills/*` 与 `docs/`。
 

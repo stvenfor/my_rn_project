@@ -5,6 +5,7 @@
 | 主题 | 路径 |
 |------|------|
 | Agent 入口地图 | [AGENTS.md](../../AGENTS.md)（仓库根 `/AGENTS.md`） |
+| Agent 角色 | [agents/README](../agents/README.md) · [conductor](../agents/conductor.md) · [planner](../agents/planner.md) · [executor](../agents/executor.md) · [reviewer](../agents/reviewer.md) |
 | 总索引 | [docs/.../00-index.md](../../docs/flutter-to-rn-lego-migration/00-index.md) |
 | 1:1 指南 | [07](../../docs/flutter-to-rn-lego-migration/07-1to1-migration-guide.md) |
 | 验收清单 | [08](../../docs/flutter-to-rn-lego-migration/08-acceptance-checklist.md) |
