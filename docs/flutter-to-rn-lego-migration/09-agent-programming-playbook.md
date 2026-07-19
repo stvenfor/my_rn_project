@@ -2,12 +2,13 @@
 
 > 源：`/Users/mac/Desktop/github/my_ai_project`  
 > 目标：`/Users/mac/Desktop/github/my_rn_project`  
-> 配套：[`07-1to1-migration-guide.md`](./07-1to1-migration-guide.md) · [`08-acceptance-checklist.md`](./08-acceptance-checklist.md) · [`04-cursor-execution-spec.md`](./04-cursor-execution-spec.md) · [`06-supervision-playbook.md`](./06-supervision-playbook.md)  
+> 配套：[`07-1to1-migration-guide.md`](./07-1to1-migration-guide.md) · [`08-acceptance-checklist.md`](./08-acceptance-checklist.md) · [`04-cursor-execution-spec.md`](./04-cursor-execution-spec.md) · [`06-supervision-playbook.md`](./06-supervision-playbook.md) · [`plans/README.md`](./plans/README.md)  
 > Skill：`.cursor/skills/flutter-to-rn-lego-module/SKILL.md`  
 > UX 门控：`/Users/mac/Desktop/skills/flutter-to-rn-lego-module/references/ux-1to1-gates.md`
 
 本文把迁移仓库已有规范串成 **可重复的 Agent 作战闭环**：任务拆解、上下文工程、测试闭环、权限边界、失败复盘、交互验证。  
-**不另起验收标准**——验收仍以 `08` 为准；页/资源状态仍以 `page-resource-parity-manifest.ts` 为准。
+**不另起验收标准**——验收仍以 `08` 为准；页/资源状态仍以 `page-resource-parity-manifest.ts` 为准。  
+**选哪一刀、Epic/Slice 队列**见 [`plans/`](./plans/README.md)（Program → Epic → Slice）。
 
 ---
 
@@ -62,6 +63,8 @@ Epic（模块）     例：settings
 
 ### 1.3 Slice Brief 模板（每轮开场）
 
+落盘模板与示例：[`plans/slices/_template.md`](./plans/slices/_template.md)。会话内可直接粘贴：
+
 ```md
 ## Slice Brief
 - FLUTTER_MODULE:
@@ -71,8 +74,12 @@ Epic（模块）     例：settings
 - 本轮 ONLY: [一页 / 一组资源 / 一个交互 bug]
 - 不做: [明确排除项]
 - 验收: 08 对应章节 + Migrated 门槛
+- 文件白名单: [...]
+- 验证命令: npx jest packages/features/<mod> --no-coverage
 - 工具: Codegraph 定位 Flutter；Headroom 控上下文；改完跑指定 jest
 ```
+
+开干前对照 [`plans/README.md`](./plans/README.md) §5 十项检查；队首 Slice 见当前 Program。
 
 ### 1.4 优先级（避免先堆壳）
 

@@ -53,6 +53,7 @@ Flutter → RN 模块化迁移（LEGO monorepo）：
 
 - **学代码 / 语法**：[docs/rn-learning-guide](./docs/rn-learning-guide/README.md)
 - **迁移与验收**：[docs/flutter-to-rn-lego-migration](./docs/flutter-to-rn-lego-migration/00-index.md)
+- **迁移规划队列**：[docs/flutter-to-rn-lego-migration/plans](./docs/flutter-to-rn-lego-migration/plans/README.md)
 
 ```
 MyRnProject/
