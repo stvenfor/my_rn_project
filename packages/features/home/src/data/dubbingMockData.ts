@@ -10,6 +10,7 @@ export interface DubbingMediaItem {
   playCount?: string;
   duration?: string;
   userName?: string;
+  avatar?: ImageSourcePropType;
   badge?: string;
 }
 
@@ -120,6 +121,7 @@ export function buildDubbingHomeFeed(): DubbingHomeFeed {
         title: '英语启蒙课堂',
         cover: dubbingHomeAssets.cover_09,
         userName: '蓝儿老师Joyue',
+        avatar: dubbingHomeAssets.thumb_default,
         subtitle: '跟读练习 · 初级',
       },
       {
@@ -127,6 +129,7 @@ export function buildDubbingHomeFeed(): DubbingHomeFeed {
         title: '趣味配音挑战',
         cover: dubbingHomeAssets.cover_10,
         userName: '配音达人',
+        avatar: dubbingHomeAssets.thumb_default,
         subtitle: '动画配音 · 中级',
       },
       {
@@ -134,6 +137,7 @@ export function buildDubbingHomeFeed(): DubbingHomeFeed {
         title: '诵读之星',
         cover: dubbingHomeAssets.cover_11,
         userName: '朗读爱好者',
+        avatar: dubbingHomeAssets.thumb_default,
         subtitle: '经典诵读',
       },
       {
@@ -141,6 +145,7 @@ export function buildDubbingHomeFeed(): DubbingHomeFeed {
         title: '动画配音秀',
         cover: dubbingHomeAssets.cover_12,
         userName: '动画迷',
+        avatar: dubbingHomeAssets.thumb_default,
         subtitle: '角色模仿',
       },
     ],

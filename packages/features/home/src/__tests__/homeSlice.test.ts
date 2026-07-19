@@ -71,6 +71,19 @@ describe('homeSlice', () => {
     expect(selectHomeDashboard({home: next})).toEqual(mockDashboard);
   });
 
+  it('refreshHomeDashboard.rejected sets error and clears refreshing', () => {
+    const refreshing = homeReducer(
+      base.home,
+      refreshHomeDashboard.pending('', undefined),
+    );
+    const next = homeReducer(
+      refreshing,
+      refreshHomeDashboard.rejected(new Error('timeout'), '', undefined),
+    );
+    expect(next.refreshing).toBe(false);
+    expect(selectHomeError({home: next})).toBe('timeout');
+  });
+
   it('updateGreeting sets greeting from user', () => {
     const next = homeReducer(
       base.home,

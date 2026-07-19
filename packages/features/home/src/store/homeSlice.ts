@@ -88,8 +88,9 @@ const homeSlice = createSlice({
         state.dashboard = action.payload;
         state.error = null;
       })
-      .addCase(refreshHomeDashboard.rejected, state => {
+      .addCase(refreshHomeDashboard.rejected, (state, action) => {
         state.refreshing = false;
+        state.error = action.error.message ?? '刷新失败';
       });
   },
 });

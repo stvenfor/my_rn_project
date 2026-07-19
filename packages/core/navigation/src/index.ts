@@ -21,6 +21,7 @@ export const RoutePath = {
   homeUsedCarList: 'HomeUsedCarList',
   homeUsedCarDetail: 'HomeUsedCarDetail',
   chatDetail: 'ChatDetail',
+  communityTab: 'CommunityTab',
   communityPublish: 'CommunityPublish',
   communityVideoPlay: 'CommunityVideoPlay',
   imagePreview: 'ImagePreview',

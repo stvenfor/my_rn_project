@@ -38,7 +38,7 @@
 | Flutter (`packages/features/`) | RN (`packages/features/`) | 备注 |
 |--------------------------------|---------------------------|------|
 | auth | auth | 登录/注册/会话 |
-| home | home | 首页/报告/签到/全部服务 |
+| home | home | B2 已验收；配音装饰已接线；Gallery/Invite 相对 Flutter 增量 |
 | settings | settings | 我的/设置/发票 demo |
 | chat | chat | 会话列表/详情 |
 | community | community | iOS 主题已对齐；视频播放器 Degraded（无 scrubber） |

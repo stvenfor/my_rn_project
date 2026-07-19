@@ -13,14 +13,14 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import type {RootStackScreenProps} from '@core/navigation';
 import {RoutePath} from '@core/navigation';
 import {dubbingHomeAssets} from '../assets/homeAssets';
+import {DubbingCoverImage} from '../components/DubbingCoverImage';
+import {DubbingHotRankCard} from '../components/DubbingHotRankCard';
+import {DubbingSectionHeader} from '../components/DubbingSectionHeader';
 import {
   buildDubbingHomeFeed,
   type DubbingMediaItem,
 } from '../data/dubbingMockData';
-import {
-  HOT_RANK_THEMES,
-  dubbingHomeTheme as t,
-} from '../theme/dubbingHomeTheme';
+import {dubbingHomeTheme as t} from '../theme/dubbingHomeTheme';
 
 export function HomeDubbingFeedScreen({
   navigation,
@@ -82,7 +82,13 @@ export function HomeDubbingFeedScreen({
           />
           <Text style={styles.searchPlaceholder}>搜索配音内容</Text>
         </Pressable>
-        <Image source={dubbingHomeAssets.icon_menu} style={styles.menu} />
+        <Pressable style={styles.headerIcon} onPress={() => {}}>
+          <Image
+            source={dubbingHomeAssets.icon_notification}
+            style={styles.headerIconImage}
+          />
+          <View style={styles.notificationDot} />
+        </Pressable>
       </View>
 
       <ScrollView
@@ -91,21 +97,33 @@ export function HomeDubbingFeedScreen({
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
         contentContainerStyle={{paddingBottom: insets.bottom + 24}}>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.cats}>
-          {categories.map(item => {
-            const active = item === category;
-            return (
-              <Pressable key={item} onPress={() => setCategory(item)}>
-                <Text style={[styles.cat, active && styles.catActive]}>
-                  {item}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </ScrollView>
+        <View style={styles.catRow}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.cats}>
+            {categories.map(item => {
+              const active = item === category;
+              const svip = item === 'SVIP';
+              return (
+                <Pressable key={item} onPress={() => setCategory(item)}>
+                  <Text
+                    style={[
+                      styles.cat,
+                      svip && styles.catSvip,
+                      active && !svip && styles.catActive,
+                      active && svip && styles.catSvipActive,
+                    ]}>
+                    {item}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </ScrollView>
+          <Pressable style={styles.menuHit} onPress={() => {}}>
+            <Image source={dubbingHomeAssets.icon_menu} style={styles.menu} />
+          </Pressable>
+        </View>
 
         <ScrollView
           horizontal
@@ -134,98 +152,98 @@ export function HomeDubbingFeedScreen({
           ))}
         </View>
 
-        <Text style={styles.sectionTitle}>最近学习</Text>
+        <DubbingSectionHeader title="最近学习" style="chevron" />
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {feed.recentLearning.map(item => (
-            <MediaCard key={item.id} item={item} onPress={openMedia} />
+            <MediaCard key={item.id} item={item} onPress={openMedia} wide />
           ))}
         </ScrollView>
 
-        <Text style={styles.sectionTitle}>达人秀场</Text>
+        <DubbingSectionHeader title="达人秀场" style="refresh" />
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {feed.expertShowcase.map(item => (
-            <MediaCard key={item.id} item={item} onPress={openMedia} showUser />
+            <ExpertCard key={item.id} item={item} onPress={openMedia} />
           ))}
         </ScrollView>
 
         <View onLayout={onHotRankLayout}>
-          <Text style={styles.sectionTitle}>热榜</Text>
-          {feed.hotRankBoards.map(board => {
-            const theme = HOT_RANK_THEMES[board.theme];
-            return (
-              <View
+          <DubbingSectionHeader title="热榜" />
+          <View style={styles.hotRankRow}>
+            {feed.hotRankBoards.map(board => (
+              <DubbingHotRankCard
                 key={board.id}
-                style={[styles.board, {backgroundColor: theme.top}]}>
-                <View style={styles.boardHeader}>
-                  <Text style={styles.boardTitle}>{board.title}</Text>
-                  <Pressable
-                    onPress={() =>
-                      navigation.navigate(RoutePath.homeHotRankDetail, {
-                        boardId: board.id,
-                        title: board.title,
-                        theme: board.theme,
-                      })
-                    }>
-                    <Text style={styles.viewAll}>查看全部 ›</Text>
-                  </Pressable>
-                </View>
-                {board.items.slice(0, 3).map(item => (
-                  <Pressable
-                    key={item.id}
-                    style={styles.boardItem}
-                    onPress={() => openMedia(item.id)}>
-                    <Text style={styles.rank}>{item.rank}</Text>
-                    <Image source={item.cover} style={styles.boardCover} />
-                    <View style={styles.flex1}>
-                      <Text style={styles.boardItemTitle}>{item.title}</Text>
-                      <Text style={styles.boardItemSub}>{item.heat} 热度</Text>
-                    </View>
-                  </Pressable>
-                ))}
-              </View>
-            );
-          })}
+                board={board}
+                onViewAll={() =>
+                  navigation.navigate(RoutePath.homeHotRankDetail, {
+                    boardId: board.id,
+                    title: board.title,
+                    theme: board.theme,
+                  })
+                }
+                onItemPress={openMedia}
+              />
+            ))}
+          </View>
         </View>
 
-        <Text style={styles.sectionTitle}>编辑精选</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <DubbingSectionHeader title="编辑精选" style="refresh" />
+        <View style={styles.grid}>
           {feed.editorPicks.map(item => (
-            <MediaCard
-              key={item.id}
-              item={item}
-              onPress={openMedia}
-              showSubtitle
-            />
+            <GridCard key={item.id} item={item} onPress={openMedia} />
           ))}
-        </ScrollView>
+        </View>
 
-        <Text style={styles.sectionTitle}>精选专辑</Text>
+        <DubbingSectionHeader
+          title="精选专辑"
+          subtitle="根据你的学习兴趣为你推荐"
+          style="refresh"
+        />
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {feed.albums.map(album => (
+          {feed.albums.map((album, index) => (
             <Pressable
               key={album.id}
               style={styles.album}
               onPress={() => openMedia(album.id)}>
-              <Image source={album.cover} style={styles.albumCover} />
+              <View>
+                <DubbingCoverImage
+                  source={album.cover}
+                  width={120}
+                  height={152}
+                />
+                {index === 0 ? (
+                  <View style={styles.albumNewBadge}>
+                    <Text style={styles.albumNewText}>New</Text>
+                  </View>
+                ) : null}
+              </View>
               <Text style={styles.mediaTitle}>{album.title}</Text>
               <Text style={styles.boardItemSub}>{album.episodeCount}</Text>
             </Pressable>
           ))}
         </ScrollView>
 
-        <Text style={styles.sectionTitle}>猜你喜欢</Text>
-        {feed.guessYouLike.map(item => (
-          <Pressable
-            key={item.id}
-            style={styles.guessRow}
-            onPress={() => openMedia(item.id)}>
-            <Image source={item.cover} style={styles.guessCover} />
-            <View style={styles.flex1}>
-              <Text style={styles.mediaTitle}>{item.title}</Text>
-              <Text style={styles.boardItemSub}>{item.playCount} 播放</Text>
-            </View>
-          </Pressable>
-        ))}
+        <DubbingSectionHeader title="猜你喜欢" style="refresh" />
+        <View style={styles.guessRow}>
+          {feed.guessYouLike.slice(0, 2).map(item => (
+            <Pressable
+              key={item.id}
+              style={styles.guessCard}
+              onPress={() => openMedia(item.id)}>
+              <DubbingCoverImage
+                source={item.cover}
+                width="100%"
+                height={110}
+                duration={item.duration ?? '02:30'}
+              />
+              <Text style={styles.guessTitle} numberOfLines={2}>
+                {item.title}
+              </Text>
+              {item.playCount ? (
+                <Text style={styles.boardItemSub}>{item.playCount}播放</Text>
+              ) : null}
+            </Pressable>
+          ))}
+        </View>
       </ScrollView>
     </View>
   );
@@ -234,31 +252,86 @@ export function HomeDubbingFeedScreen({
 function MediaCard({
   item,
   onPress,
-  showUser,
-  showSubtitle,
+  wide,
 }: {
   item: DubbingMediaItem;
   onPress: (id: string) => void;
-  showUser?: boolean;
-  showSubtitle?: boolean;
+  wide?: boolean;
 }) {
   return (
-    <Pressable style={styles.mediaCard} onPress={() => onPress(item.id)}>
-      <Image source={item.cover} style={styles.mediaCover} />
-      {item.badge ? (
-        <View style={styles.badge}>
-          <Text style={styles.badgeText}>{item.badge}</Text>
-        </View>
-      ) : null}
-      <Text style={styles.mediaTitle} numberOfLines={1}>
+    <Pressable
+      style={[styles.mediaCard, wide && styles.mediaCardWide]}
+      onPress={() => onPress(item.id)}>
+      <DubbingCoverImage
+        source={item.cover}
+        width={wide ? 120 : 110}
+        height={wide ? 68 : 78}
+        duration={item.duration}
+        badge={item.badge}
+      />
+      <Text style={styles.mediaTitle} numberOfLines={wide ? 2 : 1}>
         {item.title}
       </Text>
-      {showUser && item.userName ? (
+    </Pressable>
+  );
+}
+
+function ExpertCard({
+  item,
+  onPress,
+}: {
+  item: DubbingMediaItem;
+  onPress: (id: string) => void;
+}) {
+  return (
+    <Pressable style={styles.expertCard} onPress={() => onPress(item.id)}>
+      <DubbingCoverImage
+        source={item.cover}
+        width={150}
+        height={96}
+        duration="02:30"
+      />
+      {item.userName ? (
+        <View style={styles.expertUserRow}>
+          {item.avatar ? (
+            <Image source={item.avatar} style={styles.expertAvatar} />
+          ) : null}
+          <Text style={styles.expertUser} numberOfLines={1}>
+            {item.userName}
+          </Text>
+        </View>
+      ) : null}
+      <Text style={styles.expertTitle} numberOfLines={1}>
+        {item.title}
+      </Text>
+      {item.subtitle ? (
         <Text style={styles.boardItemSub} numberOfLines={1}>
-          {item.userName}
+          {item.subtitle}
         </Text>
       ) : null}
-      {showSubtitle && item.subtitle ? (
+    </Pressable>
+  );
+}
+
+function GridCard({
+  item,
+  onPress,
+}: {
+  item: DubbingMediaItem;
+  onPress: (id: string) => void;
+}) {
+  return (
+    <Pressable style={styles.gridCard} onPress={() => onPress(item.id)}>
+      <DubbingCoverImage
+        source={item.cover}
+        width="100%"
+        height={96}
+        badge={item.badge}
+      />
+      <Text style={styles.expertTitle} numberOfLines={1}>
+        {item.title}
+      </Text>
+      {item.subtitle ? (
         <Text style={styles.boardItemSub} numberOfLines={1}>
           {item.subtitle}
         </Text>
@@ -269,14 +342,13 @@ function MediaCard({
 
 const styles = StyleSheet.create({
   root: {flex: 1, backgroundColor: t.background},
-  flex1: {flex: 1},
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
   },
-  back: {width: 36, alignItems: 'center'},
+  back: {width: 44, height: 44, alignItems: 'center', justifyContent: 'center'},
   backText: {fontSize: 28, color: t.titleBlack},
   search: {
     flex: 1,
@@ -287,12 +359,41 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 12,
   },
-  searchIcon: {width: 16, height: 16, marginRight: 6},
+  searchIcon: {width: 16, height: 16, marginRight: 8},
   searchPlaceholder: {fontSize: 14, color: t.subtitleGray},
-  menu: {width: 22, height: 22, marginLeft: 10},
-  cats: {paddingHorizontal: 16, paddingVertical: 8},
-  cat: {marginRight: 18, fontSize: 15, color: t.textGray},
-  catActive: {color: t.primaryGreen, fontWeight: '700', fontSize: 17},
+  headerIcon: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerIconImage: {width: 22, height: 22},
+  notificationDot: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    width: 7,
+    height: 7,
+    borderRadius: 4,
+    backgroundColor: '#FF4D4F',
+  },
+  catRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingRight: 4,
+  },
+  cats: {paddingLeft: 16, paddingVertical: 8},
+  cat: {marginRight: 24, fontSize: 16, color: t.textGray},
+  catActive: {color: t.primaryGreen, fontWeight: '600'},
+  catSvip: {color: t.svipGold},
+  catSvipActive: {fontWeight: '600'},
+  menuHit: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  menu: {width: 22, height: 22},
   bannerScroll: {marginTop: 4},
   banner: {
     width: 340,
@@ -307,54 +408,61 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   feature: {alignItems: 'center', width: '18%'},
-  featureIcon: {width: 44, height: 44},
+  featureIcon: {width: 52, height: 52},
   featureLabel: {marginTop: 6, fontSize: 12, color: t.titleBlack},
-  sectionTitle: {
-    marginTop: 20,
-    marginBottom: 12,
-    marginHorizontal: 16,
-    fontSize: t.sectionTitleSize,
-    fontWeight: '700',
-    color: t.titleBlack,
-  },
   mediaCard: {width: 110, marginLeft: 16},
-  mediaCover: {width: 110, height: 78, borderRadius: 8},
-  mediaTitle: {marginTop: 6, fontSize: 13, color: t.titleBlack},
-  badge: {
-    position: 'absolute',
-    top: 4,
-    left: 4,
-    backgroundColor: 'rgba(0,0,0,0.55)',
-    borderRadius: 4,
-    paddingHorizontal: 4,
-    paddingVertical: 1,
-  },
-  badgeText: {fontSize: 10, color: '#fff', fontWeight: '700'},
-  board: {
-    marginHorizontal: 16,
-    marginBottom: 12,
-    borderRadius: t.cardRadius,
-    padding: 12,
-  },
-  boardHeader: {
+  mediaCardWide: {width: 120},
+  mediaTitle: {marginTop: 8, fontSize: 12, color: t.titleBlack},
+  hotRankRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 8,
+    paddingHorizontal: 16,
+    gap: 10,
   },
-  boardTitle: {fontSize: 16, fontWeight: '700', color: t.titleBlack},
-  viewAll: {fontSize: 13, color: t.textGray},
-  boardItem: {flexDirection: 'row', alignItems: 'center', marginTop: 8},
-  rank: {width: 22, fontWeight: '700', color: t.titleBlack},
-  boardCover: {width: 44, height: 44, borderRadius: 8, marginRight: 8},
-  boardItemTitle: {fontSize: 14, color: t.titleBlack},
-  boardItemSub: {fontSize: 12, color: t.subtitleGray, marginTop: 2},
-  album: {width: 120, marginLeft: 16},
-  albumCover: {width: 120, height: 120, borderRadius: 8},
-  guessRow: {
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingHorizontal: 16,
+    gap: 12,
+  },
+  gridCard: {width: '47%'},
+  expertCard: {width: 150, marginLeft: 16},
+  expertUserRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    marginBottom: 12,
+    marginTop: 8,
   },
-  guessCover: {width: 72, height: 72, borderRadius: 8, marginRight: 12},
+  expertAvatar: {width: 18, height: 18, borderRadius: 9, marginRight: 6},
+  expertUser: {flex: 1, fontSize: 11, color: t.subtitleGray},
+  expertTitle: {
+    marginTop: 4,
+    fontSize: 13,
+    fontWeight: '500',
+    color: t.titleBlack,
+  },
+  boardItemSub: {fontSize: 11, color: t.subtitleGray, marginTop: 2},
+  album: {width: 120, marginLeft: 16},
+  albumNewBadge: {
+    position: 'absolute',
+    top: 6,
+    right: 6,
+    backgroundColor: '#FF6B35',
+    borderRadius: 4,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+  },
+  albumNewText: {fontSize: 10, color: '#fff', fontWeight: '600'},
+  guessRow: {
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    gap: 12,
+    paddingBottom: 32,
+  },
+  guessCard: {flex: 1},
+  guessTitle: {
+    marginTop: 8,
+    fontSize: 14,
+    fontWeight: '600',
+    color: t.titleBlack,
+    lineHeight: 18,
+  },
 });

@@ -10,6 +10,7 @@ export const dubbingHomeTheme = {
   viewAllBackground: '#FAFAFA',
   hotRankHeaderPink: '#FFF0F5',
   hotRankSidebarBg: '#F7F8FA',
+  hotRankSidebarActive: '#FFFFFF',
   cardRadius: 12,
   sectionTitleSize: 18,
 } as const;

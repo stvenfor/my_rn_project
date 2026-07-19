@@ -89,12 +89,12 @@ npm run test
 
 | 项 | P0 | 结果 | 证据 |
 |----|----|------|------|
-| HomeTab 主区块顺序 1:1 | P0 | ☐ | |
-| Learning Report / Check-in Mall / All Services 可进入 | P0 | ☐ | |
-| All Services 跳转仅用 RoutePath（不 import bfui/music/video） | P0 | ☐ | |
-| 首页资源（all_services 等）registry 齐全 | P0 | ☐ | |
-| loading / empty / error（若 Flutter 有） | P0 | ☐ | |
-| Mini player 不由 home 渲染 | P0 | ☐ | |
+| HomeTab 主区块顺序 1:1 | P0 | ✅ | 与 Flutter dashboard 同序；Club→`RoutePath.communityTab` |
+| Learning Report / Check-in Mall / All Services 可进入 | P0 | ✅ | registerHomeFeature + 宫格入口 |
+| All Services 跳转仅用 RoutePath（不 import bfui/music/video） | P0 | ✅ | `allServicesRoutes.test.ts`；Gallery/Invite 相对 Flutter 增量见 note |
+| 首页资源（all_services 等）registry 齐全 | P0 | ✅ | 78/78；配音装饰已接线 |
+| loading / empty / error（若 Flutter 有） | P0 | ✅ | load + refresh rejected 写 error；无独立 empty（两侧皆无） |
+| Mini player 不由 home 渲染 | P0 | ✅ | shell `MusicMiniPlayerBar` + `useHomeMiniPlayerInset` |
 
 ### B3. `@features/settings`（Mine）
 

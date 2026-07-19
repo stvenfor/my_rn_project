@@ -154,6 +154,7 @@ const dubbingWorkList = item(
 );
 const dubbingHome = item('配音首页', 'dubbing_home', RoutePath.homeDubbingFeed);
 const membershipRenew = item('会员续费', 'marketing', RoutePath.payMembership);
+// RN delta vs Flutter: B8 product entries kept intentionally (Flutter 其他服务 has 5 items).
 const bfuiGallery = item(
   'BFUI 模板目录',
   'all_functions',

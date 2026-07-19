@@ -191,7 +191,7 @@ export function HomeScreen({navigation}: MainTabScreenProps<'HomeTab'>) {
         />
       ) : topTab === 2 ? (
         <HomeClubTabContent
-          onOpenCommunity={() => navigation.navigate('CommunityTab')}
+          onOpenCommunity={() => navigation.navigate(RoutePath.communityTab)}
         />
       ) : (
         <>
