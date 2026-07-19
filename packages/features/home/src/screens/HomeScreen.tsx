@@ -14,6 +14,7 @@ import type {User} from '@core/domain';
 import {RoutePath, type MainTabScreenProps} from '@core/navigation';
 import {WebBridgeAssets, WebPageLoadType} from '@core/webview';
 import {PrimaryButton} from '@ui/design-system';
+import {AppPageScaffold} from '@ui/design-system/AppPageScaffold';
 import {HomeBannerSection} from '../components/HomeBannerSection';
 import {HomeClubTabContent} from '../components/HomeClubTabContent';
 import {HomeContactList} from '../components/HomeContactList';
@@ -139,88 +140,94 @@ export function HomeScreen({navigation}: MainTabScreenProps<'HomeTab'>) {
 
   if (!dashboard && error) {
     return (
-      <View style={styles.errorWrap}>
-        <Text style={styles.errorText}>{error}</Text>
-        <PrimaryButton
-          title="重试"
-          onPress={() => dispatch(loadHomeDashboard())}
-        />
-      </View>
+      <AppPageScaffold layout="mainTabRoot" backgroundColor={t.background}>
+        <View style={[styles.errorWrap, {paddingTop: insets.top}]}>
+          <Text style={styles.errorText}>{error}</Text>
+          <PrimaryButton
+            title="重试"
+            onPress={() => dispatch(loadHomeDashboard())}
+          />
+        </View>
+      </AppPageScaffold>
     );
   }
 
   if (!dashboard) {
     return (
-      <View style={styles.errorWrap}>
-        {loading || refreshing ? (
-          <>
-            <ActivityIndicator size="large" color={t.accent} />
-            <Text style={styles.loadingText}>加载中</Text>
-          </>
-        ) : null}
-      </View>
+      <AppPageScaffold layout="mainTabRoot" backgroundColor={t.background}>
+        <View style={[styles.errorWrap, {paddingTop: insets.top}]}>
+          {loading || refreshing ? (
+            <>
+              <ActivityIndicator size="large" color={t.accent} />
+              <Text style={styles.loadingText}>加载中</Text>
+            </>
+          ) : null}
+        </View>
+      </AppPageScaffold>
     );
   }
 
   return (
-    <ScrollView
-      style={styles.root}
-      contentContainerStyle={{
-        paddingTop: insets.top + 16,
-        paddingBottom: 24 + miniPlayerInset,
-      }}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing || loading}
-          onRefresh={() => dispatch(refreshHomeDashboard())}
-          tintColor={t.accent}
+    <AppPageScaffold layout="mainTabRoot" backgroundColor={t.background}>
+      <ScrollView
+        style={styles.root}
+        contentContainerStyle={{
+          paddingTop: insets.top + 16,
+          paddingBottom: 24 + miniPlayerInset,
+        }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing || loading}
+            onRefresh={() => dispatch(refreshHomeDashboard())}
+            tintColor={t.accent}
+          />
+        }>
+        <HomeGreetingSection greeting={greeting} />
+        <HomeSearchBar
+          onSearchPress={() => navigation.navigate(RoutePath.homeSearch)}
         />
-      }>
-      <HomeGreetingSection greeting={greeting} />
-      <HomeSearchBar
-        onSearchPress={() => navigation.navigate(RoutePath.homeSearch)}
-      />
-      <HomeTopTabBar
-        selectedIndex={topTab}
-        onSelected={index => dispatch(setTopTab(index))}
-      />
+        <HomeTopTabBar
+          selectedIndex={topTab}
+          onSelected={index => dispatch(setTopTab(index))}
+        />
 
-      {topTab === 1 ? (
-        <HomeVideoTabContent
-          onOpenDubbing={() => navigation.navigate(RoutePath.homeDubbingFeed)}
-        />
-      ) : topTab === 2 ? (
-        <HomeClubTabContent
-          onOpenCommunity={() => navigation.navigate(RoutePath.communityTab)}
-        />
-      ) : (
-        <>
-          <HomeBannerSection />
-          <HomeFeatureGrid
-            items={dashboard.features}
-            onFeaturePress={onFeaturePress}
+        {topTab === 1 ? (
+          <HomeVideoTabContent
+            onOpenDubbing={() => navigation.navigate(RoutePath.homeDubbingFeed)}
           />
-          <HomeQuickActionGrid actions={dashboard.quickActions} />
-          <HomeStoreMetricsCard
-            storeName={dashboard.storeName}
-            selectedTab={metricTab}
-            tabs={METRIC_TABS}
-            metrics={metrics}
-            details={dashboard.metricDetails}
-            onTabSelected={index => dispatch(setMetricTab(index))}
+        ) : topTab === 2 ? (
+          <HomeClubTabContent
+            onOpenCommunity={() => navigation.navigate(RoutePath.communityTab)}
           />
-          <HomeStrategyEntry
-            onPress={() => navigation.navigate(RoutePath.homeStrategy)}
-          />
-          <HomeServiceGrid items={dashboard.services} />
-          <HomeContactList items={dashboard.contacts} />
-          <HomeNewsList items={dashboard.news} />
-          <HomeLearningReportEntry
-            onPress={() => navigation.navigate(RoutePath.homeLearningReport)}
-          />
-        </>
-      )}
-    </ScrollView>
+        ) : (
+          <>
+            <HomeBannerSection />
+            <HomeFeatureGrid
+              items={dashboard.features}
+              onFeaturePress={onFeaturePress}
+            />
+            <HomeQuickActionGrid actions={dashboard.quickActions} />
+            <HomeStoreMetricsCard
+              storeName={dashboard.storeName}
+              selectedTab={metricTab}
+              tabs={METRIC_TABS}
+              metrics={metrics}
+              details={dashboard.metricDetails}
+              onTabSelected={index => dispatch(setMetricTab(index))}
+            />
+            <HomeStrategyEntry
+              onPress={() => navigation.navigate(RoutePath.homeStrategy)}
+            />
+            <HomeServiceGrid items={dashboard.services} />
+            <HomeContactList items={dashboard.contacts} />
+            <HomeNewsList items={dashboard.news} />
+            <HomeLearningReportEntry
+              onPress={() => navigation.navigate(RoutePath.homeLearningReport)}
+            />
+          </>
+        )}
+      </ScrollView>
+    </AppPageScaffold>
   );
 }
 

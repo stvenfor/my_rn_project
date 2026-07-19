@@ -11,6 +11,7 @@
 | AGENTS.md 太长 | 质量下降、规则被忽略 | 砍到 50–100 行；细节进 docs/ |
 | Linter 死循环 | 修 A 触发 B，反复 | 逐条加规则试跑；FIX 给代码；冲突只留一条 |
 | 工具链版本漂移 | UnsupportedClassVersionError 等 | 锁定兼容版本；Dependabot ignore 主版本 |
+| Babel 包别名指向目录 | `Cannot read property 'AppPageScaffold' of undefined` | 别名精确到 `index.*` + 深路径正则；见 [metro-babel-module-resolver](../flutter-to-rn-lego-migration/appendices/metro-babel-module-resolver.md) |
 | 架构约束过严 | 合理模式被拦，团队绕过 | 白名单/豁免包 + 文档化例外 |
 | 文档腐烂 | Agent 按过时假设写码 | CI 新鲜度 + 定期 doc-gardening + status 字段 |
 | 只审代码不审环境 | CI 失败率升、规则覆盖滞后 | 每周 30 分钟「环境审查」 |

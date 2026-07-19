@@ -49,8 +49,9 @@ export function ThemedNavigation() {
   return (
     <>
       <StatusBar
+        translucent
         barStyle={isDark ? 'light-content' : 'dark-content'}
-        backgroundColor={isDark ? '#000000' : '#FFFFFF'}
+        backgroundColor="transparent"
       />
       <NavigationContainer theme={isDark ? darkNavTheme : lightNavTheme}>
         <RootNavigator />

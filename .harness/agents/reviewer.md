@@ -18,7 +18,7 @@
 | Decision | 条件 |
 |----------|------|
 | Approved | P0 过；harness 绿；证据够 |
-| Rework | P0 失败 / 缺证据 / post 未绿 / 越白名单 |
+| Rework | P0 失败 / 缺证据 / post 未绿 / 越白名单 / Babel 别名写成目录（见 `rules/metro-babel-aliases.md`） |
 | Blocked | 等人或外部依赖 |
 
 ## 组合 skill

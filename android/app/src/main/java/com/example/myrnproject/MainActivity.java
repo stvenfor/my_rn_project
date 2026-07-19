@@ -1,6 +1,7 @@
 package com.example.myrnproject;
 
 import android.os.Bundle;
+import androidx.core.view.WindowCompat;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
@@ -12,6 +13,8 @@ public class MainActivity extends ReactActivity {
   protected void onCreate(Bundle savedInstanceState) {
     setTheme(R.style.AppTheme);
     super.onCreate(savedInstanceState);
+    // Let RN layouts extend under the status/navigation bars (immersive).
+    WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
   }
 
   /**

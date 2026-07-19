@@ -84,5 +84,6 @@ export function MainTabs() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    backgroundColor: '#F2F2F7',
   },
 });

@@ -3,10 +3,16 @@
 exports[`MineScreen renders guest profile header, quick services, functions, and menu list 1`] = `
 <View
   style={
-    {
-      "backgroundColor": "#F5F6F8",
-      "flex": 1,
-    }
+    [
+      {
+        "flex": 1,
+      },
+      {
+        "backgroundColor": "#F5F6F8",
+      },
+      undefined,
+      undefined,
+    ]
   }
 >
   <RCTScrollView

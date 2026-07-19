@@ -9,7 +9,9 @@ import {
 } from 'react-native';
 import type {RootStackScreenProps} from '@core/navigation';
 import {RoutePath} from '@core/navigation';
-import {AppNavBar, AppPageScaffold, AppToast} from '@ui/design-system';
+import {AppToast} from '@ui/design-system';
+import {AppNavBar} from '@ui/design-system/AppNavBar';
+import {AppPageScaffold} from '@ui/design-system/AppPageScaffold';
 import {
   fetchTransactionById,
   formatTransactionAmount,

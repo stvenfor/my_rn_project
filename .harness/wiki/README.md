@@ -12,6 +12,7 @@
 | Prompt + 机检 | [10](../../docs/flutter-to-rn-lego-migration/10-agent-prompt-harness.md) |
 | Planning OS | [plans/README](../../docs/flutter-to-rn-lego-migration/plans/README.md) |
 | 边界规则 | [module-boundary-rules](../../docs/flutter-to-rn-lego-migration/appendices/module-boundary-rules.md) |
+| Metro/Babel 别名 | [metro-babel-module-resolver](../../docs/flutter-to-rn-lego-migration/appendices/metro-babel-module-resolver.md) · [rule](../rules/metro-babel-aliases.md) |
 | 本仓编排 | [../README.md](../README.md) |
 | 跨仓 OS skill | `~/.cursor/skills/migration-os-harness/` |
 | RN 栈 skill | `.cursor/skills/flutter-to-rn-lego-module/` |

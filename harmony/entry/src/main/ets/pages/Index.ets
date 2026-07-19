@@ -84,5 +84,6 @@ struct Index {
     }
     .height('100%')
     .width('100%')
+    .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
   }
 }

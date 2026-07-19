@@ -8,9 +8,10 @@
 
 1. 严格文件白名单  
 2. 先 Flutter 源再 RN；资源 → registry → UI → 路由 → manifest  
-3. 遵守 `.harness/rules/module-boundary.md` 与 status enums  
+3. 遵守 `.harness/rules/module-boundary.md`、status enums、`.harness/rules/metro-babel-aliases.md`  
 4. 栈细节：`.cursor/skills/flutter-to-rn-lego-module/SKILL.md` + docs `07`  
 5. 改页/资源 → `.harness/skills/parity-manifest-hygiene/SKILL.md`  
+6. 新增 monorepo 包 / 改 `babel.config.js` → 读 `docs/.../appendices/metro-babel-module-resolver.md`，改完 `--reset-cache`  
 
 ## Don't
 

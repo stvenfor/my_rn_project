@@ -31,6 +31,7 @@
 | `appendices/dependency-mapping.md` | Flutter 依赖到 RN 依赖的映射和归属 | Cursor |
 | `appendices/conversion-cheatsheet.md` | Flutter 到 RN 的转换速查表 | Cursor |
 | `appendices/module-boundary-rules.md` | import 边界、ESLint 草案、跨模块通信规范 | Cursor |
+| `appendices/metro-babel-module-resolver.md` | Babel 包别名勿指向目录；防 `undefined.AppPageScaffold` | Cursor |
 | `appendices/risk-register.md` | 风险台账、触发条件、缓解方案、验收证据 | Codex, Cursor |
 
 ## Skill

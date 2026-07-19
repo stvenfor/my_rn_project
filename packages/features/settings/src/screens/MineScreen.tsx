@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import type {ThunkDispatch, UnknownAction} from '@reduxjs/toolkit';
 import {RoutePath} from '@core/navigation';
 import {AppToast} from '@ui/design-system';
+import {AppPageScaffold} from '@ui/design-system/AppPageScaffold';
 import {MineFunctionSection} from '../components/MineFunctionSection';
 import {MineHeader, SwitchStoreDialog} from '../components/MineHeader';
 import {MineMenuList} from '../components/MineMenuList';
@@ -176,7 +177,9 @@ export function MineScreen({
   );
 
   return (
-    <View style={styles.page}>
+    <AppPageScaffold
+      layout="mainTabRoot"
+      backgroundColor={mineTheme.pageBackground}>
       <ScrollView
         scrollEnabled={!functionGridDragging}
         contentContainerStyle={{
@@ -230,15 +233,11 @@ export function MineScreen({
         onPick={handleMediaPick}
         onClose={() => setMediaSheetVisible(false)}
       />
-    </View>
+    </AppPageScaffold>
   );
 }
 
 const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-    backgroundColor: mineTheme.pageBackground,
-  },
   headerWrap: {
     paddingBottom: 40,
   },
