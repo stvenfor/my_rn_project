@@ -109,11 +109,11 @@ npm run test
 
 | 项 | P0 | 结果 | 证据 |
 |----|----|------|------|
-| ChatTab 会话列表 | P0 | ☐ | |
-| ChatDetail 消息收发（可 mock） | P0 | ☐ | |
-| ImagePreview | P0 | ☐ | |
-| IM 经 `@core/im`，state 不持有 native handle | P0 | ☐ | |
-| 空态 / 错误态 | P0 | ☐ | |
+| ChatTab 会话列表 | P0 | ✅ | iOS 大标题「消息」+ grouped card；见 `acceptance-records/2026-07-19-chat-ios-theme-parity.md` |
+| ChatDetail 消息收发（可 mock） | P0 | ✅ | iMessage 气泡 + Cupertino 输入；mock IM |
+| ImagePreview | P0 | ✅ | 可进；pinch 相对 InteractiveViewer 见 manifest note |
+| IM 经 `@core/im`，state 不持有 native handle | P0 | ✅ | `chatRepository` → `@core/im` |
+| 空态 / 错误态 | P0 | ✅ | loading + error/重试 |
 
 ### B5. `@features/community`
 

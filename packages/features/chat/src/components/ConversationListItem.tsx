@@ -2,7 +2,7 @@ import React from 'react';
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import type {ImConversation} from '@core/im';
 import {formatConversationTime} from '../utils/formatChatTime';
-import {chatTheme} from '../theme/chatTheme';
+import {chatTheme, chatTypography} from '../theme/chatTheme';
 
 interface Props {
   conversation: ImConversation;
@@ -49,42 +49,43 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: chatTheme.surface,
   },
-  avatarWrap: {width: 48, height: 48},
-  avatar: {width: 48, height: 48, borderRadius: 24},
+  avatarWrap: {width: 52, height: 52},
+  avatar: {width: 52, height: 52, borderRadius: 26},
   onlineDot: {
     position: 'absolute',
-    right: 0,
-    bottom: 0,
+    right: 1,
+    bottom: 1,
     width: 12,
     height: 12,
     borderRadius: 6,
-    backgroundColor: chatTheme.wechatGreen,
+    backgroundColor: chatTheme.online,
     borderWidth: 2,
-    borderColor: '#FFFFFF',
+    borderColor: chatTheme.surface,
   },
   meta: {flex: 1, marginLeft: 12},
   topRow: {flexDirection: 'row', alignItems: 'center'},
   title: {
     flex: 1,
-    fontSize: 16,
-    fontWeight: '500',
-    color: chatTheme.titleBlack,
+    ...chatTypography.headline,
   },
-  time: {fontSize: 12, color: chatTheme.textHint},
+  time: {...chatTypography.caption},
   bottomRow: {flexDirection: 'row', alignItems: 'center', marginTop: 4},
   subtitle: {
     flex: 1,
-    fontSize: 14,
-    color: chatTheme.textSecondary,
+    ...chatTypography.subhead,
   },
   badge: {
     marginLeft: 8,
-    paddingHorizontal: 6,
+    paddingHorizontal: 7,
     paddingVertical: 2,
     borderRadius: 10,
-    backgroundColor: chatTheme.unreadRed,
+    backgroundColor: chatTheme.unreadBadge,
   },
-  badgeText: {color: '#FFFFFF', fontSize: 11},
+  badgeText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '600',
+  },
 });

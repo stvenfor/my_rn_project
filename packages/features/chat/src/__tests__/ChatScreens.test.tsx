@@ -32,6 +32,9 @@ jest.mock('react-redux', () => ({
 
 jest.mock('@react-navigation/native', () => ({
   useNavigation: () => ({goBack: jest.fn()}),
+  useFocusEffect: (cb: () => void) => {
+    cb();
+  },
 }));
 
 jest.mock('@core/navigation', () => ({

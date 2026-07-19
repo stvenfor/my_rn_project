@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -8,8 +9,16 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import type {InputPanelMode} from '../store/chatDetailSlice';
-import {chatTheme} from '../theme/chatTheme';
+import {chatTheme, chatTypography} from '../theme/chatTheme';
+import {
+  ChatKeyboardIcon,
+  ChatMicIcon,
+  ChatPlusIcon,
+  ChatSendArrowIcon,
+  ChatSmileIcon,
+} from './ChatIcons';
 import {EmojiPanel} from './EmojiPanel';
 import {MorePanel} from './MorePanel';
 
@@ -29,6 +38,7 @@ interface Props {
   onPickCamera: () => void;
   onStartRecord: () => void;
   onStopRecord: (send: boolean) => void;
+  onKeyboardOpen?: () => void;
 }
 
 export function InputPanel({
@@ -47,11 +57,31 @@ export function InputPanel({
   onPickCamera,
   onStartRecord,
   onStopRecord,
+  onKeyboardOpen,
 }: Props) {
+  const insets = useSafeAreaInsets();
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const recordingRef = useRef(false);
   const trimmed = text.trim();
   const isVoice = mode === 'voice';
   const showEmoji = mode === 'emoji';
   const showMore = mode === 'more';
+  const showPanel =
+    panelVisible && !isVoice && !keyboardVisible && (showEmoji || showMore);
+
+  useEffect(() => {
+    const showSub = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardVisible(true);
+      onKeyboardOpen?.();
+    });
+    const hideSub = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardVisible(false);
+    });
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, [onKeyboardOpen]);
 
   return (
     <KeyboardAvoidingView
@@ -60,13 +90,22 @@ export function InputPanel({
       <View style={styles.wrap}>
         <View style={styles.toolbar}>
           <Pressable onPress={onToggleVoice} style={styles.iconBtn}>
-            <Text style={styles.icon}>{isVoice ? '⌨' : '🎤'}</Text>
+            {isVoice ? <ChatKeyboardIcon /> : <ChatMicIcon />}
           </Pressable>
           {isVoice ? (
             <Pressable
               style={[styles.voiceBtn, isRecording && styles.voiceBtnActive]}
-              onPressIn={onStartRecord}
-              onPressOut={() => onStopRecord(true)}>
+              onLongPress={() => {
+                recordingRef.current = true;
+                onStartRecord();
+              }}
+              delayLongPress={120}
+              onPressOut={() => {
+                if (recordingRef.current) {
+                  recordingRef.current = false;
+                  onStopRecord(true);
+                }
+              }}>
               <Text
                 style={[
                   styles.voiceText,
@@ -80,45 +119,47 @@ export function InputPanel({
               style={styles.input}
               value={text}
               onChangeText={onChangeText}
-              placeholder="输入消息..."
-              placeholderTextColor={chatTheme.textHint}
+              placeholder="信息"
+              placeholderTextColor={chatTheme.labelTertiary}
               multiline
               onSubmitEditing={onSend}
+              onFocus={onKeyboardOpen}
             />
           )}
           {!isVoice && trimmed.length === 0 ? (
             <>
               <Pressable onPress={onToggleEmoji} style={styles.iconBtn}>
-                <Text style={styles.icon}>😊</Text>
+                <ChatSmileIcon />
               </Pressable>
               <Pressable onPress={onToggleMore} style={styles.iconBtn}>
-                <Text style={styles.icon}>＋</Text>
+                <ChatPlusIcon />
               </Pressable>
             </>
           ) : null}
           {!isVoice && trimmed.length > 0 ? (
             <Pressable style={styles.sendBtn} onPress={onSend}>
-              <Text style={styles.sendText}>发送</Text>
+              <ChatSendArrowIcon />
             </Pressable>
           ) : null}
         </View>
-        {panelVisible && !isVoice ? (
+        {showPanel ? (
           showEmoji ? (
             <EmojiPanel onPick={onAppendEmoji} />
-          ) : showMore ? (
+          ) : (
             <MorePanel
               onPickGallery={onPickGallery}
               onPickCamera={onPickCamera}
             />
-          ) : null
+          )
         ) : null}
+        {!keyboardVisible ? <View style={{height: insets.bottom}} /> : null}
       </View>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  wrap: {backgroundColor: chatTheme.panelBackground},
+  wrap: {backgroundColor: chatTheme.surface},
   toolbar: {
     flexDirection: 'row',
     alignItems: 'flex-end',
@@ -126,47 +167,47 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   iconBtn: {
-    width: 36,
-    height: 40,
+    width: 44,
+    height: 44,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  icon: {fontSize: 22, color: chatTheme.iconMuted},
   input: {
     flex: 1,
     minHeight: 40,
     maxHeight: 120,
-    borderWidth: 1,
-    borderColor: chatTheme.inputBorder,
-    borderRadius: 6,
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    fontSize: 15,
-    color: chatTheme.titleBlack,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: chatTheme.separator,
+    borderRadius: chatTheme.inputRadius,
+    backgroundColor: chatTheme.fillSecondary,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    ...chatTypography.body,
   },
   voiceBtn: {
     flex: 1,
     height: 40,
-    borderWidth: 1,
-    borderColor: chatTheme.inputBorder,
-    borderRadius: 6,
-    backgroundColor: '#FFFFFF',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: chatTheme.separator,
+    borderRadius: chatTheme.inputRadius,
+    backgroundColor: chatTheme.fillSecondary,
     alignItems: 'center',
     justifyContent: 'center',
   },
   voiceBtnActive: {
-    backgroundColor: chatTheme.wechatGreen,
-    borderColor: chatTheme.wechatGreen,
+    backgroundColor: chatTheme.accent,
+    borderColor: chatTheme.accent,
   },
-  voiceText: {fontSize: 15, color: chatTheme.titleBlack},
+  voiceText: {fontSize: 15, color: chatTheme.labelPrimary},
   voiceTextActive: {color: '#FFFFFF'},
   sendBtn: {
     marginLeft: 4,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 6,
-    backgroundColor: chatTheme.wechatGreen,
+    marginRight: 4,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: chatTheme.accent,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  sendText: {color: '#FFFFFF', fontSize: 14, fontWeight: '600'},
 });

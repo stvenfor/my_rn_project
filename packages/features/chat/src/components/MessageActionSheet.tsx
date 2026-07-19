@@ -57,6 +57,9 @@ export function MessageActionSheet({
               <Text style={styles.actionText}>重新发送</Text>
             </Pressable>
           ) : null}
+          <Pressable style={[styles.action, styles.cancel]} onPress={onClose}>
+            <Text style={styles.actionText}>取消</Text>
+          </Pressable>
         </View>
       </Pressable>
     </Modal>
@@ -70,17 +73,22 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.3)',
   },
   sheet: {
-    backgroundColor: '#FFFFFF',
-    borderTopLeftRadius: 12,
-    borderTopRightRadius: 12,
+    backgroundColor: chatTheme.surface,
+    borderTopLeftRadius: chatTheme.radiusMd,
+    borderTopRightRadius: chatTheme.radiusMd,
     paddingBottom: 24,
   },
   action: {
     paddingVertical: 16,
     paddingHorizontal: 20,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: chatTheme.divider,
+    borderBottomColor: chatTheme.separator,
   },
-  actionText: {fontSize: 16, color: chatTheme.titleBlack},
-  danger: {color: chatTheme.unreadRed},
+  cancel: {borderBottomWidth: 0, marginTop: 4},
+  actionText: {
+    fontSize: 16,
+    color: chatTheme.labelPrimary,
+    textAlign: 'center',
+  },
+  danger: {color: chatTheme.unreadBadge},
 });

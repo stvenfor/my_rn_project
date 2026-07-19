@@ -1,9 +1,9 @@
-import React from 'react';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {Animated, Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import type {ImMessage} from '@core/im';
 import {readStatusLabel} from '../utils/timeDivider';
 import {chatAvatarUrls} from '../models/chatAvatarUrls';
-import {chatTheme} from '../theme/chatTheme';
+import {bubbleRadiusFor, chatTheme, chatTypography} from '../theme/chatTheme';
 
 interface Props {
   message: ImMessage;
@@ -14,6 +14,29 @@ interface Props {
   onVoicePress: () => void;
 }
 
+function VoiceWave({isPlaying}: {isPlaying: boolean}) {
+  const [frame, setFrame] = useState(0);
+  useEffect(() => {
+    if (!isPlaying) {
+      return;
+    }
+    const id = setInterval(() => setFrame(f => (f + 1) % 3), 200);
+    return () => clearInterval(id);
+  }, [isPlaying]);
+
+  const heights = isPlaying
+    ? [8 + frame * 2, 14 + ((frame + 1) % 3) * 2, 10 + frame]
+    : [8, 14, 10];
+
+  return (
+    <View style={styles.waveRow}>
+      {heights.map((h, i) => (
+        <View key={i} style={[styles.waveBar, {height: h}]} />
+      ))}
+    </View>
+  );
+}
+
 export function MessageBubble({
   message,
   peerAvatar,
@@ -22,6 +45,26 @@ export function MessageBubble({
   onImagePress,
   onVoicePress,
 }: Props) {
+  const opacity = useRef(new Animated.Value(0)).current;
+  const translateX = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const isSelf = message.isSelf;
+    translateX.setValue(isSelf ? 16 : -16);
+    Animated.parallel([
+      Animated.timing(opacity, {
+        toValue: 1,
+        duration: 220,
+        useNativeDriver: true,
+      }),
+      Animated.timing(translateX, {
+        toValue: 0,
+        duration: 220,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [message.id, message.isSelf, opacity, translateX]);
+
   if (message.type === 'time') {
     return (
       <View style={styles.timeWrap}>
@@ -40,21 +83,41 @@ export function MessageBubble({
 
   const isSelf = message.isSelf;
   const status = readStatusLabel(message);
+  const failed = message.sendStatus === 'failed';
+  const isPlaying = playingVoiceId === message.id;
+  const voiceDuration = Math.min(
+    Math.max(message.voiceDurationSeconds ?? 1, 1),
+    60,
+  );
+  const voiceWidth = Math.min(Math.max(80 + voiceDuration * 3, 80), 200);
 
   return (
-    <View style={[styles.row, isSelf ? styles.rowSelf : styles.rowPeer]}>
+    <Animated.View
+      style={[
+        styles.row,
+        isSelf ? styles.rowSelf : styles.rowPeer,
+        {opacity, transform: [{translateX}]},
+      ]}>
       {!isSelf ? (
         <Image source={{uri: peerAvatar}} style={styles.avatar} />
       ) : null}
-      <View style={isSelf ? styles.colSelf : styles.colPeer}>
+      <View style={[styles.col, isSelf ? styles.colSelf : styles.colPeer]}>
         <Pressable
           onLongPress={onLongPress}
           style={[
-            styles.bubble,
+            message.type === 'text' ? styles.bubblePad : styles.bubbleBare,
+            bubbleRadiusFor(isSelf),
             isSelf ? styles.bubbleSelf : styles.bubblePeer,
           ]}>
           {message.type === 'text' ? (
-            <Text style={styles.text}>{message.content}</Text>
+            <Text
+              style={
+                isSelf
+                  ? chatTypography.selfBubbleText
+                  : chatTypography.peerBubbleText
+              }>
+              {message.content}
+            </Text>
           ) : null}
           {message.type === 'image' ? (
             <Pressable
@@ -64,26 +127,36 @@ export function MessageBubble({
               <Image
                 source={{uri: message.remoteUrl ?? message.localUri}}
                 style={styles.image}
+                resizeMode="cover"
               />
             </Pressable>
           ) : null}
           {message.type === 'voice' ? (
-            <Pressable style={styles.voiceRow} onPress={onVoicePress}>
-              <Text style={styles.voiceIcon}>
-                {playingVoiceId === message.id ? '▮▮' : '▶'}
-              </Text>
-              <Text style={styles.voiceDur}>
-                {message.voiceDurationSeconds ?? 0}"
-              </Text>
+            <Pressable
+              style={[styles.voiceRow, {width: voiceWidth}]}
+              onPress={onVoicePress}>
+              {!isSelf ? <VoiceWave isPlaying={isPlaying} /> : null}
+              {!isSelf ? <View style={styles.voiceGap} /> : null}
+              <Text style={styles.voiceDur}>{voiceDuration}"</Text>
+              {isSelf ? <View style={styles.voiceGap} /> : null}
+              {isSelf ? <VoiceWave isPlaying={isPlaying} /> : null}
             </Pressable>
           ) : null}
         </Pressable>
-        {status ? <Text style={styles.status}>{status}</Text> : null}
+        {status ? (
+          <Text
+            style={[
+              styles.status,
+              failed ? styles.statusFailed : styles.statusNormal,
+            ]}>
+            {status}
+          </Text>
+        ) : null}
       </View>
       {isSelf ? (
         <Image source={{uri: chatAvatarUrls.self}} style={styles.avatar} />
       ) : null}
-    </View>
+    </Animated.View>
   );
 }
 
@@ -91,42 +164,57 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     paddingHorizontal: 12,
-    paddingVertical: 6,
-    alignItems: 'flex-start',
+    paddingVertical: 4,
+    alignItems: 'flex-end',
   },
   rowSelf: {justifyContent: 'flex-end'},
   rowPeer: {justifyContent: 'flex-start'},
-  avatar: {width: 40, height: 40, borderRadius: 20},
-  colSelf: {alignItems: 'flex-end', maxWidth: '72%'},
-  colPeer: {alignItems: 'flex-start', maxWidth: '72%', marginLeft: 8},
-  bubble: {
-    borderRadius: 6,
-    paddingHorizontal: 12,
+  avatar: {width: 32, height: 32, borderRadius: 16},
+  col: {maxWidth: '72%'},
+  colSelf: {alignItems: 'flex-end', marginRight: 8},
+  colPeer: {alignItems: 'flex-start', marginLeft: 8},
+  bubblePad: {
+    paddingHorizontal: 14,
     paddingVertical: 10,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.04,
-    shadowRadius: 2,
-    elevation: 1,
+  },
+  bubbleBare: {
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+    overflow: 'hidden',
   },
   bubbleSelf: {backgroundColor: chatTheme.selfBubble},
   bubblePeer: {backgroundColor: chatTheme.peerBubble},
-  text: {fontSize: 15, color: chatTheme.titleBlack},
-  image: {width: 160, height: 120, borderRadius: 6},
-  voiceRow: {flexDirection: 'row', alignItems: 'center', minWidth: 80},
-  voiceIcon: {fontSize: 14, color: chatTheme.iconMuted, marginRight: 8},
-  voiceDur: {fontSize: 14, color: chatTheme.titleBlack},
-  status: {fontSize: 11, color: chatTheme.textHint, marginTop: 4},
-  timeWrap: {alignItems: 'center', paddingVertical: 8},
+  image: {width: 200, height: 200, maxWidth: 200, maxHeight: 200},
+  voiceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+  },
+  voiceGap: {width: 8},
+  voiceDur: {fontSize: 14, color: 'rgba(0,0,0,0.87)'},
+  waveRow: {flexDirection: 'row', alignItems: 'center'},
+  waveBar: {
+    width: 3,
+    marginHorizontal: 1,
+    borderRadius: 2,
+    backgroundColor: 'rgba(0,0,0,0.54)',
+  },
+  status: {fontSize: 11, marginTop: 4},
+  statusNormal: {color: chatTheme.labelSecondary},
+  statusFailed: {color: chatTheme.unreadBadge},
+  timeWrap: {alignItems: 'center', paddingVertical: 12},
   timeText: {
     fontSize: 12,
-    color: '#FFFFFF',
-    backgroundColor: chatTheme.timeBackground,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-    overflow: 'hidden',
+    color: chatTheme.labelSecondary,
   },
-  systemWrap: {alignItems: 'center', paddingVertical: 8},
-  systemText: {fontSize: 12, color: chatTheme.textHint},
+  systemWrap: {
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+  },
+  systemText: {
+    ...chatTypography.caption,
+    textAlign: 'center',
+  },
 });

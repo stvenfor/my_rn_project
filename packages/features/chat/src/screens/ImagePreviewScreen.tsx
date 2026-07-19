@@ -1,10 +1,5 @@
 import React, {useState} from 'react';
-import {
-  Dimensions,
-  Image,
-  ScrollView,
-  StyleSheet,
-} from 'react-native';
+import {Dimensions, Image, ScrollView, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {RoutePath, type RootStackScreenProps} from '@core/navigation';
 import {AppNavBar, AppPageScaffold} from '@ui/design-system';

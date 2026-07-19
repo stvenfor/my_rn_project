@@ -39,7 +39,7 @@ export function EmojiPanel({onPick}: Props) {
 const styles = StyleSheet.create({
   wrap: {
     height: chatTheme.emojiPanelHeight,
-    backgroundColor: chatTheme.panelBackground,
+    backgroundColor: chatTheme.background,
     paddingVertical: 8,
   },
   cell: {

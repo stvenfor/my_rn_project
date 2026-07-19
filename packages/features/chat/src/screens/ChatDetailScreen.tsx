@@ -1,9 +1,11 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {
   ActivityIndicator,
   Clipboard,
   FlatList,
   StyleSheet,
+  useWindowDimensions,
+  View,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import type {ThunkDispatch, UnknownAction} from '@reduxjs/toolkit';
@@ -32,6 +34,7 @@ import {
   sendImageMessage,
   sendTextMessage,
   sendVoiceMessage,
+  setInputPanelMode,
   setInputText,
   setMessages,
   setPlayingVoiceId,
@@ -47,15 +50,19 @@ import {chatTheme} from '../theme/chatTheme';
 
 type Dispatch = ThunkDispatch<Record<string, unknown>, unknown, UnknownAction>;
 
+const MAX_VOICE_SECONDS = 60;
+
 export function ChatDetailScreen({
   route,
   navigation,
 }: RootStackScreenProps<typeof RoutePath.chatDetail>) {
   const dispatch = useDispatch<Dispatch>();
+  const {width} = useWindowDimensions();
   const conversationId = route.params?.conversationId ?? '';
   const title = route.params?.title ?? 'Chat';
   const portraitUrl = route.params?.portraitUrl ?? chatAvatarUrls.self;
   const isOnline = route.params?.isOnline ?? false;
+  const contentMaxWidth = width >= 840 ? 720 : undefined;
 
   const messages = useSelector(selectChatDetailMessages);
   const loading = useSelector(selectChatDetailLoading);
@@ -98,13 +105,18 @@ export function ChatDetailScreen({
     }
     recordTimer.current = setInterval(() => {
       dispatch(tickRecordVoice());
+      if (recordSecondsRef.current + 1 >= MAX_VOICE_SECONDS) {
+        const duration = MAX_VOICE_SECONDS;
+        dispatch(stopRecordVoice());
+        dispatch(sendVoiceMessage({conversationId, durationSeconds: duration}));
+      }
     }, 1000);
     return () => {
       if (recordTimer.current) {
         clearInterval(recordTimer.current);
       }
     };
-  }, [dispatch, isRecording]);
+  }, [dispatch, isRecording, conversationId]);
 
   const handleSend = () => {
     dispatch(sendTextMessage({conversationId, text: inputText}));
@@ -122,16 +134,30 @@ export function ChatDetailScreen({
     }
   };
 
-  const handlePickImage = async () => {
-    const picked = await getMediaPickerService().pickImage();
-    if (picked?.uri) {
-      dispatch(sendImageMessage({conversationId, localUri: picked.uri}));
-    }
-  };
+  const pickImage = useCallback(
+    async (source: 'gallery' | 'camera') => {
+      try {
+        const picked = await getMediaPickerService().pickImage({source});
+        if (picked?.uri) {
+          dispatch(sendImageMessage({conversationId, localUri: picked.uri}));
+        }
+      } catch {
+        AppToast.show(
+          source === 'camera' ? '需要相机权限才能拍摄' : '选择图片失败',
+        );
+      }
+    },
+    [conversationId, dispatch],
+  );
 
   const handleVoicePress = (messageId: string, duration: number) => {
     if (voiceTimer.current) {
       clearTimeout(voiceTimer.current);
+      voiceTimer.current = null;
+    }
+    if (playingVoiceId === messageId) {
+      dispatch(setPlayingVoiceId(null));
+      return;
     }
     dispatch(setPlayingVoiceId(messageId));
     voiceTimer.current = setTimeout(() => {
@@ -139,12 +165,22 @@ export function ChatDetailScreen({
     }, duration * 1000);
   };
 
+  const collapsePanelOnKeyboard = useCallback(() => {
+    if (inputMode === 'emoji' || inputMode === 'more') {
+      dispatch(setInputPanelMode('text'));
+    }
+  }, [dispatch, inputMode]);
+
   const panelVisible = inputMode === 'emoji' || inputMode === 'more';
 
   return (
-    <AppPageScaffold
-      backgroundColor={chatTheme.pageBackground}
-      navBar={
+    <AppPageScaffold layout="edgeToEdge" backgroundColor={chatTheme.background}>
+      <View
+        style={[
+          styles.root,
+          contentMaxWidth != null && styles.rootConstrained,
+          contentMaxWidth != null && {maxWidth: contentMaxWidth},
+        ]}>
         <ChatDetailAppBar
           title={title}
           portraitUrl={portraitUrl}
@@ -152,55 +188,53 @@ export function ChatDetailScreen({
           onBack={() => navigation.goBack()}
           onMore={() => {}}
         />
-      }>
-      {loading && messages.length === 0 ? (
-        <ActivityIndicator
-          style={styles.center}
-          color={chatTheme.wechatGreen}
+        {loading && messages.length === 0 ? (
+          <ActivityIndicator style={styles.center} color={chatTheme.accent} />
+        ) : (
+          <FlatList
+            style={styles.list}
+            data={messages}
+            inverted
+            keyExtractor={item => item.id}
+            renderItem={({item}) => (
+              <MessageBubble
+                message={item}
+                peerAvatar={portraitUrl}
+                playingVoiceId={playingVoiceId}
+                onLongPress={() => dispatch(showActionSheet(item))}
+                onImagePress={uri =>
+                  navigation.navigate(RoutePath.imagePreview, {
+                    imageUrl: uri,
+                    uris: [uri],
+                    initialIndex: 0,
+                  })
+                }
+                onVoicePress={() =>
+                  handleVoicePress(item.id, item.voiceDurationSeconds ?? 1)
+                }
+              />
+            )}
+          />
+        )}
+        <InputPanel
+          mode={inputMode}
+          text={inputText}
+          isRecording={isRecording}
+          recordSeconds={recordSeconds}
+          panelVisible={panelVisible}
+          onChangeText={value => dispatch(setInputText(value))}
+          onToggleVoice={() => dispatch(toggleVoiceInput())}
+          onToggleEmoji={() => dispatch(toggleEmojiPanel())}
+          onToggleMore={() => dispatch(toggleMorePanel())}
+          onSend={handleSend}
+          onAppendEmoji={emoji => dispatch(appendEmoji(emoji))}
+          onPickGallery={() => pickImage('gallery')}
+          onPickCamera={() => pickImage('camera')}
+          onStartRecord={handleStartRecord}
+          onStopRecord={handleStopRecord}
+          onKeyboardOpen={collapsePanelOnKeyboard}
         />
-      ) : (
-        <FlatList
-          style={styles.list}
-          data={messages}
-          inverted
-          keyExtractor={item => item.id}
-          renderItem={({item}) => (
-            <MessageBubble
-              message={item}
-              peerAvatar={portraitUrl}
-              playingVoiceId={playingVoiceId}
-              onLongPress={() => dispatch(showActionSheet(item))}
-              onImagePress={uri =>
-                navigation.navigate(RoutePath.imagePreview, {
-                  imageUrl: uri,
-                  uris: [uri],
-                  initialIndex: 0,
-                })
-              }
-              onVoicePress={() =>
-                handleVoicePress(item.id, item.voiceDurationSeconds ?? 1)
-              }
-            />
-          )}
-        />
-      )}
-      <InputPanel
-        mode={inputMode}
-        text={inputText}
-        isRecording={isRecording}
-        recordSeconds={recordSeconds}
-        panelVisible={panelVisible}
-        onChangeText={value => dispatch(setInputText(value))}
-        onToggleVoice={() => dispatch(toggleVoiceInput())}
-        onToggleEmoji={() => dispatch(toggleEmojiPanel())}
-        onToggleMore={() => dispatch(toggleMorePanel())}
-        onSend={handleSend}
-        onAppendEmoji={emoji => dispatch(appendEmoji(emoji))}
-        onPickGallery={handlePickImage}
-        onPickCamera={handlePickImage}
-        onStartRecord={handleStartRecord}
-        onStopRecord={handleStopRecord}
-      />
+      </View>
       <MessageActionSheet
         message={actionMessage}
         visible={actionMessage != null}
@@ -244,6 +278,8 @@ export function ChatDetailScreen({
 }
 
 const styles = StyleSheet.create({
+  root: {flex: 1, width: '100%'},
+  rootConstrained: {alignSelf: 'center'},
   list: {flex: 1},
   center: {flex: 1},
 });

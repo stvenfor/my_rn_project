@@ -149,7 +149,9 @@ const chatDetailSlice = createSlice({
       state.recordDurationSeconds = 0;
     },
     tickRecordVoice(state) {
-      state.recordDurationSeconds += 1;
+      if (state.recordDurationSeconds < 60) {
+        state.recordDurationSeconds += 1;
+      }
     },
     stopRecordVoice(state) {
       state.isRecordingVoice = false;

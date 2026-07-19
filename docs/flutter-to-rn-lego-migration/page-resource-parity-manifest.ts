@@ -51,9 +51,9 @@ export const PAGE_PARITY_ENTRIES: PageParityEntry[] = [
   {id: 'home-used-car-list', module: 'home', flutterPath: 'packages/features/home/lib/home/view/used_car_list_page.dart', rnRoute: 'HomeUsedCarList', rnComponent: 'HomeUsedCarListScreen', status: 'Migrated', note: 'Entry gated via openUsedCarList + LoginRedirect'},
   {id: 'home-used-car-detail', module: 'home', flutterPath: 'packages/features/home/lib/home/view/used_car_detail_page.dart', rnRoute: 'HomeUsedCarDetail', rnComponent: 'HomeUsedCarDetailScreen', status: 'Migrated'},
 
-  {id: 'chat-page', module: 'chat', flutterPath: 'packages/features/chat/lib/chat/view/chat_page.dart', rnRoute: 'ChatTab', rnComponent: 'ChatScreen', status: 'Migrated', note: 'IM adapter via @core/im'},
-  {id: 'chat-detail', module: 'chat', flutterPath: 'packages/features/chat/lib/chat/view/chat_detail_page.dart', rnRoute: 'ChatDetail', rnComponent: 'ChatDetailScreen', status: 'Migrated', note: 'Messages via @core/im adapter'},
-  {id: 'chat-image-preview', module: 'chat', flutterPath: 'packages/features/chat/lib/chat/view/image_preview_page.dart', rnRoute: 'ImagePreview', rnComponent: 'ImagePreviewScreen', status: 'Migrated'},
+  {id: 'chat-page', module: 'chat', flutterPath: 'packages/features/chat/lib/chat/view/chat_page.dart', rnRoute: 'ChatTab', rnComponent: 'ChatScreen', status: 'Migrated', note: 'iOS ChatTheme; large title 消息; grouped card list; focus refresh; IM via @core/im'},
+  {id: 'chat-detail', module: 'chat', flutterPath: 'packages/features/chat/lib/chat/view/chat_detail_page.dart', rnRoute: 'ChatDetail', rnComponent: 'ChatDetailScreen', status: 'Migrated', note: 'iMessage bubbles + Cupertino input; voice long-press/60s; gallery/camera pick; mock IM'},
+  {id: 'chat-image-preview', module: 'chat', flutterPath: 'packages/features/chat/lib/chat/view/image_preview_page.dart', rnRoute: 'ImagePreview', rnComponent: 'ImagePreviewScreen', status: 'Migrated', note: 'ScrollView pinch zoom; local file:// may be Degraded vs InteractiveViewer'},
 
   {id: 'community-page', module: 'community', flutterPath: 'packages/features/community/lib/community/view/community_page.dart', rnRoute: 'CommunityTab', rnComponent: 'CommunityScreen', status: 'Migrated', note: 'PostCard feed + refresh/loadMore + comment/like sheets aligned with MockPostRepository'},
   {id: 'community-publish', module: 'community', flutterPath: 'packages/features/community/lib/community/view/publish_page.dart', rnRoute: 'CommunityPublish', rnComponent: 'CommunityPublishScreen', status: 'Migrated'},

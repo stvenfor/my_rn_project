@@ -13,7 +13,7 @@ const SEED_CONVERSATIONS: ImConversation[] = [
     id: 'private_mock_peer_01',
     type: 'private',
     targetId: 'mock_peer_01',
-    title: 'Mock好友01',
+    title: 'Mock好友1',
     portraitUrl: 'https://picsum.photos/seed/chat_mock_peer_01/150/150',
     lastMessage: '晚上一起吃饭吗？',
     lastMessageTime: new Date(Date.now() - 5 * 60_000).toISOString(),
@@ -25,7 +25,7 @@ const SEED_CONVERSATIONS: ImConversation[] = [
     id: 'private_mock_peer_02',
     type: 'private',
     targetId: 'mock_peer_02',
-    title: 'Mock好友02',
+    title: 'Mock好友2',
     portraitUrl: 'https://picsum.photos/seed/chat_mock_peer_02/150/150',
     lastMessage: '你好',
     lastMessageTime: new Date(Date.now() - 10 * 60_000).toISOString(),
@@ -37,7 +37,7 @@ const SEED_CONVERSATIONS: ImConversation[] = [
     id: 'private_mock_peer_03',
     type: 'private',
     targetId: 'mock_peer_03',
-    title: 'Mock好友03',
+    title: 'Mock好友3',
     portraitUrl: 'https://picsum.photos/seed/chat_mock_peer_03/150/150',
     lastMessage: '你好',
     lastMessageTime: new Date(Date.now() - 15 * 60_000).toISOString(),
@@ -71,60 +71,8 @@ function seedMessages(): Record<string, ImMessage[]> {
         content: '你好，在吗？',
         isSelf: false,
         senderImUserId: 'mock_peer_01',
-        senderDisplayName: 'Mock好友01',
+        senderDisplayName: 'Mock好友1',
         createdAt: new Date(now - 30 * 60_000).toISOString(),
-        sendStatus: 'success',
-        readStatus: 'read',
-        isRecalled: false,
-      },
-    ],
-    private_mock_peer_02: [
-      {
-        id: 'm_3',
-        conversationId: 'private_mock_peer_02',
-        type: 'text',
-        content: '你好',
-        isSelf: false,
-        senderImUserId: 'mock_peer_02',
-        senderDisplayName: 'Mock好友02',
-        createdAt: new Date(now - 10 * 60_000).toISOString(),
-        sendStatus: 'success',
-        readStatus: 'unread',
-        isRecalled: false,
-      },
-    ],
-    group_product_discuss: [
-      {
-        id: 'msg_6',
-        conversationId: 'group_product_discuss',
-        type: 'text',
-        content: '问题已解决',
-        isSelf: true,
-        createdAt: new Date(now - 1800_000).toISOString(),
-        sendStatus: 'success',
-        readStatus: 'read',
-        isRecalled: false,
-      },
-      {
-        id: 'msg_5',
-        conversationId: 'group_product_discuss',
-        type: 'image',
-        content: '[图片]',
-        isSelf: false,
-        createdAt: new Date(now - 3600_000).toISOString(),
-        remoteUrl: 'https://picsum.photos/400/300?random=99',
-        sendStatus: 'success',
-        readStatus: 'unread',
-        isRecalled: false,
-      },
-      {
-        id: 'msg_4',
-        conversationId: 'group_product_discuss',
-        type: 'text',
-        content: '新版本什么时候发布？',
-        isSelf: false,
-        senderDisplayName: '技术支持',
-        createdAt: new Date(now - 5400_000).toISOString(),
         sendStatus: 'success',
         readStatus: 'read',
         isRecalled: false,
@@ -132,19 +80,6 @@ function seedMessages(): Record<string, ImMessage[]> {
     ],
   };
 }
-
-const GROUP_CONVERSATION: ImConversation = {
-  id: 'group_product_discuss',
-  type: 'group',
-  targetId: 'group_product_discuss',
-  title: '产品讨论群',
-  portraitUrl: 'https://picsum.photos/seed/im3/80/80',
-  lastMessage: '问题已解决',
-  lastMessageTime: new Date(Date.now() - 1800_000).toISOString(),
-  isOnline: false,
-  unreadCount: 1,
-  memberCount: 12,
-};
 
 function formatTimeLabel(iso: string): string {
   const time = new Date(iso);
@@ -216,7 +151,7 @@ export class MockImAdapter implements ImAdapter {
       return;
     }
     this.seeded = true;
-    this.conversations = [...SEED_CONVERSATIONS, GROUP_CONVERSATION];
+    this.conversations = [...SEED_CONVERSATIONS];
     this.messages = seedMessages();
   }
 

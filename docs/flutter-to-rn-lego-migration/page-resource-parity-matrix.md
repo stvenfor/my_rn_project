@@ -7,7 +7,7 @@ Machine-readable source: [page-resource-parity-manifest.ts](./page-resource-pari
 
 | Dimension | Flutter | RN target | Coverage |
 |-----------|---------|-----------|----------|
-| Pages | 60 | 60 mapped | 100% (8 classroom Deferred) |
+| Pages | 72+ | mapped in manifest | classroom Migrated (video Degraded); chat iOS theme 1:1 |
 | First-party assets | 76 | 76 migrated | 100% |
 
 Status legend: `Migrated` | `Degraded` | `Placeholder` | `Deferred` | `Removed`

@@ -1,17 +1,21 @@
 import React, {useCallback, useEffect} from 'react';
 import {
   ActivityIndicator,
-  FlatList,
   Pressable,
   RefreshControl,
+  ScrollView,
   StyleSheet,
   Text,
+  useWindowDimensions,
   View,
 } from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import type {ThunkDispatch, UnknownAction} from '@reduxjs/toolkit';
 import {RoutePath, type MainTabScreenProps} from '@core/navigation';
-import {AppNavBar, AppPageScaffold, PrimaryButton} from '@ui/design-system';
+import {AppPageScaffold, PrimaryButton} from '@ui/design-system';
+import {ChatComposeIcon, ChatSearchIcon} from '../components/ChatIcons';
 import {ConversationListItem} from '../components/ConversationListItem';
 import {
   fetchConversations,
@@ -19,22 +23,18 @@ import {
   selectChatLoading,
   selectConversations,
 } from '../store/chatSlice';
-import {chatTheme} from '../theme/chatTheme';
+import {chatTheme, chatTypography} from '../theme/chatTheme';
 
 type Dispatch = ThunkDispatch<Record<string, unknown>, unknown, UnknownAction>;
-
-function ConversationSeparator() {
-  return <View style={styles.divider} />;
-}
 
 function ChatNavActions() {
   return (
     <View style={styles.navActions}>
-      <Pressable style={styles.navBtn} onPress={() => {}}>
-        <Text style={styles.navIcon}>🔍</Text>
+      <Pressable style={styles.navBtn} onPress={() => {}} hitSlop={8}>
+        <ChatSearchIcon />
       </Pressable>
-      <Pressable style={styles.navBtn} onPress={() => {}}>
-        <Text style={styles.navIcon}>＋</Text>
+      <Pressable style={styles.navBtn} onPress={() => {}} hitSlop={8}>
+        <ChatComposeIcon />
       </Pressable>
     </View>
   );
@@ -42,13 +42,22 @@ function ChatNavActions() {
 
 export function ChatScreen({navigation}: MainTabScreenProps<'ChatTab'>) {
   const dispatch = useDispatch<Dispatch>();
+  const insets = useSafeAreaInsets();
+  const {width} = useWindowDimensions();
   const conversations = useSelector(selectConversations);
   const loading = useSelector(selectChatLoading);
   const error = useSelector(selectChatError);
+  const contentMaxWidth = width >= 840 ? 720 : undefined;
 
   useEffect(() => {
     dispatch(fetchConversations());
   }, [dispatch]);
+
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(fetchConversations());
+    }, [dispatch]),
+  );
 
   const openConversation = useCallback(
     (item: (typeof conversations)[number]) => {
@@ -65,51 +74,99 @@ export function ChatScreen({navigation}: MainTabScreenProps<'ChatTab'>) {
 
   return (
     <AppPageScaffold
-      backgroundColor={chatTheme.pageBackground}
-      navBar={<AppNavBar title="微信" right={<ChatNavActions />} />}>
-      {loading && conversations.length === 0 ? (
-        <ActivityIndicator
-          style={styles.center}
-          color={chatTheme.wechatGreen}
-        />
-      ) : error && conversations.length === 0 ? (
-        <View style={styles.center}>
-          <Text style={styles.error}>{error}</Text>
-          <PrimaryButton
-            title="重试"
-            onPress={() => dispatch(fetchConversations())}
-          />
+      layout="mainTabRoot"
+      backgroundColor={chatTheme.background}>
+      <View
+        style={[
+          styles.root,
+          contentMaxWidth != null && styles.rootConstrained,
+          contentMaxWidth != null && {maxWidth: contentMaxWidth},
+        ]}>
+        <View style={[styles.header, {paddingTop: insets.top + 8}]}>
+          <Text style={styles.largeTitle}>消息</Text>
+          <ChatNavActions />
         </View>
-      ) : (
-        <FlatList
-          data={conversations}
-          keyExtractor={item => item.id}
-          refreshControl={
-            <RefreshControl
-              refreshing={loading}
-              onRefresh={() => dispatch(fetchConversations())}
+        {loading && conversations.length === 0 ? (
+          <ActivityIndicator style={styles.center} color={chatTheme.accent} />
+        ) : error && conversations.length === 0 ? (
+          <View style={styles.center}>
+            <Text style={styles.error}>{error}</Text>
+            <PrimaryButton
+              title="重试"
+              onPress={() => dispatch(fetchConversations())}
             />
-          }
-          ItemSeparatorComponent={ConversationSeparator}
-          renderItem={({item}) => (
-            <ConversationListItem
-              conversation={item}
-              onPress={() => openConversation(item)}
-            />
-          )}
-        />
-      )}
+          </View>
+        ) : (
+          <ScrollView
+            contentContainerStyle={styles.listPad}
+            refreshControl={
+              <RefreshControl
+                refreshing={loading}
+                tintColor={chatTheme.accent}
+                colors={[chatTheme.accent]}
+                onRefresh={() => dispatch(fetchConversations())}
+              />
+            }>
+            <View style={styles.card}>
+              {conversations.map((item, index) => (
+                <View key={item.id}>
+                  <ConversationListItem
+                    conversation={item}
+                    onPress={() => openConversation(item)}
+                  />
+                  {index < conversations.length - 1 ? (
+                    <View style={styles.groupedDivider} />
+                  ) : null}
+                </View>
+              ))}
+            </View>
+          </ScrollView>
+        )}
+      </View>
     </AppPageScaffold>
   );
 }
 
 const styles = StyleSheet.create({
-  navActions: {flexDirection: 'row'},
-  navBtn: {width: 36, alignItems: 'center'},
-  navIcon: {fontSize: 20, color: chatTheme.iconMuted},
-  divider: {
+  root: {
+    flex: 1,
+    width: '100%',
+  },
+  rootConstrained: {
+    alignSelf: 'center',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 16,
+    paddingRight: 8,
+    paddingBottom: 8,
+  },
+  largeTitle: {
+    flex: 1,
+    ...chatTypography.largeTitle,
+  },
+  navActions: {flexDirection: 'row', alignItems: 'center'},
+  navBtn: {
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  listPad: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+    paddingBottom: 24,
+  },
+  card: {
+    backgroundColor: chatTheme.surface,
+    borderRadius: chatTheme.radiusMd,
+    overflow: 'hidden',
+  },
+  groupedDivider: {
     height: StyleSheet.hairlineWidth,
-    backgroundColor: chatTheme.divider,
+    backgroundColor: chatTheme.separator,
+    marginLeft: 72,
   },
   center: {
     flex: 1,
@@ -117,5 +174,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 24,
   },
-  error: {color: '#E53935', marginBottom: 12},
+  error: {...chatTypography.caption, marginBottom: 12},
 });
