@@ -188,11 +188,13 @@ npm run test
 
 ## D. 三端 Smoke（按发布范围）
 
-| 平台 | 命令 | Splash→Tabs | Login | 主业务抽检 |
-|------|------|-------------|-------|------------|
-| iOS | `npm run ios` | ☐ | ☐ | ☐ |
-| Android | `npm run android` | ☐ | ☐ | ☐ |
-| HarmonyOS | `npm run harmony` | ☐ | ☐ | ☐ |
+> **本里程碑（M-close-gap）**：三端 **JS packaging smoke** 已绿；真机/模拟器交互格 **Deferred → M2**（见 `acceptance-records/2026-07-19-d-smoke.md`）。不假勾交互。
+
+| 平台 | Packaging | Splash→Tabs | Login | 主业务抽检 |
+|------|-----------|-------------|-------|------------|
+| iOS | ✅ Metro bundle（180 assets） | ☐ Deferred 真机 | ☐ Deferred | ☐ Deferred |
+| Android | ✅ Metro bundle（182 assets） | ☐ Deferred 真机 | ☐ Deferred | ☐ Deferred |
+| HarmonyOS | ✅ `npm run dev`（183 assets） | ☐ Deferred 真机 | ☐ Deferred | ☐ Deferred |
 
 - 仅验收单端时：其余标 N/A，并在 Record 中写明范围。  
 - 专项（WebView / BLE / 真支付 / 真 IM）失败不阻塞基础壳，但必须进风险台账。
@@ -201,10 +203,10 @@ npm run test
 
 ## E. 证据与文档
 
-- [ ] Delivery Report 已附（格式见 [04-cursor-execution-spec.md](./04-cursor-execution-spec.md)）  
-- [ ] 截图/录屏路径可访问  
-- [ ] 已知差距有 owner + 计划阶段  
-- [ ] 本 Record 已写入 `acceptance-records/`  
+- [x] Delivery Report 已附（格式见 [04-cursor-execution-spec.md](./04-cursor-execution-spec.md)） — `acceptance-records/2026-07-19-d-smoke.md`  
+- [ ] 截图/录屏路径可访问 — Deferred（C / M2）  
+- [x] 已知差距有 owner + 计划阶段 — 见 d-smoke record  
+- [x] 本 Record 已写入 `acceptance-records/` — `2026-07-19-d-smoke.md`  
 
 ---
 

@@ -128,6 +128,6 @@ Harness 报告：`.cursor/agent-harness/harness-report.json`（不入库）。
 ## 8. 当前入口
 
 - 最新 Program：[`2026-07-19-program.md`](./2026-07-19-program.md)  
-- 队首：**可选 D 三端 smoke**（或关闭 M-close-gap → M2）  
+- **M-close-gap 已条件关闭** → 下一刀 **M2**（真机 §D 交互 / 截图 / lint / token）  
 
-已 Accept：B1–B10 · A（条件）· C（截图 Deferred）。
+已 Accept：B1–B10 · A（条件）· C（截图 Deferred）· D（packaging；真机 Deferred）· E（Delivery；截图 Deferred）。

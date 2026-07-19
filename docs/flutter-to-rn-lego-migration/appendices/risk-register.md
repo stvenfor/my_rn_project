@@ -17,6 +17,7 @@
 | R-013 | Supabase session 与 local session 不一致 | auth, supabase, storage | 高 | 登录成功但本地未同步，或登出未清理 | 单一 session service contract | auth integration test |
 | R-014 | 短视频性能不达标 | video, media-player | 中 | FlatList/player 复用不当 | windowing、player pool facade、性能 smoke | scroll/play manual test |
 | R-015 | IM mock 与真实 adapter contract 不一致 | chat, im | 中 | mock 返回字段与真实 SDK 不同 | contract tests 固定 shape | adapter contract tests |
+| R-016 | 三端真机交互 smoke 未补录 | app shell | 中 | 仅 Metro/`npm run dev` packaging 通过，无 Splash→Tabs/Login 真机日志 | M2 按发布端补 `run-ios/android/harmony` | `2026-07-19-d-smoke.md` Deferred 格 |
 
 ## 风险处理流程
 
