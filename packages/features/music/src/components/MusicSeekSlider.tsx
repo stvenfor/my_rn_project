@@ -1,7 +1,7 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {
   LayoutChangeEvent,
-  Pressable,
+  PanResponder,
   StyleSheet,
   View,
   type GestureResponderEvent,
@@ -13,37 +13,77 @@ export interface MusicSeekSliderProps {
   value: number;
   maximumValue: number;
   onSlidingComplete: (value: number) => void;
+  onValueChange?: (value: number) => void;
+}
+
+function valueFromEvent(
+  event: GestureResponderEvent,
+  trackWidth: number,
+  maximumValue: number,
+): number {
+  if (trackWidth <= 0 || maximumValue <= 0) {
+    return 0;
+  }
+  const ratio = Math.min(
+    Math.max(event.nativeEvent.locationX / trackWidth, 0),
+    1,
+  );
+  return Math.round(ratio * maximumValue);
 }
 
 function JsSeekSlider({
   value,
   maximumValue,
   onSlidingComplete,
+  onValueChange,
 }: MusicSeekSliderProps) {
-  const [trackWidth, setTrackWidth] = React.useState(0);
+  const [trackWidth, setTrackWidth] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  const [dragValue, setDragValue] = useState(value);
+  const displayValue = dragging ? dragValue : value;
   const progress =
-    maximumValue > 0 ? Math.min(Math.max(value / maximumValue, 0), 1) : 0;
+    maximumValue > 0
+      ? Math.min(Math.max(displayValue / maximumValue, 0), 1)
+      : 0;
 
   const onLayout = useCallback((event: LayoutChangeEvent) => {
     setTrackWidth(event.nativeEvent.layout.width);
   }, []);
 
-  const seekAt = useCallback(
-    (event: GestureResponderEvent) => {
-      if (trackWidth <= 0 || maximumValue <= 0) {
-        return;
-      }
-      const ratio = Math.min(
-        Math.max(event.nativeEvent.locationX / trackWidth, 0),
-        1,
-      );
-      onSlidingComplete(Math.round(ratio * maximumValue));
-    },
-    [maximumValue, onSlidingComplete, trackWidth],
+  const panResponder = useMemo(
+    () =>
+      PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onMoveShouldSetPanResponder: () => true,
+        onPanResponderGrant: evt => {
+          setDragging(true);
+          const next = valueFromEvent(evt, trackWidth, maximumValue);
+          setDragValue(next);
+          onValueChange?.(next);
+        },
+        onPanResponderMove: evt => {
+          const next = valueFromEvent(evt, trackWidth, maximumValue);
+          setDragValue(next);
+          onValueChange?.(next);
+        },
+        onPanResponderRelease: evt => {
+          const next = valueFromEvent(evt, trackWidth, maximumValue);
+          setDragging(false);
+          onSlidingComplete(next);
+        },
+        onPanResponderTerminate: () => {
+          setDragging(false);
+          onSlidingComplete(dragValue);
+        },
+      }),
+    [dragValue, maximumValue, onSlidingComplete, onValueChange, trackWidth],
   );
 
   return (
-    <Pressable onPress={seekAt} onLayout={onLayout} style={styles.track}>
+    <View
+      onLayout={onLayout}
+      style={styles.track}
+      {...panResponder.panHandlers}>
       <View style={[styles.fillBase, styles.inactive]} />
       <View
         style={[styles.fillBase, styles.active, {width: `${progress * 100}%`}]}
@@ -54,7 +94,7 @@ function JsSeekSlider({
           {left: Math.max(0, trackWidth * progress - THUMB_SIZE / 2)},
         ]}
       />
-    </Pressable>
+    </View>
   );
 }
 
@@ -71,6 +111,7 @@ export function MusicSeekSlider(props: MusicSeekSliderProps) {
         maximumValue: number;
         value: number;
         onSlidingComplete: (value: number) => void;
+        onValueChange?: (value: number) => void;
         minimumTrackTintColor?: string;
         maximumTrackTintColor?: string;
         thumbTintColor?: string;
@@ -88,6 +129,7 @@ export function MusicSeekSlider(props: MusicSeekSliderProps) {
         maximumValue={props.maximumValue}
         value={Math.min(props.value, props.maximumValue)}
         onSlidingComplete={props.onSlidingComplete}
+        onValueChange={props.onValueChange}
         minimumTrackTintColor={musicTheme.sliderActiveTrack}
         maximumTrackTintColor={musicTheme.sliderInactiveTrack}
         thumbTintColor={musicTheme.sliderThumb}

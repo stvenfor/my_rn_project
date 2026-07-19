@@ -128,10 +128,10 @@ npm run test
 
 | 项 | P0 | 结果 | 证据 |
 |----|----|------|------|
-| MusicList → NowPlaying | P0 | ☐ | |
-| 播放/暂停经 `@core/media-player` | P0 | ☐ | |
-| Mini player 由 shell/slot，不依赖 home | P0 | ☐ | |
-| 默认封面等资源 registry | P0 | ☐ | |
+| MusicList → NowPlaying | P0 | ✅ | 见 `acceptance-records/2026-07-19-music-controls-parity.md` |
+| 播放/暂停经 `@core/media-player` | P0 | ✅ | musicSlice → createAudioPlayerService |
+| Mini player 由 shell/slot，不依赖 home | P0 | ✅ | MusicMiniPlayerBar + home inset（平板无 tab 加高） |
+| 默认封面等资源 registry | P0 | ✅ | musicAssets lady/musicRecord |
 
 ### B7. `@features/video`
 

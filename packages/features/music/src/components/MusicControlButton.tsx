@@ -1,19 +1,18 @@
 import React from 'react';
-import {Pressable, StyleSheet, Text} from 'react-native';
+import {Pressable, StyleSheet} from 'react-native';
 import {musicTheme} from '../theme/musicTheme';
+import {
+  MusicPauseIcon,
+  MusicPlayIcon,
+  MusicSkipNextIcon,
+  MusicSkipPreviousIcon,
+} from './MusicIcons';
 
 export type MusicControlIcon =
   | 'skip_previous'
   | 'play_arrow'
   | 'pause'
   | 'skip_next';
-
-const ICON_GLYPH: Record<MusicControlIcon, string> = {
-  skip_previous: '⏮',
-  play_arrow: '▶',
-  pause: '⏸',
-  skip_next: '⏭',
-};
 
 export interface MusicControlButtonProps {
   icon: MusicControlIcon;
@@ -26,12 +25,27 @@ export function MusicControlButton({
   onPress,
   iconSize = musicTheme.controlIconSize,
 }: MusicControlButtonProps) {
+  let glyph: React.ReactNode;
+  switch (icon) {
+    case 'skip_previous':
+      glyph = <MusicSkipPreviousIcon size={iconSize} />;
+      break;
+    case 'play_arrow':
+      glyph = <MusicPlayIcon size={iconSize} />;
+      break;
+    case 'pause':
+      glyph = <MusicPauseIcon size={iconSize} />;
+      break;
+    case 'skip_next':
+      glyph = <MusicSkipNextIcon size={iconSize} />;
+      break;
+    default:
+      glyph = null;
+  }
+
   return (
     <Pressable onPress={onPress} style={styles.hit} accessibilityRole="button">
-      <Text
-        style={[styles.icon, {fontSize: iconSize, lineHeight: iconSize + 4}]}>
-        {ICON_GLYPH[icon]}
-      </Text>
+      {glyph}
     </Pressable>
   );
 }
@@ -40,9 +54,7 @@ const styles = StyleSheet.create({
   hit: {
     paddingHorizontal: 12,
     paddingVertical: 8,
-  },
-  icon: {
-    color: musicTheme.titleColor,
-    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

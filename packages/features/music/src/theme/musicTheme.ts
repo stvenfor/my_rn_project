@@ -2,7 +2,7 @@ export const musicTheme = {
   listBackground: '#000000',
   nowPlayingBackground: '#000000',
   titleColor: '#FFFFFF',
-  subtitleColor: 'rgba(255,255,255,0.6)',
+  subtitleColor: 'rgba(255,255,255,0.65)',
   artistMutedColor: 'rgba(255,255,255,0.7)',
   timeMutedColor: 'rgba(255,255,255,0.5)',
   fabBackground: '#4DD0C8',

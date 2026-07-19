@@ -8,6 +8,11 @@ import {RoutePath, type RootStackParamList} from '@core/navigation';
 import {formatMusicDuration} from './utils/formatMusicDuration';
 import {MusicCoverAvatar} from './components/MusicCoverAvatar';
 import {
+  MusicCloseIcon,
+  MusicPauseIcon,
+  MusicPlayIcon,
+} from './components/MusicIcons';
+import {
   selectCurrentSong,
   selectHasActiveSession,
   selectMusicDuration,
@@ -60,7 +65,11 @@ export function MusicMiniPlayerBar() {
           style={styles.artWrap}>
           <MusicCoverAvatar song={song} radius={musicTheme.miniCoverRadius} />
           <View style={styles.playOverlay}>
-            <Text style={styles.playIcon}>{playing ? '⏸' : '▶'}</Text>
+            {playing ? (
+              <MusicPauseIcon size={22} />
+            ) : (
+              <MusicPlayIcon size={22} />
+            )}
           </View>
         </Pressable>
         <Pressable
@@ -86,7 +95,7 @@ export function MusicMiniPlayerBar() {
           style={styles.close}
           accessibilityRole="button"
           accessibilityLabel={t('musicClosePlayer')}>
-          <Text style={styles.closeText}>×</Text>
+          <MusicCloseIcon />
         </Pressable>
       </View>
     </View>
@@ -124,10 +133,6 @@ const styles = StyleSheet.create({
     backgroundColor: musicTheme.playOverlay,
     borderRadius: musicTheme.miniCoverRadius,
   },
-  playIcon: {
-    color: musicTheme.titleColor,
-    fontSize: 22,
-  },
   meta: {flex: 1},
   title: {
     color: musicTheme.titleColor,
@@ -135,7 +140,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   artist: {
-    color: musicTheme.subtitleColor,
+    color: 'rgba(255,255,255,0.65)',
     fontSize: 12,
     marginTop: 2,
   },
@@ -145,9 +150,4 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   close: {padding: 8},
-  closeText: {
-    color: 'rgba(255,255,255,0.7)',
-    fontSize: 22,
-    lineHeight: 22,
-  },
 });

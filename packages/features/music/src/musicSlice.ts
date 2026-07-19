@@ -244,7 +244,7 @@ export type MusicDispatch = ThunkDispatch<
   unknown,
   UnknownAction
 >;
-export const {toggleMute} = musicSlice.actions;
+export const {toggleMute, setPosition} = musicSlice.actions;
 
 export const selectMusicSongs = (state: {music: MusicState}) =>
   state.music.songs;

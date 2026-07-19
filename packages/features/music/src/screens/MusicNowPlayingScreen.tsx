@@ -7,6 +7,7 @@ import {AppNavBar, AppPageScaffold} from '@ui/design-system';
 import {MusicAlbumArt} from '../components/MusicAlbumArt';
 import {MusicBlurBackground} from '../components/MusicBlurBackground';
 import {MusicControlButton} from '../components/MusicControlButton';
+import {MusicHeadsetIcon} from '../components/MusicIcons';
 import {MusicSeekSlider} from '../components/MusicSeekSlider';
 import {
   formatMusicDuration,
@@ -19,11 +20,15 @@ import {
   selectMusicIsMuted,
   selectMusicPlayerState,
   selectMusicPosition,
+  setPosition,
   toggleMute,
   togglePlayPause,
   type MusicDispatch,
 } from '../musicSlice';
 import {musicTheme} from '../theme/musicTheme';
+
+/** Flutter hardcodes English title. */
+const NOW_PLAYING_TITLE = 'Now Playing';
 
 export function MusicNowPlayingScreen({
   navigation,
@@ -43,16 +48,24 @@ export function MusicNowPlayingScreen({
 
   const navBar = (
     <AppNavBar
-      title={t('musicNowPlaying')}
+      title={NOW_PLAYING_TITLE}
       style="dark"
+      backgroundColor={musicTheme.nowPlayingBackground}
       showBackButton
       onBack={() => navigation.goBack()}
     />
   );
 
-  const handleSeek = useCallback(
+  const handleSeekComplete = useCallback(
     (value: number) => {
       dispatch(seekTo(value));
+    },
+    [dispatch],
+  );
+
+  const handleSeekChange = useCallback(
+    (value: number) => {
+      dispatch(setPosition(value));
     },
     [dispatch],
   );
@@ -77,9 +90,9 @@ export function MusicNowPlayingScreen({
         <MusicBlurBackground song={song} />
         <View style={styles.content}>
           <AppNavBar
-            title={t('musicNowPlaying')}
+            title={NOW_PLAYING_TITLE}
             style="dark"
-            backgroundColor="transparent"
+            backgroundColor={musicTheme.nowPlayingBackground}
             showBackButton
             onBack={() => navigation.goBack()}
           />
@@ -111,7 +124,8 @@ export function MusicNowPlayingScreen({
                   <MusicSeekSlider
                     value={Math.min(positionMs, durationMs)}
                     maximumValue={durationMs}
-                    onSlidingComplete={handleSeek}
+                    onValueChange={handleSeekChange}
+                    onSlidingComplete={handleSeekComplete}
                   />
                   <Text style={styles.timeText}>
                     {formatMusicDuration(positionMs)} /{' '}
@@ -124,7 +138,7 @@ export function MusicNowPlayingScreen({
                 style={styles.muteButton}
                 accessibilityRole="button"
                 accessibilityLabel={t('musicToggleMute')}>
-                <Text style={styles.muteIcon}>{isMuted ? '🎧✕' : '🎧'}</Text>
+                <MusicHeadsetIcon off={isMuted} />
               </Pressable>
             </View>
           </View>
@@ -184,10 +198,6 @@ const styles = StyleSheet.create({
   muteButton: {
     marginTop: 20,
     padding: 8,
-  },
-  muteIcon: {
-    fontSize: 28,
-    color: musicTheme.artistMutedColor,
   },
   emptyWrap: {
     flex: 1,

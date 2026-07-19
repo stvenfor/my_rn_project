@@ -42,7 +42,7 @@
 | settings | settings | 我的/设置/发票 demo |
 | chat | chat | 会话列表/详情 |
 | community | community | iOS 主题已对齐；视频播放器 Degraded（无 scrubber） |
-| music | music | 列表/播放 |
+| music | music | 控件/顶栏/seek 已对齐；Harmony blur/Hero 能力门控 |
 | video | video | 列表/短视频 |
 | bfui | bfui | Best-Flutter-UI 模板画廊 |
 | live | live | UI 迁完；真 realtime 可 Deferred |

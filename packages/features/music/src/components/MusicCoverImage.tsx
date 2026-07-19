@@ -31,6 +31,7 @@ export function MusicCoverImage({
   sharedElementId,
   style,
 }: MusicCoverImageProps) {
+  const [networkFailed, setNetworkFailed] = React.useState(false);
   const elementId = sharedElementId ?? musicCoverSharedElementId(song.id);
   const imageStyle = [
     {width: size, height: size},
@@ -38,13 +39,18 @@ export function MusicCoverImage({
     style,
   ] as StyleProp<ImageStyle>;
 
+  React.useEffect(() => {
+    setNetworkFailed(false);
+  }, [song.id, song.albumArtUrl]);
+
   let image: React.ReactNode;
-  if (hasNetworkCover(song)) {
+  if (hasNetworkCover(song) && !networkFailed) {
     image = (
       <Image
         source={{uri: song.albumArtUrl}}
         style={imageStyle}
         defaultSource={musicAssets.musicRecord}
+        onError={() => setNetworkFailed(true)}
       />
     );
   } else if (hasAssetCover(song)) {

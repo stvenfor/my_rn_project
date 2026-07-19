@@ -5,6 +5,7 @@ import {useTranslation} from 'react-i18next';
 import {RoutePath, type RootStackScreenProps} from '@core/navigation';
 import {AppNavBar, AppPageScaffold} from '@ui/design-system';
 import {MusicMiniPlayerBar} from '../MusicMiniPlayerBar';
+import {MusicShuffleIcon} from '../components/MusicIcons';
 import {MusicSongListTile} from '../components/MusicSongListTile';
 import {
   initMusicPlayer,
@@ -17,6 +18,9 @@ import {
 import {musicTheme} from '../theme/musicTheme';
 import {miniPlayerBottomInset} from '../utils/miniPlayerInset';
 import type {LocalSong} from '../models/localSong';
+
+/** Flutter hardcodes English for this nav action. */
+const NOW_PLAYING_LABEL = 'Now Playing';
 
 export function MusicListScreen({
   navigation,
@@ -40,9 +44,8 @@ export function MusicListScreen({
   );
 
   /**
-   * Flutter: playAt → push NowPlaying。
-   * 关键点勿 await play：TrackPlayer 在部分端（如鸿蒙）setup/play 会挂起，
-   * 导致看起来「点击无反应」。先导航 + 乐观切歌，播放异步进行。
+   * Flutter: playAt → push NowPlaying.
+   * Do not await play: TrackPlayer may hang on Harmony; navigate + optimistic play.
    */
   const handleSongPress = useCallback(
     (index: number, trackId: string) => {
@@ -92,9 +95,7 @@ export function MusicListScreen({
                   onPress={() => openNowPlaying(currentSong.id)}
                   style={styles.nowPlayingAction}
                   hitSlop={8}>
-                  <Text style={styles.nowPlayingText}>
-                    {t('musicNowPlaying')}
-                  </Text>
+                  <Text style={styles.nowPlayingText}>{NOW_PLAYING_LABEL}</Text>
                 </Pressable>
               ) : null
             }
@@ -105,7 +106,6 @@ export function MusicListScreen({
             keyExtractor={item => item.id}
             renderItem={renderItem}
             contentContainerStyle={styles.listContent}
-            ItemSeparatorComponent={ListSeparator}
           />
         </View>
         {hasSession ? (
@@ -118,15 +118,11 @@ export function MusicListScreen({
           style={[styles.fab, {bottom: 16 + miniBarInset}]}
           accessibilityRole="button"
           accessibilityLabel={t('musicShuffle')}>
-          <Text style={styles.fabIcon}>⇄</Text>
+          <MusicShuffleIcon />
         </Pressable>
       </View>
     </AppPageScaffold>
   );
-}
-
-function ListSeparator() {
-  return <View style={styles.separator} />;
 }
 
 const styles = StyleSheet.create({
@@ -141,13 +137,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listContent: {
-    paddingBottom: 88,
     flexGrow: 1,
-  },
-  separator: {
-    height: StyleSheet.hairlineWidth,
-    backgroundColor: 'rgba(255,255,255,0.08)',
-    marginLeft: 88,
   },
   miniBar: {
     position: 'absolute',
@@ -179,11 +169,5 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     shadowOffset: {width: 0, height: 4},
     zIndex: 20,
-  },
-  fabIcon: {
-    color: musicTheme.fabIconColor,
-    fontSize: 26,
-    fontWeight: '600',
-    transform: [{rotate: '90deg'}],
   },
 });

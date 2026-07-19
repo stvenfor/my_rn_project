@@ -81,8 +81,8 @@ export const PAGE_PARITY_ENTRIES: PageParityEntry[] = [
   {id: 'video-dubbing-detail', module: 'video', flutterPath: 'packages/features/video/lib/dubbing/view/dubbing_video_detail_page.dart', rnRoute: 'DubbingVideoDetail', rnComponent: 'DubbingVideoDetailScreen', status: 'Migrated', note: 'List-entry detail; full player chrome may be Degraded vs Flutter'},
   {id: 'video-dubbing-work-detail', module: 'video', flutterPath: 'packages/features/video/lib/dubbing/view/dubbing_work_detail_page.dart', rnRoute: 'DubbingWorkDetail', rnComponent: 'DubbingWorkDetailScreen', status: 'Migrated', note: 'List-entry detail; full player chrome may be Degraded vs Flutter'},
 
-  {id: 'music-list', module: 'music', flutterPath: 'packages/features/music/lib/view/music_list_page.dart', rnRoute: 'MusicList', rnComponent: 'MusicListScreen', status: 'Migrated'},
-  {id: 'music-now-playing', module: 'music', flutterPath: 'packages/features/music/lib/view/now_playing_page.dart', rnRoute: 'MusicNowPlaying', rnComponent: 'MusicNowPlayingScreen', status: 'Migrated'},
+  {id: 'music-list', module: 'music', flutterPath: 'packages/features/music/lib/view/music_list_page.dart', rnRoute: 'MusicList', rnComponent: 'MusicListScreen', status: 'Migrated', note: 'Material-like shuffle FAB; Now Playing nav EN; no list dividers; mini-player inset'},
+  {id: 'music-now-playing', module: 'music', flutterPath: 'packages/features/music/lib/view/now_playing_page.dart', rnRoute: 'MusicNowPlaying', rnComponent: 'MusicNowPlayingScreen', status: 'Migrated', note: 'Opaque black nav; vector transport/headset; live seek scrub; blur/Hero Degraded on Harmony'},
 
   {id: 'bfui-intro', module: 'bfui', flutterPath: 'packages/features/bfui/lib/introduction_animation/introduction_animation_screen.dart', rnRoute: 'BfuiTemplate', rnComponent: 'IntroAnimationTemplate', status: 'Migrated'},
   {id: 'bfui-hotel-home', module: 'bfui', flutterPath: 'packages/features/bfui/lib/hotel_booking/hotel_home_screen.dart', rnRoute: 'BfuiTemplate', rnComponent: 'HotelBookingTemplate', status: 'Migrated'},
