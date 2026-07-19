@@ -253,3 +253,36 @@ Program（队首 Epic）
 | 日期 | 变更 |
 |------|------|
 | 2026-07-19 | 初版：A 脚本 + B hooks + npm `agent:pre`/`agent:post` |
+| 2026-07-19 | 增加 `.harness/` 编排层（agents/rules/skills/changes/wiki） |
+
+## 12. `.harness/` 编排层（与图示目录对齐）
+
+仓库根目录 [`.harness/`](../../.harness/README.md) 是 **Agent 编排合同**，不是第二套验收标准。
+
+| 目录 | 作用 | 本仓要点 |
+|------|------|----------|
+| `agents/` | 角色 | `executor` 可写代码；`reviewer` 只读 |
+| `rules/` | 硬规则 | dual-truth、slice-contract、boundary、status-enums、no-silent-accept |
+| `skills/` | 可组合能力 | request-analysis → coding → unit-test-* → expert-reviewer；deploy-verify 可选 |
+| `changes/` | 本轮指针 | `current.md`；**Slice 文件仍是合同源** |
+| `wiki/` | 索引 | 链到 `docs/flutter-to-rn-lego-migration/*`，不搬长文 |
+
+```text
+人批 Slice
+  → .harness/agents/executor + skills/*
+  → scripts/agent-harness (agent:pre/post)     ← 硬门禁
+  → .harness/changes/current.md
+  → .harness/agents/reviewer + skills/expert-reviewer
+  → 人 commit/push
+```
+
+**禁止双份维护：** skill 正文只写何时用/输入输出；实现细节继续指 `.cursor/skills/*` 与 `docs/`。
+
+## 跨项目复用
+
+个人 Skill（语言无关 OS，可带到其它语言仓库）：
+
+`~/.cursor/skills/migration-os-harness/`（`SKILL.md` + `prompts.md` + `templates.md` + `parallel-agents.md`）
+
+在 Cursor 中 `@migration-os-harness` 或描述「迁移 OS / harness / 多开 Agent」时使用；栈映射仍用本仓 `.cursor/skills/flutter-to-rn-lego-module`。  
+新语言项目：复制 `.harness/` 骨架 + 换 `coding-skill` 指向即可。

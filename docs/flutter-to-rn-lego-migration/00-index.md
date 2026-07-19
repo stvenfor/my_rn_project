@@ -12,6 +12,7 @@
 | **`08-acceptance-checklist.md`** | **验收权威清单（后续按此验收）** | Codex, QA, Cursor |
 | **`09-agent-programming-playbook.md`** | **Agent 编程方法（拆解/上下文/测试闭环/边界/复盘/交互验证）** | Cursor, Codex, 人 |
 | **`10-agent-prompt-harness.md`** | **提示词合同 + Harness（agent:pre/post）与 Cursor Hooks** | Cursor, Codex, 人 |
+| **[`.harness/`](../../.harness/README.md)** | **Agent 编排层（agents/rules/skills/changes/wiki）** | Cursor, Codex, 人 |
 | **`plans/README.md`** | **Planning 操作系统（Program / Epic / Slice）** | 人, Cursor, Codex |
 | `01-flutter-analysis-report.md` | Flutter 项目结构、包职责、路由、状态和依赖分析 | Cursor, Codex |
 | `02-lego-monorepo-architecture.md` | RN LEGO 目标架构、目录结构、依赖图和边界规则 | Cursor, Codex |
@@ -29,6 +30,8 @@
 ## Skill
 
 - 项目入口：`.cursor/skills/flutter-to-rn-lego-module/SKILL.md`
+- 编排层：`.harness/`（角色 / 规则 / 可组合 skills）
+- 跨仓 OS：`~/.cursor/skills/migration-os-harness/`
 - 完整 skill：`/Users/mac/Desktop/skills/flutter-to-rn-lego-module/`（结构对称于 `flutter-to-harmony-module`）
 
 ## Cursor 执行顺序
