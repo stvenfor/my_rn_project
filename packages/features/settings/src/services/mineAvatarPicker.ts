@@ -1,4 +1,5 @@
-import {Platform, Alert} from 'react-native';
+import {Alert} from 'react-native';
+import {isHarmonyOS} from '@core/webview/platform';
 import {AppToast} from '@ui/design-system';
 import {getMediaPickerService} from '@core/media-picker';
 import {getPermissionsService} from '@core/permissions';
@@ -6,7 +7,7 @@ import type {MediaPickSource} from '../components/MediaSourceBottomSheet';
 
 function showFeedback(message: string, options?: {alert?: boolean}) {
   AppToast.show(message);
-  if (Platform.OS === 'harmony' || options?.alert) {
+  if (isHarmonyOS() || options?.alert) {
     Alert.alert('提示', message);
   }
 }

@@ -118,8 +118,7 @@ export function HomeScreen({navigation}: MainTabScreenProps<'HomeTab'>) {
     if (item.label === '二手车') {
       openUsedCarList({
         isLoggedIn: Boolean(user),
-        navigate: (name, params) =>
-          navigation.navigate(name as never, params as never),
+        navigate: name => navigation.navigate(name),
       });
       return;
     }

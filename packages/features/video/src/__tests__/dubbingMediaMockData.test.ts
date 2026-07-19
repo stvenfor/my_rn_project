@@ -14,6 +14,7 @@ describe('dubbingMediaMockData', () => {
     expect(first.subtitleEn).toBeTruthy();
     expect(first.subtitleZh).toBeTruthy();
     expect(first.albumParts.length).toBeGreaterThanOrEqual(3);
+    expect(first.albumParts[0]?.videoUrl).toContain('http');
     expect(first.latestWorkAvatars.length).toBe(6);
     expect(first.leaderboard?.userName).toBeTruthy();
   });

@@ -1,4 +1,4 @@
-import React, {useMemo, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   Pressable,
@@ -9,6 +9,11 @@ import {
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import WebView from 'react-native-webview';
+import {
+  escapeHtmlAttr,
+  sanitizeHttpUrl,
+  WEBVIEW_VIDEO_TEARDOWN_JS,
+} from '@commons/toolkit';
 
 interface Props {
   videoUrl: string;
@@ -46,8 +51,14 @@ export function PlayableVideoHeader({
   const [positionMs] = useState(0);
   const [durationMs] = useState(0);
 
-  const html = useMemo(
-    () => `<!DOCTYPE html>
+  const safeUrl = useMemo(() => sanitizeHttpUrl(videoUrl), [videoUrl]);
+
+  const html = useMemo(() => {
+    if (!safeUrl) {
+      return '';
+    }
+    const src = escapeHtmlAttr(safeUrl);
+    return `<!DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -57,11 +68,26 @@ export function PlayableVideoHeader({
     </style>
   </head>
   <body>
-    <video id="player" src="${videoUrl}" playsinline webkit-playsinline autoplay></video>
+    <video id="player" src="${src}" playsinline webkit-playsinline autoplay></video>
   </body>
-</html>`,
-    [videoUrl],
-  );
+</html>`;
+  }, [safeUrl]);
+
+  useEffect(() => {
+    if (!safeUrl) {
+      setFailed(true);
+    }
+  }, [safeUrl]);
+
+  useEffect(() => {
+    if (!initialized || !safeUrl) {
+      return;
+    }
+    const webview = webRef.current;
+    return () => {
+      webview?.injectJavaScript(WEBVIEW_VIDEO_TEARDOWN_JS);
+    };
+  }, [initialized, safeUrl]);
 
   const togglePlay = () => {
     const script = playing
@@ -77,7 +103,7 @@ export function PlayableVideoHeader({
 
   return (
     <View style={[styles.root, {height}]}>
-      {failed ? (
+      {failed || !safeUrl ? (
         <Text style={styles.error}>视频加载失败</Text>
       ) : (
         <>
@@ -141,11 +167,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#000000',
     overflow: 'hidden',
   },
-  webview: {...StyleSheet.absoluteFillObject, backgroundColor: '#000'},
-  tapLayer: {...StyleSheet.absoluteFillObject},
-  loader: {
+  webview: {
     ...StyleSheet.absoluteFillObject,
+    backgroundColor: '#000000',
+  },
+  loader: {
+    position: 'absolute',
+    alignSelf: 'center',
+    top: '45%',
     zIndex: 2,
+  },
+  tapLayer: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 3,
   },
   error: {
     color: '#FFFFFF',
@@ -154,51 +188,46 @@ const styles = StyleSheet.create({
   },
   backBtn: {
     position: 'absolute',
-    left: 4,
-    width: 44,
-    height: 44,
+    left: 8,
+    zIndex: 10,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(0,0,0,0.35)',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 3,
   },
-  backGlyph: {
-    color: '#FFFFFF',
-    fontSize: 32,
-    lineHeight: 34,
-    fontWeight: '300',
-  },
+  backGlyph: {color: '#FFFFFF', fontSize: 28, marginTop: -2},
   watermark: {
     position: 'absolute',
     right: 12,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-    backgroundColor: 'rgba(0,0,0,0.35)',
-    zIndex: 3,
+    zIndex: 10,
+    alignItems: 'flex-end',
   },
-  wmTitle: {color: '#FFFFFF', fontSize: 10, textAlign: 'right'},
-  wmSub: {color: 'rgba(255,255,255,0.7)', fontSize: 8, textAlign: 'right'},
+  wmTitle: {color: 'rgba(255,255,255,0.85)', fontSize: 11, fontWeight: '600'},
+  wmSub: {color: 'rgba(255,255,255,0.55)', fontSize: 9, marginTop: 2},
   subtitleBlock: {
     position: 'absolute',
-    left: 16,
-    right: 16,
-    bottom: 48,
-    zIndex: 3,
+    left: 12,
+    right: 12,
+    bottom: 44,
+    zIndex: 10,
+    alignItems: 'center',
   },
   subtitleEn: {
     color: '#FFFFFF',
-    fontSize: 13,
+    fontSize: 15,
+    fontWeight: '600',
     textAlign: 'center',
-    textShadowColor: 'rgba(0,0,0,0.54)',
-    textShadowRadius: 4,
+    textShadowColor: 'rgba(0,0,0,0.8)',
+    textShadowOffset: {width: 0, height: 1},
+    textShadowRadius: 3,
   },
   subtitleZh: {
-    marginTop: 2,
-    color: '#FFFFFF',
-    fontSize: 12,
+    color: 'rgba(255,255,255,0.9)',
+    fontSize: 13,
+    marginTop: 4,
     textAlign: 'center',
-    textShadowColor: 'rgba(0,0,0,0.54)',
-    textShadowRadius: 4,
   },
   controlsBar: {
     position: 'absolute',
@@ -206,21 +235,21 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     height: 36,
+    backgroundColor: 'rgba(0,0,0,0.45)',
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,
-    backgroundColor: 'rgba(0,0,0,0.35)',
-    zIndex: 3,
+    zIndex: 10,
   },
-  ctrlIcon: {color: '#FFFFFF', fontSize: 12, width: 20},
+  ctrlIcon: {color: '#FFFFFF', fontSize: 12, width: 22},
   track: {
     flex: 1,
     height: 3,
-    borderRadius: 1.5,
-    backgroundColor: 'rgba(255,255,255,0.35)',
+    backgroundColor: 'rgba(255,255,255,0.25)',
+    borderRadius: 2,
     marginHorizontal: 8,
     overflow: 'hidden',
   },
-  fill: {height: 3, backgroundColor: '#52C41A'},
-  time: {color: '#FFFFFF', fontSize: 10},
+  fill: {height: '100%', backgroundColor: '#4CD964'},
+  time: {color: '#FFFFFF', fontSize: 10, minWidth: 72, textAlign: 'right'},
 });

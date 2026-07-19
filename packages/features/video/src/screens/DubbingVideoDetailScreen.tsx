@@ -48,6 +48,8 @@ export function DubbingVideoDetailScreen({
   const item = findDubbingVideo(route.params?.id);
   const [descExpanded, setDescExpanded] = useState(false);
   const [selectedPartIndex, setSelectedPartIndex] = useState(0);
+  const activeVideoUrl =
+    item?.albumParts[selectedPartIndex]?.videoUrl ?? item?.videoUrl ?? '';
 
   if (!item) {
     return (
@@ -70,7 +72,8 @@ export function DubbingVideoDetailScreen({
     <AppPageScaffold layout="edgeToEdge" backgroundColor="#FFFFFF">
       <View style={styles.root}>
         <PlayableVideoHeader
-          videoUrl={item.videoUrl}
+          key={activeVideoUrl}
+          videoUrl={activeVideoUrl}
           subtitleEn={item.subtitleEn}
           subtitleZh={item.subtitleZh}
           onBack={() => navigation.goBack()}

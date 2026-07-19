@@ -1,4 +1,4 @@
-import React, {useMemo, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   Pressable,
@@ -7,6 +7,11 @@ import {
   View,
 } from 'react-native';
 import WebView from 'react-native-webview';
+import {
+  escapeHtmlAttr,
+  sanitizeHttpUrl,
+  WEBVIEW_VIDEO_TEARDOWN_JS,
+} from '@commons/toolkit';
 import {RoutePath, type RootStackScreenProps} from '@core/navigation';
 import {AppNavBar, AppPageScaffold, colors} from '@ui/design-system';
 
@@ -14,14 +19,19 @@ export function CommunityVideoPlayScreen({
   route,
   navigation,
 }: RootStackScreenProps<typeof RoutePath.communityVideoPlay>) {
-  const url = route.params?.url ?? '';
+  const rawUrl = route.params?.url ?? '';
+  const safeUrl = useMemo(() => sanitizeHttpUrl(rawUrl), [rawUrl]);
   const [initialized, setInitialized] = useState(false);
-  const [failed, setFailed] = useState(false);
+  const [failed, setFailed] = useState(!safeUrl);
   const [playing, setPlaying] = useState(true);
   const webRef = useRef<WebView>(null);
 
-  const html = useMemo(
-    () => `<!DOCTYPE html>
+  const html = useMemo(() => {
+    if (!safeUrl) {
+      return '';
+    }
+    const src = escapeHtmlAttr(safeUrl);
+    return `<!DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -31,11 +41,20 @@ export function CommunityVideoPlayScreen({
     </style>
   </head>
   <body>
-    <video id="player" src="${url}" playsinline webkit-playsinline autoplay></video>
+    <video id="player" src="${src}" playsinline webkit-playsinline autoplay></video>
   </body>
-</html>`,
-    [url],
-  );
+</html>`;
+  }, [safeUrl]);
+
+  useEffect(() => {
+    if (!initialized || !safeUrl) {
+      return;
+    }
+    const webview = webRef.current;
+    return () => {
+      webview?.injectJavaScript(WEBVIEW_VIDEO_TEARDOWN_JS);
+    };
+  }, [initialized, safeUrl]);
 
   const togglePlay = () => {
     const script = playing
@@ -56,7 +75,7 @@ export function CommunityVideoPlayScreen({
           onBack={() => navigation.goBack()}
         />
       }>
-      {failed ? (
+      {failed || !safeUrl ? (
         <Text style={styles.errorText}>视频加载失败</Text>
       ) : (
         <>

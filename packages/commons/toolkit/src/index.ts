@@ -20,3 +20,8 @@ export type {
   ShortVideoIndexCallback,
   ShortVideoPlaybackCallback,
 } from './player/shortVideoModels';
+export {
+  escapeHtmlAttr,
+  sanitizeHttpUrl,
+  WEBVIEW_VIDEO_TEARDOWN_JS,
+} from './webviewVideoSafety';

@@ -1,4 +1,5 @@
 import {Platform} from 'react-native';
+import {isHarmonyOS} from '@core/webview/platform';
 import {
   NativeImagePickerService,
   isNativeImagePickerAvailable,
@@ -12,7 +13,7 @@ export function bootstrapMediaPickerService(): void {
   if (
     Platform.OS === 'ios' ||
     Platform.OS === 'android' ||
-    Platform.OS === 'harmony' ||
+    isHarmonyOS() ||
     isNativeImagePickerAvailable()
   ) {
     configureMediaPickerService(new NativeImagePickerService());

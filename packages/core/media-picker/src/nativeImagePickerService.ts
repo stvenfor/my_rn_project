@@ -1,24 +1,12 @@
 import {Platform} from 'react-native';
-import {launchImagePicker} from './imagePickerLauncher';
+import {isHarmonyOS} from '@core/webview/platform';
+import {launchImagePicker, type PhotoQuality} from './imagePickerLauncher';
 import {resolveNativeImagePickerModule} from './harmonyImagePickerBridge';
 import type {
   MediaPickerService,
   PickImageOptions,
   PickedMedia,
 } from './types';
-
-type PhotoQuality =
-  | 0
-  | 0.1
-  | 0.2
-  | 0.3
-  | 0.4
-  | 0.5
-  | 0.6
-  | 0.7
-  | 0.8
-  | 0.9
-  | 1;
 
 function toPhotoQuality(imageQuality: number): PhotoQuality {
   const normalized = Math.min(100, Math.max(0, imageQuality)) / 100;
@@ -57,7 +45,7 @@ export class NativeImagePickerService implements MediaPickerService {
   async pickImage(options: PickImageOptions = {}): Promise<PickedMedia | null> {
     if (!isNativeImagePickerAvailable()) {
       throw new Error(
-        Platform.OS === 'harmony'
+        isHarmonyOS()
           ? '相册模块未就绪，请重新编译 Harmony 应用'
           : '相册模块未就绪，请重新编译应用',
       );
@@ -107,5 +95,5 @@ export function isNativeImagePickerAvailable(): boolean {
   if (resolveNativeImagePickerModule()) {
     return true;
   }
-  return Platform.OS === 'harmony';
+  return isHarmonyOS();
 }

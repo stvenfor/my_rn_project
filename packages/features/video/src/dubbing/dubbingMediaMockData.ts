@@ -4,6 +4,7 @@ export interface DubbingAlbumPart {
   id: string;
   title: string;
   badge?: string;
+  videoUrl: string;
 }
 
 export interface DubbingLeaderboardEntry {
@@ -112,15 +113,20 @@ export function getDubbingVideos(): DubbingVideoItem[] {
         id: `part_${i}_1`,
         title: i === 0 ? '制服牛油果小怪兽' : `Part 1 ${source.title}`,
         badge: '试听',
+        videoUrl: source.url,
       },
       {
         id: `part_${i}_2`,
         title: i === 0 ? '想到制服牛油果...' : 'Part 2 续集片段...',
         badge: i === 0 || i === 1 ? '付费' : undefined,
+        videoUrl:
+          VIDEO_MOCK_SOURCES[(i + 1) % VIDEO_MOCK_SOURCES.length]!.url,
       },
       {
         id: `part_${i}_3`,
         title: '顺利制服...',
+        videoUrl:
+          VIDEO_MOCK_SOURCES[(i + 2) % VIDEO_MOCK_SOURCES.length]!.url,
       },
     ],
     latestWorkAvatars: Array.from(

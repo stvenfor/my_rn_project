@@ -1,6 +1,10 @@
 import {LoginRedirect, RoutePath} from '@core/navigation';
 
-type NavigateFn = (name: string, params?: object) => void;
+type UsedCarListRoute =
+  | typeof RoutePath.homeUsedCarList
+  | typeof RoutePath.login;
+
+type NavigateFn = (name: UsedCarListRoute) => void;
 
 /**
  * Aligns with Flutter `UsedCarNavigation.open`:

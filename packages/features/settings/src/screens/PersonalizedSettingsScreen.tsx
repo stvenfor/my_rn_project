@@ -11,8 +11,7 @@ import {
   View,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import type {RootStackParamList} from '@core/navigation';
+import {RoutePath, type RootStackScreenProps} from '@core/navigation';
 import {AppNavBar, AppPageScaffold, AppToast, colors} from '@ui/design-system';
 import {personalizedSettingsIcons} from '../assets/settingsAssets';
 import {
@@ -25,7 +24,7 @@ import {
   type PersonalizedSettingsState,
 } from '../services/personalizedSettingsRepository';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'PersonalizedSettings'>;
+type Props = RootStackScreenProps<typeof RoutePath.personalizedSettings>;
 
 const PAGE_BG = '#F5F5F5';
 const TITLE_COLOR = '#333333';

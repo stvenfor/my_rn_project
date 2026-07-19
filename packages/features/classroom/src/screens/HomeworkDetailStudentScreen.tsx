@@ -15,14 +15,24 @@ export function HomeworkDetailStudentScreen({
 }: RootStackScreenProps<typeof RoutePath.classroomHomeworkDetailStudent>) {
   const student = classroomMockData.findStudent(route.params?.studentId);
   const tasks = classroomMockData.studentHomeworkTasks;
+  const progressRatio = Math.min(
+    Math.max((student.completionRate ?? 0) / 100, 0),
+    1,
+  );
+  const progressPercent = Math.round(progressRatio * 100);
+
   return (
-    <AppPageScaffold layout="standard" backgroundColor={c.background}>
-      <AppNavBar
-        title="作业详情"
-        showBackButton
-        onBack={() => navigation.goBack()}
-        backgroundColor={c.background}
-      />
+    <AppPageScaffold
+      layout="standard"
+      backgroundColor={c.background}
+      navBar={
+        <AppNavBar
+          title="作业详情"
+          showBackButton
+          onBack={() => navigation.goBack()}
+          backgroundColor={c.background}
+        />
+      }>
       <ScrollView contentContainerStyle={styles.body}>
         <View style={styles.card}>
           <View style={styles.profileRow}>
@@ -43,9 +53,11 @@ export function HomeworkDetailStudentScreen({
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>完成进度</Text>
           <View style={styles.progressTrack}>
-            <View style={styles.progressFill} />
+            <View
+              style={[styles.progressFill, {width: `${progressPercent}%`}]}
+            />
           </View>
-          <Text style={styles.progressText}>{Math.round(progress * 100)}%</Text>
+          <Text style={styles.progressText}>{progressPercent}%</Text>
           <Text style={styles.social}>已有 32 人完成此作业</Text>
         </View>
 
@@ -119,7 +131,7 @@ const styles = StyleSheet.create({
     backgroundColor: c.divider,
     overflow: 'hidden',
   },
-  progressFill: {height: '100%', width: '74%', backgroundColor: c.primaryGreen},
+  progressFill: {height: '100%', backgroundColor: c.primaryGreen},
   progressText: {
     marginTop: 8,
     fontSize: 14,

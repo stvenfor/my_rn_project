@@ -82,6 +82,16 @@ export function ChatDetailScreen({
   }, [recordSeconds]);
 
   useEffect(() => {
+    return () => {
+      if (voiceTimer.current) {
+        clearTimeout(voiceTimer.current);
+        voiceTimer.current = null;
+      }
+      dispatch(setPlayingVoiceId(null));
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
     if (!conversationId) {
       return;
     }

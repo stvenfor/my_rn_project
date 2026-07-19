@@ -8,11 +8,24 @@ export type ImagePickerResult = {
   assets?: Array<{uri?: string; fileName?: string; type?: string}>;
 };
 
+export type PhotoQuality =
+  | 0
+  | 0.1
+  | 0.2
+  | 0.3
+  | 0.4
+  | 0.5
+  | 0.6
+  | 0.7
+  | 0.8
+  | 0.9
+  | 1;
+
 export type PickerLaunchOptions = {
   mediaType: 'photo' | 'video' | 'mixed';
   selectionLimit?: number;
   maxWidth?: number;
-  quality?: number;
+  quality?: PhotoQuality;
 };
 
 function getStandardImagePicker() {
