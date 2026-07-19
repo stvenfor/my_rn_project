@@ -56,7 +56,10 @@ export function PostSkeletonList() {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: communityTheme.cardBackground,
+    backgroundColor: communityTheme.surface,
+    borderRadius: communityTheme.radiusMd,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: communityTheme.separator,
     padding: 16,
   },
   headerRow: {
@@ -71,7 +74,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   bone: {
-    backgroundColor: 'rgba(0,0,0,0.06)',
+    backgroundColor: communityTheme.fillSecondary,
     borderRadius: 4,
     marginBottom: 8,
   },

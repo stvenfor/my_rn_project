@@ -1,12 +1,14 @@
 import React, {useState} from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 import {useDispatch} from 'react-redux';
+import type {ThunkDispatch, UnknownAction} from '@reduxjs/toolkit';
 import {AppToast} from '@ui/design-system';
 import type {PostModel} from '../models/postModel';
 import {hasImages, hasVideo} from '../models/postModel';
-import {deletePost} from '../store/communitySlice';
+import {deletePost, type CommunityState} from '../store/communitySlice';
 import {CommentPreview} from './CommentPreview';
 import {CommentBottomSheet} from './CommentBottomSheet';
+import {CommunityEllipsisIcon} from './CommunityIcons';
 import {ExpandTextContent} from './ExpandTextContent';
 import {ImageGrid} from './ImageGrid';
 import {LikeBar} from './LikeBar';
@@ -15,12 +17,18 @@ import {UserInfoRow} from './UserInfoRow';
 import {VideoCard} from './VideoCard';
 import {communityTheme} from '../theme/communityTheme';
 
+type CommunityDispatch = ThunkDispatch<
+  {community: CommunityState},
+  unknown,
+  UnknownAction
+>;
+
 interface PostCardProps {
   post: PostModel;
 }
 
 export function PostCard({post}: PostCardProps) {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<CommunityDispatch>();
   const [moreVisible, setMoreVisible] = useState(false);
   const [commentVisible, setCommentVisible] = useState(false);
 
@@ -45,7 +53,7 @@ export function PostCard({post}: PostCardProps) {
           style={styles.moreButton}
           hitSlop={8}
           onPress={() => setMoreVisible(true)}>
-          <Text style={styles.moreIcon}>⋯</Text>
+          <CommunityEllipsisIcon size={20} />
         </Pressable>
       </View>
 
@@ -87,7 +95,10 @@ export function PostCard({post}: PostCardProps) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: communityTheme.cardBackground,
+    backgroundColor: communityTheme.surface,
+    borderRadius: communityTheme.radiusMd,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: communityTheme.separator,
     marginBottom: communityTheme.cardMarginBottom,
     paddingTop: communityTheme.cardPaddingTop,
     paddingBottom: communityTheme.cardPaddingBottom,
@@ -102,15 +113,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   moreButton: {
-    minWidth: 32,
-    minHeight: 32,
+    minWidth: 44,
+    minHeight: 44,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  moreIcon: {
-    fontSize: 22,
-    lineHeight: 22,
-    color: communityTheme.actionColor,
   },
   sectionGap: {
     height: communityTheme.sectionGap,

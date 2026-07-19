@@ -41,7 +41,7 @@
 | home | home | 首页/报告/签到/全部服务 |
 | settings | settings | 我的/设置/发票 demo |
 | chat | chat | 会话列表/详情 |
-| community | community | 动态/发布/预览 |
+| community | community | iOS 主题已对齐；视频播放器 Degraded（无 scrubber） |
 | music | music | 列表/播放 |
 | video | video | 列表/短视频 |
 | bfui | bfui | Best-Flutter-UI 模板画廊 |

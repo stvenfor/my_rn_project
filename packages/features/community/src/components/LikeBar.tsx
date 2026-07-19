@@ -1,9 +1,22 @@
 import React, {useEffect, useRef} from 'react';
 import {Animated, Pressable, StyleSheet, Text, View} from 'react-native';
 import {useDispatch} from 'react-redux';
+import type {ThunkDispatch, UnknownAction} from '@reduxjs/toolkit';
+import {AppToast} from '@ui/design-system';
 import type {PostModel} from '../models/postModel';
-import {toggleLike} from '../store/communitySlice';
+import {toggleLike, type CommunityState} from '../store/communitySlice';
+import {
+  CommunityCommentIcon,
+  CommunityHeartIcon,
+  CommunityShareIcon,
+} from './CommunityIcons';
 import {communityTheme, communityTypography} from '../theme/communityTheme';
+
+type CommunityDispatch = ThunkDispatch<
+  {community: CommunityState},
+  unknown,
+  UnknownAction
+>;
 
 interface LikeBarProps {
   post: PostModel;
@@ -30,7 +43,7 @@ function ActionButton({
 }
 
 export function LikeBar({post, onCommentPress}: LikeBarProps) {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<CommunityDispatch>();
   const scale = useRef(new Animated.Value(1)).current;
   const color = communityTheme.actionColor;
   const activeColor = post.isLiked ? communityTheme.likeActiveColor : color;
@@ -42,13 +55,13 @@ export function LikeBar({post, onCommentPress}: LikeBarProps) {
   const runHeartAnimation = () => {
     Animated.sequence([
       Animated.timing(scale, {
-        toValue: 1.35,
-        duration: 128,
+        toValue: 1.28,
+        duration: 140,
         useNativeDriver: true,
       }),
       Animated.timing(scale, {
         toValue: 1,
-        duration: 192,
+        duration: 140,
         useNativeDriver: true,
       }),
     ]).start();
@@ -63,20 +76,43 @@ export function LikeBar({post, onCommentPress}: LikeBarProps) {
     <View style={styles.container}>
       <ActionButton
         icon={
-          <Animated.Text
-            style={[styles.icon, {color: activeColor, transform: [{scale}]}]}>
-            {post.isLiked ? '♥' : '♡'}
-          </Animated.Text>
+          <Animated.View style={[styles.iconWrap, {transform: [{scale}]}]}>
+            <CommunityHeartIcon
+              color={activeColor}
+              filled={post.isLiked}
+              size={communityTheme.actionIconSize}
+            />
+          </Animated.View>
         }
         label={post.likeCount > 0 ? String(post.likeCount) : '赞'}
         color={activeColor}
         onPress={handleLike}
       />
       <ActionButton
-        icon={<Text style={[styles.icon, {color}]}>💬</Text>}
+        icon={
+          <View style={styles.iconWrap}>
+            <CommunityCommentIcon
+              color={color}
+              size={communityTheme.actionIconSize}
+            />
+          </View>
+        }
         label={post.commentCount > 0 ? String(post.commentCount) : '评论'}
         color={color}
         onPress={onCommentPress}
+      />
+      <ActionButton
+        icon={
+          <View style={styles.iconWrap}>
+            <CommunityShareIcon
+              color={color}
+              size={communityTheme.actionIconSize}
+            />
+          </View>
+        }
+        label="分享"
+        color={color}
+        onPress={() => AppToast.show('分享功能开发中')}
       />
     </View>
   );
@@ -95,8 +131,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     marginRight: communityTheme.actionGap,
   },
-  icon: {
-    fontSize: communityTheme.actionIconSize,
+  iconWrap: {
     marginRight: 4,
   },
 });

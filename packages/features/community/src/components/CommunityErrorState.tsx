@@ -1,7 +1,7 @@
 import React from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import {colors} from '@ui/design-system';
-import {communityTheme} from '../theme/communityTheme';
+import {CommunityWarningIcon} from './CommunityIcons';
+import {communityTheme, communityTypography} from '../theme/communityTheme';
 
 interface CommunityErrorStateProps {
   message: string;
@@ -14,11 +14,11 @@ export function CommunityErrorState({
 }: CommunityErrorStateProps) {
   return (
     <View style={styles.container}>
-      <Text style={styles.icon}>⚠</Text>
+      <CommunityWarningIcon />
       <Text style={styles.title}>加载失败</Text>
       <Text style={styles.message}>{message}</Text>
       <Pressable style={styles.button} onPress={onRetry}>
-        <Text style={styles.buttonText}>点击重试</Text>
+        <Text style={styles.buttonText}>重试</Text>
       </Pressable>
     </View>
   );
@@ -31,31 +31,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 24,
   },
-  icon: {
-    fontSize: 48,
-    color: communityTheme.errorIconColor,
-    marginBottom: 12,
-  },
   title: {
-    fontSize: 16,
-    color: colors.text,
+    ...communityTypography.headline,
+    marginTop: 12,
     marginBottom: 8,
   },
   message: {
-    fontSize: 12,
-    color: communityTheme.emptyTextColor,
+    ...communityTypography.caption,
     textAlign: 'center',
     marginBottom: 16,
+    paddingHorizontal: 32,
   },
   button: {
-    backgroundColor: colors.primary,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8,
+    backgroundColor: communityTheme.accent,
+    paddingHorizontal: 22,
+    paddingVertical: 12,
+    borderRadius: 10,
   },
   buttonText: {
     color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '500',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });

@@ -119,10 +119,10 @@ npm run test
 
 | 项 | P0 | 结果 | 证据 |
 |----|----|------|------|
-| Feed + 下拉刷新 + 加载更多 | P0 | ☐ | |
-| Publish | P0 | ☐ | |
-| ImagePreview / VideoPlay | P0 | ☐ | |
-| 点赞/评论等主交互（与 Flutter 对齐或 Degraded+note） | P0 | ☐ | |
+| Feed + 下拉刷新 + 加载更多 | P0 | ✅ | iOS 大标题/搜索/筛选 + grouped card；见 `acceptance-records/2026-07-19-community-ios-theme-parity.md` |
+| Publish | P0 | ✅ | 占位文案与 Flutter 一致 |
+| ImagePreview / VideoPlay | P0 | ✅ | 图集滑动+计数；视频播放器 Degraded（无 scrubber） |
+| 点赞/评论等主交互（与 Flutter 对齐或 Degraded+note） | P0 | ✅ | 赞/评论/分享 + 评论 sheet；mock repo |
 
 ### B6. `@features/music`
 

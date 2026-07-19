@@ -1,12 +1,23 @@
-import React from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useRef} from 'react';
+import {Animated, Pressable, StyleSheet, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import type {ThunkDispatch, UnknownAction} from '@reduxjs/toolkit';
 import type {PostModel} from '../models/postModel';
-import {selectIsExpanded, toggleExpanded} from '../store/communitySlice';
+import {
+  selectIsExpanded,
+  toggleExpanded,
+  type CommunityState,
+} from '../store/communitySlice';
 import {RichTextContent} from './RichTextContent';
 import {communityTypography} from '../theme/communityTheme';
 
 const MAX_COLLAPSED_LINES = 3;
+
+type CommunityDispatch = ThunkDispatch<
+  {community: CommunityState},
+  unknown,
+  UnknownAction
+>;
 
 interface ExpandTextContentProps {
   post: PostModel;
@@ -20,21 +31,30 @@ function needsToggle(text: string): boolean {
 }
 
 export function ExpandTextContent({post}: ExpandTextContentProps) {
-  const dispatch = useDispatch();
-  const expanded = useSelector(state =>
-    selectIsExpanded(
-      state as {community: {expandedPostIds: string[]}},
-      post.id,
-    ),
+  const dispatch = useDispatch<CommunityDispatch>();
+  const expanded = useSelector((state: {community: CommunityState}) =>
+    selectIsExpanded(state, post.id),
   );
+  const opacity = useRef(new Animated.Value(1)).current;
   const showToggle = needsToggle(post.content);
+
+  useEffect(() => {
+    opacity.setValue(0.35);
+    Animated.timing(opacity, {
+      toValue: 1,
+      duration: 220,
+      useNativeDriver: true,
+    }).start();
+  }, [expanded, opacity]);
 
   return (
     <View>
-      <RichTextContent
-        content={post.content}
-        numberOfLines={expanded ? undefined : MAX_COLLAPSED_LINES}
-      />
+      <Animated.View style={[styles.fade, {opacity}]}>
+        <RichTextContent
+          content={post.content}
+          numberOfLines={expanded ? undefined : MAX_COLLAPSED_LINES}
+        />
+      </Animated.View>
       {showToggle ? (
         <Pressable
           onPress={() => dispatch(toggleExpanded(post.id))}
@@ -49,6 +69,7 @@ export function ExpandTextContent({post}: ExpandTextContentProps) {
 }
 
 const styles = StyleSheet.create({
+  fade: {},
   toggle: {
     marginTop: 4,
   },

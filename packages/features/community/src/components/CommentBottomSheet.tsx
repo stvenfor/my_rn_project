@@ -10,14 +10,26 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
-import {AppToast, colors} from '@ui/design-system';
+import type {ThunkDispatch, UnknownAction} from '@reduxjs/toolkit';
+import {AppToast} from '@ui/design-system';
 import type {CommentModel} from '../models/commentModel';
 import type {PostModel} from '../models/postModel';
-import {fetchComments, sendComment} from '../store/communitySlice';
+import {
+  fetchComments,
+  sendComment,
+  type CommunityState,
+} from '../store/communitySlice';
 import {communityTheme, communityTypography} from '../theme/communityTheme';
+
+type CommunityDispatch = ThunkDispatch<
+  {community: CommunityState},
+  unknown,
+  UnknownAction
+>;
 
 interface CommentBottomSheetProps {
   visible: boolean;
@@ -30,11 +42,14 @@ export function CommentBottomSheet({
   post,
   onClose,
 }: CommentBottomSheetProps) {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<CommunityDispatch>();
+  const {height} = useWindowDimensions();
   const [comments, setComments] = useState<CommentModel[]>([]);
   const [loading, setLoading] = useState(true);
   const [input, setInput] = useState('');
   const [replyTo, setReplyTo] = useState<string | null>(null);
+  const sheetMaxHeight = height * 0.92;
+  const listMaxHeight = height * 0.5;
 
   useEffect(() => {
     if (!visible || !post) {
@@ -89,15 +104,17 @@ export function CommentBottomSheet({
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <Pressable style={styles.backdrop} onPress={onClose}>
-          <Pressable style={styles.sheet} onPress={e => e.stopPropagation()}>
+          <Pressable
+            style={[styles.sheet, {maxHeight: sheetMaxHeight}]}
+            onPress={e => e.stopPropagation()}>
             <View style={styles.handle} />
             <Text style={[communityTypography.sheetTitle, styles.title]}>
               评论 {post.commentCount}
             </Text>
-            <View style={styles.listArea}>
+            <View style={[styles.listArea, {maxHeight: listMaxHeight}]}>
               {loading ? (
                 <ActivityIndicator
-                  color={colors.primary}
+                  color={communityTheme.accent}
                   style={styles.center}
                 />
               ) : comments.length === 0 ? (
@@ -132,10 +149,10 @@ export function CommentBottomSheet({
                 value={input}
                 onChangeText={setInput}
                 placeholder={replyTo ? `回复 ${replyTo}` : '写评论…'}
-                placeholderTextColor={colors.textMuted}
+                placeholderTextColor={communityTheme.labelTertiary}
               />
               <Pressable style={styles.sendButton} onPress={handleSend}>
-                <Text style={styles.sendIcon}>➤</Text>
+                <Text style={styles.sendIcon}>↑</Text>
               </Pressable>
             </View>
           </Pressable>
@@ -150,14 +167,13 @@ const styles = StyleSheet.create({
   backdrop: {
     flex: 1,
     justifyContent: 'flex-end',
-    backgroundColor: colors.overlayDark,
+    backgroundColor: 'rgba(0,0,0,0.35)',
   },
   sheet: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: communityTheme.surface,
     borderTopLeftRadius: communityTheme.sheetTopRadius,
     borderTopRightRadius: communityTheme.sheetTopRadius,
     minHeight: '40%',
-    maxHeight: '92%',
     paddingBottom: 12,
   },
   handle: {
@@ -176,7 +192,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
     minHeight: 180,
-    maxHeight: 360,
     paddingHorizontal: 8,
   },
   center: {
@@ -184,7 +199,7 @@ const styles = StyleSheet.create({
   },
   empty: {
     textAlign: 'center',
-    color: colors.textMuted,
+    color: communityTheme.labelSecondary,
     marginTop: 40,
   },
   commentRow: {
@@ -197,7 +212,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: communityTheme.dividerColor,
+    backgroundColor: communityTheme.fillSecondary,
   },
   commentBody: {
     flex: 1,
@@ -205,15 +220,15 @@ const styles = StyleSheet.create({
   },
   nickname: {
     fontWeight: '600',
-    color: colors.text,
+    color: communityTheme.labelPrimary,
     marginBottom: 2,
   },
   commentText: {
-    color: colors.textSecondary,
+    color: communityTheme.labelPrimary,
     lineHeight: 20,
   },
   replyButton: {
-    color: colors.primary,
+    color: communityTheme.accent,
     fontSize: 14,
   },
   inputRow: {
@@ -224,25 +239,27 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: communityTheme.dividerColor,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: communityTheme.separator,
     borderRadius: communityTheme.inputBorderRadius,
+    backgroundColor: communityTheme.fillSecondary,
     paddingHorizontal: 14,
     paddingVertical: 8,
     fontSize: 14,
-    color: colors.text,
+    color: communityTheme.labelPrimary,
   },
   sendButton: {
     marginLeft: 8,
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: colors.primary,
+    backgroundColor: communityTheme.accent,
     alignItems: 'center',
     justifyContent: 'center',
   },
   sendIcon: {
     color: '#FFFFFF',
     fontSize: 18,
+    fontWeight: '700',
   },
 });
