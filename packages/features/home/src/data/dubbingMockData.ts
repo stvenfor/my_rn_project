@@ -9,6 +9,8 @@ export interface DubbingMediaItem {
   subtitle?: string;
   playCount?: string;
   duration?: string;
+  userName?: string;
+  badge?: string;
 }
 
 export interface DubbingHotRankItem {
@@ -35,7 +37,9 @@ export interface DubbingHomeFeed {
     action?: 'scrollToHotRank' | 'openAllServices';
   }[];
   recentLearning: DubbingMediaItem[];
+  expertShowcase: DubbingMediaItem[];
   hotRankBoards: DubbingHotRankBoard[];
+  editorPicks: DubbingMediaItem[];
   albums: {
     id: string;
     title: string;
@@ -110,6 +114,36 @@ export function buildDubbingHomeFeed(): DubbingHomeFeed {
         duration: '04:01',
       },
     ],
+    expertShowcase: [
+      {
+        id: 'expert_1',
+        title: '英语启蒙课堂',
+        cover: dubbingHomeAssets.cover_09,
+        userName: '蓝儿老师Joyue',
+        subtitle: '跟读练习 · 初级',
+      },
+      {
+        id: 'expert_2',
+        title: '趣味配音挑战',
+        cover: dubbingHomeAssets.cover_10,
+        userName: '配音达人',
+        subtitle: '动画配音 · 中级',
+      },
+      {
+        id: 'expert_3',
+        title: '诵读之星',
+        cover: dubbingHomeAssets.cover_11,
+        userName: '朗读爱好者',
+        subtitle: '经典诵读',
+      },
+      {
+        id: 'expert_4',
+        title: '动画配音秀',
+        cover: dubbingHomeAssets.cover_12,
+        userName: '动画迷',
+        subtitle: '角色模仿',
+      },
+    ],
     hotRankBoards: [
       {id: 'hot_heat', title: '热度榜', theme: 'pink', items: hotItems('heat')},
       {
@@ -117,6 +151,28 @@ export function buildDubbingHomeFeed(): DubbingHomeFeed {
         title: '热搜榜',
         theme: 'blue',
         items: hotItems('search'),
+      },
+    ],
+    editorPicks: [
+      {
+        id: 'editor_1',
+        title: '经典动画配音',
+        cover: dubbingHomeAssets.cover_01,
+        subtitle: '跟佩奇一起快乐学英语',
+        badge: 'AD',
+      },
+      {
+        id: 'editor_2',
+        title: '热门影视跟读',
+        cover: dubbingHomeAssets.cover_02,
+        subtitle: '原声台词练习',
+        badge: 'HOT',
+      },
+      {
+        id: 'editor_3',
+        title: '少儿启蒙精选',
+        cover: dubbingHomeAssets.cover_03,
+        subtitle: '分级阅读配套',
       },
     ],
     albums: [

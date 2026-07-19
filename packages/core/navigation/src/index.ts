@@ -210,3 +210,6 @@ export interface FeatureRegistration {
   }>;
   reducer?: {key: string; reducer: Reducer};
 }
+
+export {LoginRedirect} from './loginRedirect';
+export type {PendingLoginRoute} from './loginRedirect';

@@ -30,6 +30,7 @@ import {HomeTopTabBar} from '../components/HomeTopTabBar';
 import {HomeVideoTabContent} from '../components/HomeVideoTabContent';
 import {useHomeMiniPlayerInset} from '../hooks/useHomeMiniPlayerInset';
 import type {HomeFeatureItem} from '../models/homeDashboardModel';
+import {openUsedCarList} from '../navigation/usedCarNavigation';
 import {
   loadHomeDashboard,
   METRIC_TABS,
@@ -115,7 +116,11 @@ export function HomeScreen({navigation}: MainTabScreenProps<'HomeTab'>) {
       return;
     }
     if (item.label === '二手车') {
-      navigation.navigate(RoutePath.homeUsedCarList);
+      openUsedCarList({
+        isLoggedIn: Boolean(user),
+        navigate: (name, params) =>
+          navigation.navigate(name as never, params as never),
+      });
       return;
     }
     if (item.label === '销售顾问') {

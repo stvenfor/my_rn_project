@@ -1,7 +1,7 @@
 import type {NavigationProp} from '@react-navigation/native';
 import {RoutePath, type RootStackParamList} from '@core/navigation';
 import {AppLoading} from '@ui/design-system';
-import {LoginRedirect} from './loginRedirect';
+import {LoginRedirect} from '@core/navigation';
 
 type AuthNavigation = NavigationProp<RootStackParamList>;
 

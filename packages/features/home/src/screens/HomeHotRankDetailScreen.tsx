@@ -94,21 +94,26 @@ export function HomeHotRankDetailScreen({
           ) : null}
           <ScrollView>
             {items.map((item, index) => (
-              <View
+              <Pressable
                 key={item.id}
                 style={[
                   styles.item,
                   index < items.length - 1 && styles.itemDivider,
-                ]}>
+                ]}
+                onPress={() =>
+                  navigation.navigate(RoutePath.dubbingVideoDetail, {
+                    id: item.id,
+                  })
+                }>
                 <Text style={styles.rank}>{item.rank}</Text>
                 <Image source={item.cover} style={styles.cover} />
-                <View style={{flex: 1}}>
+                <View style={styles.flex1}>
                   <Text style={styles.itemTitle}>{item.title}</Text>
                   <Text style={styles.itemSub}>
                     {item.subtitle} · {item.heat}
                   </Text>
                 </View>
-              </View>
+              </Pressable>
             ))}
           </ScrollView>
         </View>
@@ -119,6 +124,7 @@ export function HomeHotRankDetailScreen({
 
 const styles = StyleSheet.create({
   root: {flex: 1, backgroundColor: t.background},
+  flex1: {flex: 1},
   header: {
     height: 56,
     flexDirection: 'row',

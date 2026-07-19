@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {
   Image,
   Pressable,
@@ -7,12 +7,16 @@ import {
   StyleSheet,
   Text,
   View,
+  type LayoutChangeEvent,
 } from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import type {RootStackScreenProps} from '@core/navigation';
 import {RoutePath} from '@core/navigation';
 import {dubbingHomeAssets} from '../assets/homeAssets';
-import {buildDubbingHomeFeed} from '../data/dubbingMockData';
+import {
+  buildDubbingHomeFeed,
+  type DubbingMediaItem,
+} from '../data/dubbingMockData';
 import {
   HOT_RANK_THEMES,
   dubbingHomeTheme as t,
@@ -22,15 +26,45 @@ export function HomeDubbingFeedScreen({
   navigation,
 }: RootStackScreenProps<typeof RoutePath.homeDubbingFeed>) {
   const insets = useSafeAreaInsets();
+  const scrollRef = useRef<ScrollView>(null);
+  const hotRankY = useRef(0);
   const [refreshing, setRefreshing] = useState(false);
   const [category, setCategory] = useState('配音');
   const feed = useMemo(() => buildDubbingHomeFeed(), []);
   const categories = ['SVIP', '配音', '听力', '小剧场', '专题'];
 
+  const openMedia = useCallback(
+    (id: string) => {
+      navigation.navigate(RoutePath.dubbingVideoDetail, {id});
+    },
+    [navigation],
+  );
+
   const onRefresh = async () => {
     setRefreshing(true);
     await new Promise(r => setTimeout(r, 400));
     setRefreshing(false);
+  };
+
+  const onHotRankLayout = (e: LayoutChangeEvent) => {
+    hotRankY.current = e.nativeEvent.layout.y;
+  };
+
+  const scrollToHotRank = () => {
+    scrollRef.current?.scrollTo({
+      y: Math.max(hotRankY.current - 8, 0),
+      animated: true,
+    });
+  };
+
+  const onFeaturePress = (action?: 'scrollToHotRank' | 'openAllServices') => {
+    if (action === 'openAllServices') {
+      navigation.navigate(RoutePath.homeAllServices);
+      return;
+    }
+    if (action === 'scrollToHotRank') {
+      scrollToHotRank();
+    }
   };
 
   return (
@@ -52,6 +86,7 @@ export function HomeDubbingFeedScreen({
       </View>
 
       <ScrollView
+        ref={scrollRef}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -92,11 +127,7 @@ export function HomeDubbingFeedScreen({
             <Pressable
               key={feature.label}
               style={styles.feature}
-              onPress={() => {
-                if (feature.action === 'openAllServices') {
-                  navigation.navigate(RoutePath.homeAllServices);
-                }
-              }}>
+              onPress={() => onFeaturePress(feature.action)}>
               <Image source={feature.icon} style={styles.featureIcon} />
               <Text style={styles.featureLabel}>{feature.label}</Text>
             </Pressable>
@@ -106,77 +137,139 @@ export function HomeDubbingFeedScreen({
         <Text style={styles.sectionTitle}>最近学习</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {feed.recentLearning.map(item => (
-            <View key={item.id} style={styles.mediaCard}>
-              <Image source={item.cover} style={styles.mediaCover} />
-              <Text style={styles.mediaTitle} numberOfLines={1}>
-                {item.title}
-              </Text>
-            </View>
+            <MediaCard key={item.id} item={item} onPress={openMedia} />
           ))}
         </ScrollView>
 
-        <Text style={styles.sectionTitle}>热榜</Text>
-        {feed.hotRankBoards.map(board => {
-          const theme = HOT_RANK_THEMES[board.theme];
-          return (
-            <View
-              key={board.id}
-              style={[styles.board, {backgroundColor: theme.top}]}>
-              <View style={styles.boardHeader}>
-                <Text style={styles.boardTitle}>{board.title}</Text>
-                <Pressable
-                  onPress={() =>
-                    navigation.navigate(RoutePath.homeHotRankDetail, {
-                      boardId: board.id,
-                      title: board.title,
-                      theme: board.theme,
-                    })
-                  }>
-                  <Text style={styles.viewAll}>查看全部 ›</Text>
-                </Pressable>
-              </View>
-              {board.items.slice(0, 3).map(item => (
-                <View key={item.id} style={styles.boardItem}>
-                  <Text style={styles.rank}>{item.rank}</Text>
-                  <Image source={item.cover} style={styles.boardCover} />
-                  <View style={{flex: 1}}>
-                    <Text style={styles.boardItemTitle}>{item.title}</Text>
-                    <Text style={styles.boardItemSub}>{item.heat} 热度</Text>
-                  </View>
+        <Text style={styles.sectionTitle}>达人秀场</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {feed.expertShowcase.map(item => (
+            <MediaCard key={item.id} item={item} onPress={openMedia} showUser />
+          ))}
+        </ScrollView>
+
+        <View onLayout={onHotRankLayout}>
+          <Text style={styles.sectionTitle}>热榜</Text>
+          {feed.hotRankBoards.map(board => {
+            const theme = HOT_RANK_THEMES[board.theme];
+            return (
+              <View
+                key={board.id}
+                style={[styles.board, {backgroundColor: theme.top}]}>
+                <View style={styles.boardHeader}>
+                  <Text style={styles.boardTitle}>{board.title}</Text>
+                  <Pressable
+                    onPress={() =>
+                      navigation.navigate(RoutePath.homeHotRankDetail, {
+                        boardId: board.id,
+                        title: board.title,
+                        theme: board.theme,
+                      })
+                    }>
+                    <Text style={styles.viewAll}>查看全部 ›</Text>
+                  </Pressable>
                 </View>
-              ))}
-            </View>
-          );
-        })}
+                {board.items.slice(0, 3).map(item => (
+                  <Pressable
+                    key={item.id}
+                    style={styles.boardItem}
+                    onPress={() => openMedia(item.id)}>
+                    <Text style={styles.rank}>{item.rank}</Text>
+                    <Image source={item.cover} style={styles.boardCover} />
+                    <View style={styles.flex1}>
+                      <Text style={styles.boardItemTitle}>{item.title}</Text>
+                      <Text style={styles.boardItemSub}>{item.heat} 热度</Text>
+                    </View>
+                  </Pressable>
+                ))}
+              </View>
+            );
+          })}
+        </View>
+
+        <Text style={styles.sectionTitle}>编辑精选</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {feed.editorPicks.map(item => (
+            <MediaCard
+              key={item.id}
+              item={item}
+              onPress={openMedia}
+              showSubtitle
+            />
+          ))}
+        </ScrollView>
 
         <Text style={styles.sectionTitle}>精选专辑</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {feed.albums.map(album => (
-            <View key={album.id} style={styles.album}>
+            <Pressable
+              key={album.id}
+              style={styles.album}
+              onPress={() => openMedia(album.id)}>
               <Image source={album.cover} style={styles.albumCover} />
               <Text style={styles.mediaTitle}>{album.title}</Text>
               <Text style={styles.boardItemSub}>{album.episodeCount}</Text>
-            </View>
+            </Pressable>
           ))}
         </ScrollView>
 
         <Text style={styles.sectionTitle}>猜你喜欢</Text>
         {feed.guessYouLike.map(item => (
-          <View key={item.id} style={styles.guessRow}>
+          <Pressable
+            key={item.id}
+            style={styles.guessRow}
+            onPress={() => openMedia(item.id)}>
             <Image source={item.cover} style={styles.guessCover} />
-            <View style={{flex: 1}}>
+            <View style={styles.flex1}>
               <Text style={styles.mediaTitle}>{item.title}</Text>
               <Text style={styles.boardItemSub}>{item.playCount} 播放</Text>
             </View>
-          </View>
+          </Pressable>
         ))}
       </ScrollView>
     </View>
   );
 }
 
+function MediaCard({
+  item,
+  onPress,
+  showUser,
+  showSubtitle,
+}: {
+  item: DubbingMediaItem;
+  onPress: (id: string) => void;
+  showUser?: boolean;
+  showSubtitle?: boolean;
+}) {
+  return (
+    <Pressable style={styles.mediaCard} onPress={() => onPress(item.id)}>
+      <Image source={item.cover} style={styles.mediaCover} />
+      {item.badge ? (
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>{item.badge}</Text>
+        </View>
+      ) : null}
+      <Text style={styles.mediaTitle} numberOfLines={1}>
+        {item.title}
+      </Text>
+      {showUser && item.userName ? (
+        <Text style={styles.boardItemSub} numberOfLines={1}>
+          {item.userName}
+        </Text>
+      ) : null}
+      {showSubtitle && item.subtitle ? (
+        <Text style={styles.boardItemSub} numberOfLines={1}>
+          {item.subtitle}
+        </Text>
+      ) : null}
+    </Pressable>
+  );
+}
+
 const styles = StyleSheet.create({
   root: {flex: 1, backgroundColor: t.background},
+  flex1: {flex: 1},
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -227,6 +320,16 @@ const styles = StyleSheet.create({
   mediaCard: {width: 110, marginLeft: 16},
   mediaCover: {width: 110, height: 78, borderRadius: 8},
   mediaTitle: {marginTop: 6, fontSize: 13, color: t.titleBlack},
+  badge: {
+    position: 'absolute',
+    top: 4,
+    left: 4,
+    backgroundColor: 'rgba(0,0,0,0.55)',
+    borderRadius: 4,
+    paddingHorizontal: 4,
+    paddingVertical: 1,
+  },
+  badgeText: {fontSize: 10, color: '#fff', fontWeight: '700'},
   board: {
     marginHorizontal: 16,
     marginBottom: 12,
