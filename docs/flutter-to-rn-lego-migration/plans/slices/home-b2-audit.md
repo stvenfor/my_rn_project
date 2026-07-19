@@ -9,9 +9,14 @@
 - RN_FEATURE: @features/home
 - Flutter 入口: packages/features/home/lib/home/view/home_page.dart 等
 - RN 目标: packages/features/home/src/
-- 本轮 ONLY: 完成 Epic home-b2 差距表与 backlog 排序；不改业务 UI
+- 本轮 ONLY: 完成 Epic home-b2 差距表与 backlog 排序；不改业务 UI（只读审计）
 - 不做: music/video/bfui/auth/settings 行为变更；Harmony；支付 SDK；勾选 08
 - 验收: epics/home-b2.md 差距表非空；每条映射 08 §B2；backlog 序可执行
+- 文件白名单:
+  - docs/flutter-to-rn-lego-migration/plans/
+- 验证命令:
+  - 无
+- 证据: docs/flutter-to-rn-lego-migration/plans/epics/home-b2.md
 ```
 
 ## 审计结论摘要

@@ -29,6 +29,8 @@ description: >-
 | [07-1to1-migration-guide.md](../../docs/flutter-to-rn-lego-migration/07-1to1-migration-guide.md) | **迁移执行指南** |
 | [08-acceptance-checklist.md](../../docs/flutter-to-rn-lego-migration/08-acceptance-checklist.md) | **验收权威清单**（按此验收） |
 | [09-agent-programming-playbook.md](../../docs/flutter-to-rn-lego-migration/09-agent-programming-playbook.md) | **Agent 编程方法**（拆解/上下文/测试闭环/边界/复盘/交互验证） |
+| [10-agent-prompt-harness.md](../../docs/flutter-to-rn-lego-migration/10-agent-prompt-harness.md) | **提示词合同 + Harness**（`agent:pre` / `agent:post` + Hooks） |
+| [plans/README.md](../../docs/flutter-to-rn-lego-migration/plans/README.md) | Program / Epic / Slice 队列 |
 | [page-resource-parity-manifest.ts](../../docs/flutter-to-rn-lego-migration/page-resource-parity-manifest.ts) | 页面 + 资源 parity 真相源 |
 | [moduleManifest.ts](../../src/config/moduleManifest.ts) | feature 聚合与路由收集 |
 | [04-cursor-execution-spec.md](../../docs/flutter-to-rn-lego-migration/04-cursor-execution-spec.md) | 交付格式与边界规则 |
@@ -48,23 +50,28 @@ description: >-
 
 ## 快速工作流
 
-1. 锁定 `FLUTTER_MODULE` + `RN_FEATURE`（见主 skill Required inputs）。
-2. 读主 skill `mappings/README.md`，顺序：**09 → 08 → 10 → 01–07**。
-3. 产出 UX contract（主 skill `references/ux-1to1-gates.md`）。
-4. 实现 `packages/features/<name>/`（screens / store / assets registry）。
-5. 接线：`register*Feature` → `moduleManifest` → `RoutePath`。
-6. 更新 `page-resource-parity-manifest.ts`（每页/每资源必须有 status）。
-7. 验证 + 按 `08-acceptance-checklist.md` 自检。
+1. 从 Program 取队首 → 落盘 `plans/slices/<id>.md`（见 `_template.md`）。
+2. `npm run agent:pre -- --slice docs/flutter-to-rn-lego-migration/plans/slices/<id>.md`
+3. 锁定 `FLUTTER_MODULE` + `RN_FEATURE`；读主 skill `mappings/README.md`，顺序：**09 → 08 → 10 → 01–07**。
+4. 产出 UX contract（主 skill `references/ux-1to1-gates.md`）。
+5. 在 Brief **白名单**内实现 `packages/features/<name>/`。
+6. 接线：`register*Feature` → `moduleManifest` → `RoutePath`。
+7. 更新 `page-resource-parity-manifest.ts`（每页/每资源必须有 status）。
+8. `npm run agent:post`（跑 Brief 验证命令 + 边界/白名单/DoD 信号）。
+9. 按 `08-acceptance-checklist.md` 自检；**未过 post 不得勾 08 / 自称 Accept**。
 
 ```bash
-npm run lint && npm run typecheck && npm run test
+npm run agent:pre -- --slice docs/flutter-to-rn-lego-migration/plans/slices/<id>.md
+# ... implement ...
+npm run agent:post
 ```
 
-Parity 测试：
+聚焦测试也可直接：
 
-- `src/__tests__/pageParity.test.ts`
-- `src/__tests__/assetParity.test.ts`
-- `src/navigation/__tests__/routeRegistration.test.ts`
+```bash
+npx jest packages/features/<mod> --no-coverage
+npx jest src/__tests__/pageParity.test.ts src/__tests__/assetParity.test.ts
+```
 
 ## Parity status（必填）
 

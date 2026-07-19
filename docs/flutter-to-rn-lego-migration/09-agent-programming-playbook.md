@@ -2,13 +2,14 @@
 
 > 源：`/Users/mac/Desktop/github/my_ai_project`  
 > 目标：`/Users/mac/Desktop/github/my_rn_project`  
-> 配套：[`07-1to1-migration-guide.md`](./07-1to1-migration-guide.md) · [`08-acceptance-checklist.md`](./08-acceptance-checklist.md) · [`04-cursor-execution-spec.md`](./04-cursor-execution-spec.md) · [`06-supervision-playbook.md`](./06-supervision-playbook.md) · [`plans/README.md`](./plans/README.md)  
+> 配套：[`07-1to1-migration-guide.md`](./07-1to1-migration-guide.md) · [`08-acceptance-checklist.md`](./08-acceptance-checklist.md) · [`04-cursor-execution-spec.md`](./04-cursor-execution-spec.md) · [`06-supervision-playbook.md`](./06-supervision-playbook.md) · [`plans/README.md`](./plans/README.md) · [`10-agent-prompt-harness.md`](./10-agent-prompt-harness.md)  
 > Skill：`.cursor/skills/flutter-to-rn-lego-module/SKILL.md`  
 > UX 门控：`/Users/mac/Desktop/skills/flutter-to-rn-lego-module/references/ux-1to1-gates.md`
 
 本文把迁移仓库已有规范串成 **可重复的 Agent 作战闭环**：任务拆解、上下文工程、测试闭环、权限边界、失败复盘、交互验证。  
 **不另起验收标准**——验收仍以 `08` 为准；页/资源状态仍以 `page-resource-parity-manifest.ts` 为准。  
-**选哪一刀、Epic/Slice 队列**见 [`plans/`](./plans/README.md)（Program → Epic → Slice）。
+**选哪一刀、Epic/Slice 队列**见 [`plans/`](./plans/README.md)（Program → Epic → Slice）。  
+**提示词合同 + 机检门禁**见 [`10`](./10-agent-prompt-harness.md)：`npm run agent:pre` / `agent:post` + `.cursor/hooks.json`。
 
 ---
 
@@ -63,7 +64,9 @@ Epic（模块）     例：settings
 
 ### 1.3 Slice Brief 模板（每轮开场）
 
-落盘模板与示例：[`plans/slices/_template.md`](./plans/slices/_template.md)。会话内可直接粘贴：
+**必须落盘**到 [`plans/slices/<id>.md`](./plans/slices/_template.md)（Harness 锚定）。不要只靠会话粘贴。
+
+模板：[`plans/slices/_template.md`](./plans/slices/_template.md)。最小字段：
 
 ```md
 ## Slice Brief
@@ -74,12 +77,16 @@ Epic（模块）     例：settings
 - 本轮 ONLY: [一页 / 一组资源 / 一个交互 bug]
 - 不做: [明确排除项]
 - 验收: 08 对应章节 + Migrated 门槛
-- 文件白名单: [...]
-- 验证命令: npx jest packages/features/<mod> --no-coverage
-- 工具: Codegraph 定位 Flutter；Headroom 控上下文；改完跑指定 jest
+- 文件白名单:
+  - packages/features/<mod>/
+- 验证命令:
+  - npx jest packages/features/<mod> --no-coverage
+- 证据: docs/flutter-to-rn-lego-migration/acceptance-records/...
+- 工具: Codegraph 定位 Flutter；改完跑 agent:post
 ```
 
-开干前对照 [`plans/README.md`](./plans/README.md) §5 十项检查；队首 Slice 见当前 Program。
+开干前：[`plans/README.md`](./plans/README.md) §5 十项 + **`npm run agent:pre -- --slice <path>` 绿**。  
+收工：`npm run agent:post` 绿后再写 Delivery / 勾 `08`。详解见 [`10`](./10-agent-prompt-harness.md)。
 
 ### 1.4 优先级（避免先堆壳）
 
@@ -103,7 +110,7 @@ Epic（模块）     例：settings
 
 | 层 | 内容 | 何时读 |
 |----|------|--------|
-| **L0 契约** | skill 入口、`07`、`08`、boundary rules、本 Slice Brief | 每轮必读 |
+| **L0 契约** | skill 入口、`07`、`08`、`10` harness、boundary rules、本 Slice 文件 | 每轮必读 |
 | **L1 源真相** | Flutter 目标页 + controller + assets；Codegraph node | 实现前 |
 | **L2 目标锚点** | RN 同模块参考屏、`RoutePath`、registry、manifest 邻近条目 | 实现时 |
 | **L3 噪音** | 无关模块、历史草案路径、大体积无关 diff | 默认不读 |
@@ -349,14 +356,16 @@ app shell ──▶ 装配 features（slot / 注入）
 
 | 步 | 角色 | 产出 |
 |----|------|------|
-| 1 下达 Brief | 人 | Slice Brief |
-| 2 只读审计 | 执行 Agent | 缺口列表（≥1 真问题） |
-| 3 确认范围 | 人 | 「做 / 不做」 |
-| 4 实现 + 测 | 执行 Agent | 代码 + 绿测 |
-| 5 交互验证 | 人（或按脚本） | 证据 |
-| 6 Delivery Report | 执行 Agent | 见 `04` |
-| 7 Review | 审查 Agent | Decision |
-| 8 Commit / Push | **仅人指令后** | git |
+| 1 下达 Brief | 人 | 落盘 `plans/slices/<id>.md` |
+| 2 `agent:pre` | 执行 Agent | harness-report `pre.ok` |
+| 3 只读审计 | 执行 Agent | 缺口列表（≥1 真问题） |
+| 4 确认范围 | 人 | 「做 / 不做」 |
+| 5 实现 | 执行 Agent | 白名单内 diff |
+| 6 `agent:post` | 执行 Agent | verify + `post.ok` |
+| 7 交互验证 | 人（或按脚本） | 证据 |
+| 8 Delivery Report | 执行 Agent | 见 `04` + harness 摘要 |
+| 9 Review | 审查 Agent | Decision（无 post 绿 → Rework） |
+| 10 Commit / Push | **仅人指令后** | git |
 
 ### 7.2 Delivery Report 最小字段
 
@@ -385,25 +394,31 @@ app shell ──▶ 装配 features（slot / 注入）
 - Skill: .cursor/skills/flutter-to-rn-lego-module + 主 skill mappings / UX gates
 - 指南: docs/flutter-to-rn-lego-migration/07-1to1-migration-guide.md
 - 方法: docs/flutter-to-rn-lego-migration/09-agent-programming-playbook.md
+- Harness: docs/flutter-to-rn-lego-migration/10-agent-prompt-harness.md
 - 验收: docs/flutter-to-rn-lego-migration/08-acceptance-checklist.md
 - 真相源: page-resource-parity-manifest.ts
 - 边界: 无 feature-to-feature；不切包管理器；不擅自扩 scope
 - 工具: Codegraph 查 Flutter；改动最小化；先资源再 UI 再路由再 parity
 
-本轮 Slice Brief:
-- ...
+本轮 Slice 文件:
+- docs/flutter-to-rn-lego-migration/plans/slices/<id>.md
 
-流程: 审计 → 等我确认 → 实现 → 聚焦测试 → Delivery Report（含证据清单）
-未达标禁止写 Migrated。
+流程:
+1) npm run agent:pre -- --slice <同上>
+2) 审计 →（等人确认）→ 白名单内实现
+3) npm run agent:post
+4) Delivery Report（含 harness-report 摘要 + 证据）
+未过 agent:post 禁止勾 08 / 写 Migrated；commit/push 等我指令。
 ```
 
 ### 8.2 审查 Agent
 
 ```md
 你是审查 Agent。只做 Review，不改代码。
-对照 08 + UX gates + module-boundary-rules + 09 playbook + git diff。
+对照 08 + UX gates + module-boundary-rules + 09 + 10 harness + git diff
++ .cursor/agent-harness/harness-report.json（要求 post.ok === true）。
 输出 Codex Review（Decision / findings / required changes），格式见 06。
-缺证据或 P0 失败 → Rework。
+缺证据、缺 harness 绿或 P0 失败 → Rework。
 ```
 
 ---
@@ -412,10 +427,11 @@ app shell ──▶ 装配 features（slot / 注入）
 
 | 本章节 | 仓库落点 |
 |--------|----------|
-| 任务拆解 | `07` Module Progress Step 0–10 |
+| 任务拆解 | `07` Module Progress Step 0–10 · `plans/` |
 | 上下文工程 | skill 入口 + Codegraph + Context Card |
-| 测试闭环 | `08` A1 + parity tests + 模块单测 |
-| 权限边界 | `04` + `module-boundary-rules` + status 决策树 |
+| 提示词合同 / 机检 | `10-agent-prompt-harness.md` · `agent:pre`/`post` · `.cursor/hooks.json` |
+| 测试闭环 | `08` A1 + parity tests + 模块单测 + `run-verify` |
+| 权限边界 | `04` + `module-boundary-rules` + `check-boundary` |
 | 失败复盘 | `06` Rework Request + 本文 Retro 卡 |
 | 交互验证 | UX gates + `08` 模块表证据列 |
 

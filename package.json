@@ -33,7 +33,11 @@
     "yuque:diff": "node scripts/yuque/generate-diff.mjs",
     "yuque:push": "node scripts/yuque/push-all.mjs",
     "yuque:pilot": "node scripts/yuque/pilot.mjs",
-    "yuque:run-all": "node scripts/yuque/run-all.mjs"
+    "yuque:run-all": "node scripts/yuque/run-all.mjs",
+    "agent:pre": "node scripts/agent-harness/pre.mjs",
+    "agent:post": "node scripts/agent-harness/post.mjs",
+    "agent:check-brief": "node scripts/agent-harness/check-brief.mjs",
+    "agent:check-boundary": "node scripts/agent-harness/check-boundary.mjs"
   },
   "dependencies": {
     "@commons/toolkit": "*",
