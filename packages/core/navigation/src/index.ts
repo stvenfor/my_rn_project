@@ -50,6 +50,11 @@ export const RoutePath = {
   classroomMyClass: 'ClassroomMyClass',
   classroomHomeworkStats: 'ClassroomHomeworkStats',
   classroomHomeworkReview: 'ClassroomHomeworkReview',
+  classroomHomeworkDetailTeacher: 'ClassroomHomeworkDetailTeacher',
+  classroomHomeworkDetailStudent: 'ClassroomHomeworkDetailStudent',
+  classroomDubbingHomework: 'ClassroomDubbingHomework',
+  classroomVideoDetail: 'ClassroomVideoDetail',
+  classroomClaimGift: 'ClassroomClaimGift',
   debugBle: 'DebugBle',
   debugLinking: 'DebugLinking',
   debugRealtime: 'DebugRealtime',
@@ -152,6 +157,17 @@ export type RootStackParamList = {
   ClassroomMyClass: undefined;
   ClassroomHomeworkStats: {classId?: string} | undefined;
   ClassroomHomeworkReview: undefined;
+  ClassroomHomeworkDetailTeacher:
+    | {classId?: string; studentId?: string}
+    | undefined;
+  ClassroomHomeworkDetailStudent:
+    | {classId?: string; studentId?: string; homeworkId?: string}
+    | undefined;
+  ClassroomDubbingHomework:
+    | {classId?: string; studentId?: string; homeworkId?: string}
+    | undefined;
+  ClassroomVideoDetail: {videoId?: string} | undefined;
+  ClassroomClaimGift: undefined;
   DebugBle: undefined;
   DebugLinking: undefined;
   DebugRealtime: undefined;

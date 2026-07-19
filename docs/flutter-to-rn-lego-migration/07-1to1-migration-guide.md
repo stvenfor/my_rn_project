@@ -48,7 +48,7 @@
 | live | live | UI 迁完；真 realtime 可 Deferred |
 | friend | friend | |
 | pay | pay | UI 迁完；支付 SDK 可 Deferred |
-| classroom | — | Flutter 有；RN 未建包 → 须 `Deferred` 并登记 |
+| classroom | classroom | 8 页 mock UI 已迁；视频播放 Degraded |
 
 ## 4. 单模块执行步骤
 

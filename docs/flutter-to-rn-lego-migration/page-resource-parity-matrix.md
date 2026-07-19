@@ -14,7 +14,7 @@ Status legend: `Migrated` | `Degraded` | `Placeholder` | `Deferred` | `Removed`
 
 ## Page mapping (60)
 
-See `PAGE_PARITY_ENTRIES` in the manifest for the authoritative list. Flutter `classroom` (8 pages) is registered as `Deferred` until `@features/classroom` exists.
+See `PAGE_PARITY_ENTRIES` in the manifest for the authoritative list. Flutter `classroom` (8 pages) is migrated under `@features/classroom` (video player Degraded).
 
 ## Asset mapping (76)
 

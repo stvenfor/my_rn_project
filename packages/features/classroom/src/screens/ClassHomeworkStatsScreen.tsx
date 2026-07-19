@@ -13,6 +13,7 @@ type Tab = 'all' | 'dubbing' | 'sync' | 'checkin';
 
 export function ClassHomeworkStatsScreen({
   navigation,
+  route,
 }: RootStackScreenProps<typeof RoutePath.classroomHomeworkStats>) {
   const [tab, setTab] = useState<Tab>('all');
   const summary = classroomMockData.statSummary;
@@ -59,12 +60,20 @@ export function ClassHomeworkStatsScreen({
         <View style={styles.studentCard}>
           <Text style={styles.statsTitle}>学生列表</Text>
           {students.map(s => (
-            <View key={s.id} style={styles.studentRow}>
+            <Pressable
+              key={s.id}
+              style={styles.studentRow}
+              onPress={() =>
+                navigation.navigate(RoutePath.classroomHomeworkDetailTeacher, {
+                  classId: route.params?.classId,
+                  studentId: s.id,
+                })
+              }>
               <Text style={styles.studentName}>{s.name}</Text>
               <Text style={styles.studentMeta}>
                 已完成 {s.completed} · 待完成 {s.pending}
               </Text>
-            </View>
+            </Pressable>
           ))}
         </View>
       </ScrollView>

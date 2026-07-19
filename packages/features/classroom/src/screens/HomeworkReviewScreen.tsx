@@ -34,7 +34,8 @@ export function HomeworkReviewScreen({
   const onSend = () => {
     AppToast.show('点评已发送');
     if (sendGift) {
-      AppToast.show('已赠送 SVIP 体验卡');
+      navigation.navigate(RoutePath.classroomClaimGift);
+      return;
     }
     navigation.goBack();
   };

@@ -58,7 +58,7 @@ npm run test
 - [ ] 每个 Flutter 业务页在 manifest 中有条目与 `status`  
 - [ ] 每个一等公民资源在 manifest 中有条目与 `status`  
 - [ ] `Deferred` / `Degraded` 条目均有 `note`（建议含 owner / targetVersion）  
-- [ ] Flutter `classroom` 等 RN 未建包模块已登记为 `Deferred` 或明确 `Removed`  
+- [ ] 未建包模块已登记为 `Deferred`/`Removed`；`classroom` 已 Migrated（视频播放 Degraded） 
 
 ### A3. 壳与导航（P0）
 
