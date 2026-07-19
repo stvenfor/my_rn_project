@@ -149,11 +149,12 @@ registerAuthFeature()
 
 ## 8. 延伸阅读路径
 
-学完登录后，按同样方法读：
+学完登录后，按同样「三问」方法读（完整路线见 [09](./09-read-code-roadmap.md)）：
 
-1. `packages/features/home/src/screens/...`（列表 + 宫格 + 拉数）  
-2. `packages/features/chat/...`（列表 → 详情 params）  
-3. `src/navigation/MainTabs.tsx`（Tab 图标与切换）
+1. `packages/features/chat/...`（列表 → 详情 `params`，主题在 `chatTheme`）  
+2. `packages/features/home/...`（全部服务 + `homeAssets` registry）  
+3. `packages/features/music/...`（跨层播放器；对照 `AppBootstrap`）  
+4. `src/navigation/MainTabs.tsx`（Tab 图标与切换）
 
 每读一个文件，在笔记本写三列：**语法 / 含义 / 场景**。
 

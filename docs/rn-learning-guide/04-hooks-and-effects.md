@@ -158,8 +158,27 @@ import {isHarmonyOS} from '...'; // Platform.OS === 'harmony'
 
 ---
 
-## 10. 小练习
+## 10. 进房/离房清理（直播 smoke）
+
+`LiveRoomScreen` 一类页面常在 `useEffect` 里 `connect`，**必须在 cleanup 里 `disconnect`**，否则返回列表仍占着 mock 连接：
+
+```tsx
+useEffect(() => {
+  const adapter = getRealtimeAdapter();
+  adapter.connect(roomId);
+  return () => {
+    adapter.disconnect();
+  };
+}, [roomId]);
+```
+
+短视频页隐藏 StatusBar 同理：进页 `setHidden(true)`，cleanup 恢复。
+
+---
+
+## 11. 小练习
 
 1. 写一个 `useToggle(initial=false)` 自定义 Hook。  
 2. 用 `useEffect` 做 3 秒倒计时，注意清理 `setInterval`。  
-3. 在首页用 `useWindowDimensions` 打印当前宽度（调试完删掉）。
+3. 在首页用 `useWindowDimensions` 打印当前宽度（调试完删掉）。  
+4. 打开 `packages/features/live/src/index.tsx`，标出 connect / disconnect 各在哪一行。

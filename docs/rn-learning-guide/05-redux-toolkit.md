@@ -180,8 +180,21 @@ export function registerAuthFeature(): FeatureRegistration {
 
 ---
 
-## 7. 小练习
+## 7. 不是所有状态都进 Redux
+
+| 放 Redux | 放 Screen / 局部 Hook |
+|----------|----------------------|
+| 登录用户、环境、跨 Tab 共享列表 | 弹窗开关、临时输入、单页 Tab |
+| 音乐播放会话（跨页迷你条） | 详情页当前选中的 Part |
+| 需要持久化 / 多屏订阅的数据 | 仅动画或一次性 UI |
+
+**反例：** 把 LiveRoom 的信令列表硬塞进全局 store——本仓用 `@core/realtime` + 页内 state 即可。
+
+---
+
+## 8. 小练习
 
 1. 给 `authSlice` 增加一个同步 action `clearPassword`。  
 2. 写一个假 thunk：`delayEchoThunk`，1 秒后返回字符串，并在某页按钮触发。  
-3. 画一张纸：从点击「登录」到 `state.auth.user` 变化的完整箭头图。
+3. 画一张纸：从点击「登录」到 `state.auth.user` 变化的完整箭头图。  
+4. 对照 `music` 与 `live`：哪个更适合进 store，为什么？

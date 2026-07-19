@@ -149,9 +149,22 @@ export function collectMainTabs() {
 
 - **禁止** `features/a` import `features/b` 的内部文件。  
 - 跨 feature 协作：通过 `@core/*`、App 壳、或明确的公共类型。  
-- 对外只从 feature 的 `src/index.ts` 导出。
+- 对外只从 feature 的 `src/index.ts` 导出。  
+- **跨模块跳转只认 `RoutePath`**：例如 home 全部服务进 BFUI，只 `navigate(RoutePath.bfuiTemplate, {templateId})`，不要 `import` bfui 屏幕。
 
 这样 LEGO 才真的「可拔插」。
+
+---
+
+## 5b. 入口从哪来（三种常见）
+
+| 入口 | 例子 | 文件 |
+|------|------|------|
+| 主 Tab | 首页 / 聊天 / 社区 / 我的 | `register*Feature` 的 `tab` + `collectMainTabs` |
+| 产品路径 | 全部服务宫格、Mine 功能格 | `allServicesData` / Mine 网格 → `RoutePath` |
+| 开发 smoke | Settings `__DEV__`、DebugRealtime | `SettingsScreen`、`DebugScreens` |
+
+**学习技巧：** 新模块若「路由注册了但点不到」，先查有没有上表三种入口之一——B9（live/friend/pay）就是靠 Settings DEV 补齐 smoke 的。
 
 ---
 
@@ -183,4 +196,5 @@ import {collectFeatureRoutes} from '@app/config/moduleManifest';
 
 1. 从 `moduleManifest` 临时去掉 `registerBfuiFeature()`，确认相关路由进不去。  
 2. 从首页 `navigate` 到登录，再 `replace` 回 Main，感受返回栈差异。  
-3. 给 `LoginPassword` 补一次跳转：带上 `{email}`，在目标页 `route.params.email` 读出。
+3. 给 `LoginPassword` 补一次跳转：带上 `{email}`，在目标页 `route.params.email` 读出。  
+4. 在 Settings 开发调试里依次点开 Live / Friend / Pay，对照各 feature 的 `register*Feature`。

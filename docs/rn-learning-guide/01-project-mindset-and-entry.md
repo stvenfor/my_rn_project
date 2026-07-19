@@ -138,10 +138,27 @@ function AppBootstrap({children}: {children: React.ReactNode}) {
 2. `store` 里 `auth: authReducer`
 3. 屏幕里 `useSelector(select...)`
 
+想搞清「全部服务某一格点到哪」：
+
+1. `packages/features/home/src/data/allServicesData.ts`（`routePath` / `templateId`）
+2. `HomeAllServicesScreen.openService`
+3. 目标 feature 的 `register*Feature` + Screen
+
+想搞清「开发调试里的 Live / Pay 从哪进」：
+
+1. `SettingsScreen` 的 `__DEV__` 区块
+2. `navigation.navigate(RoutePath.live | friend | pay)`
+3. 对应 `packages/features/{live,friend,pay}`
+
+当前业务包一览（不必一次读完，按 [09 路线图](./09-read-code-roadmap.md) 练）：
+
+`auth` · `home` · `chat` · `community` · `settings` · `music` · `video` · `bfui` · `classroom` · `live` · `friend` · `pay`
+
 ---
 
 ## 6. 小练习
 
 1. 打开 `AppProviders.tsx`，用一句话写出每一层 Provider 的职责。  
 2. 把 `createApiClient` 的 `baseUrl` 改成读 `ENV_CONFIGS` 里另一个环境（先别提交），观察请求域名变化。  
-3. 在 `SplashScreen` 里把 `800` 改成 `2000`，体会 `navigation.replace` 与 `navigate` 的差别（见导航篇）。
+3. 在 `SplashScreen` 里把 `800` 改成 `2000`，体会 `navigation.replace` 与 `navigate` 的差别（见导航篇）。  
+4. 从 `moduleManifest.ts` 数出当前 `enabledModules` 有几个，对照上面业务包一览。

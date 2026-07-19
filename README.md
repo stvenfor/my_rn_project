@@ -49,7 +49,10 @@ Harmony 端原生库通过 `react-native link-harmony` 自动链接（Autolinkin
 
 ## 项目结构
 
-Flutter → RN 模块化迁移（LEGO monorepo），详见 `docs/rn-migration/`。
+Flutter → RN 模块化迁移（LEGO monorepo）：
+
+- **学代码 / 语法**：[docs/rn-learning-guide](./docs/rn-learning-guide/README.md)
+- **迁移与验收**：[docs/flutter-to-rn-lego-migration](./docs/flutter-to-rn-lego-migration/00-index.md)
 
 ```
 MyRnProject/
@@ -61,25 +64,28 @@ MyRnProject/
 │   └── store/                 # auth / env / app slices
 ├── packages/
 │   ├── core/                  # domain, config, api-client, storage, supabase, i18n, navigation, webview
-│   ├── ui/design-system/      # theme, ScreenContainer, PrimaryButton…
-│   └── features/              # home, chat, community, settings, auth, music, bfui, …
+│   ├── ui/design-system/      # AppPageScaffold, AppNavBar, theme…
+│   └── features/              # home, chat, community, settings, auth, music, video, bfui, …
 ├── android/
 ├── ios/
 ├── harmony/
 ├── metro.config.js            # monorepo watchFolders + Harmony Metro
-└── docs/rn-migration/         # 迁移计划与验收清单
+└── docs/
+    ├── rn-learning-guide/                 # RN 学习指南（语法 + 读代码路线）
+    └── flutter-to-rn-lego-migration/      # 迁移计划、验收清单、parity
 ```
 
-### 当前迁移进度
+### 当前迁移进度（摘要）
 
 | 模块 | 状态 |
 |------|------|
-| home / chat / community / settings | Phase 1 MVP（Mock + WanAndroid API） |
-| auth | Mock OTP（默认 `USE_MOCK_AUTH=true`，验证码 `123456`） |
-| friend / live / pay / video | 占位页 |
-| music / bfui | 入口壳页 |
+| auth / home / chat / community / settings / classroom | 已迁；细节以 checklist B 章为准 |
+| music / video / bfui | 已验收（部分能力 Degraded，见 manifest `note`） |
+| live / friend / pay | B9 smoke 已验收；真 WS / 支付 SDK Deferred |
 | WebView | 已集成（ICSJavascriptBridge + Core handlers） |
-| 音频播放 | `react-native-track-player` + `@react-native-ohos/react-native-track-player` 4.1.x |
+| 音频播放 | `react-native-track-player` + Harmony 对应包 |
+
+完整勾选见 `docs/flutter-to-rn-lego-migration/08-acceptance-checklist.md`。
 
 ### 环境变量
 

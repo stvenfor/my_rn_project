@@ -163,6 +163,31 @@ export const spacing = { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 };
 
 **使用场景：** 统一状态栏/背景/安全区策略，避免每页复制一套。
 
+### 5b. 二级页标配：`navBar` + 返回
+
+本仓多数二级页 **自绘导航栏**（根 Stack `headerShown: false`）。正确写法是把 `AppNavBar` 交给脚手架的 **`navBar` prop**，而不是当普通子节点塞进内容区：
+
+```tsx
+<AppPageScaffold
+  navBar={
+    <AppNavBar
+      title="视频列表"
+      showBackButton
+      onBack={() => navigation.goBack()}
+    />
+  }>
+  {/* 列表 / 表单内容 */}
+</AppPageScaffold>
+```
+
+| 要点 | 为什么 |
+|------|--------|
+| `navBar={...}` | 脚手架负责占位/叠层；当 children 塞 NavBar 容易和安全区打架 |
+| `showBackButton` | 二级页必须能返回；漏了就「进得去出不来」 |
+| `onBack → goBack()` | 与系统返回手势语义一致 |
+
+沉浸式播放页（如短视频）可能用 `edgeToEdge` 自绘返回，并配合 `StatusBar.setHidden`——见 `ShortVideoPlayScreen`。
+
 ---
 
 ## 6. 键盘与滚动（登录页）
@@ -187,8 +212,25 @@ export const spacing = { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 };
 
 ---
 
-## 7. 小练习
+## 7. 资源怎么进界面：`require` + registry
+
+RN 不能像 Web 那样随便拼图片 URL 路径加载本地包内资源，本仓约定：
+
+```ts
+// packages/features/xxx/src/assets/xxxAssets.ts
+export const xxxImages = {
+  cover: require('../../assets/cover.png'),
+};
+```
+
+页面：`<Image source={xxxImages.cover} />`。  
+**使用场景：** 新 PNG 必须「文件落地 + registry 一行 + UI 引用」三件套；迁移时还要改 parity manifest 的资源计数。
+
+---
+
+## 8. 小练习
 
 1. 新建一个 `DemoScreen`：标题 + 按钮，用 `StyleSheet` + `colors.primary`。  
 2. 用三元切换「白天/夜晚」背景色（本地 `useState` 即可）。  
-3. 对比 `style={styles.a}` 与 `style={[styles.a, styles.b]}` 的覆盖效果。
+3. 对比 `style={styles.a}` 与 `style={[styles.a, styles.b]}` 的覆盖效果。  
+4. 打开任意列表页，确认它用的是 `navBar={...}` 还是把 `AppNavBar` 塞进了 children。
