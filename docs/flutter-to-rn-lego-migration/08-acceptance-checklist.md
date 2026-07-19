@@ -192,7 +192,7 @@ npm run test
 
 | 平台 | Packaging | Splash→Tabs | Login | 主业务抽检 |
 |------|-----------|-------------|-------|------------|
-| iOS | ✅ Metro bundle（180 assets） | ☐ Deferred 真机 | ☐ Deferred | ☐ Deferred |
+| iOS | ✅ Metro bundle（180 assets） | ✅ Sim iPhone 16 Pro（`2026-07-19-m2-device-smoke-ios.md`） | ☐ gate 可证（Chat→Login）；**Mock 登录成功未证** | ✅ Home + Mine 访客 |
 | Android | ✅ Metro bundle（182 assets） | ☐ Deferred 真机 | ☐ Deferred | ☐ Deferred |
 | HarmonyOS | ✅ `npm run dev`（183 assets） | ☐ Deferred 真机 | ☐ Deferred | ☐ Deferred |
 
