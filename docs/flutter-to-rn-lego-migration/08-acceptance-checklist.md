@@ -78,12 +78,12 @@ npm run test
 
 | 项 | P0 | 结果 | 证据 |
 |----|----|------|------|
-| Login / Password / OTP / Register 可进入 | P0 | ☐ | |
-| 表单校验与 Flutter 文案/规则对齐 | P0 | ☐ | |
-| 登录成功写入 session；登出清理 | P0 | ☐ | |
-| 隐私协议勾选/链接（若 Flutter 有） | P0 | ☐ | |
-| 不依赖其他 `@features/*` | P0 | ☐ | |
-| auth standalone / AuthDevHome 处理为 Removed 或未暴露 | — | ☐ | |
+| Login / Password / OTP / Register 可进入 | P0 | ✅ | `registerAuthFeature.test.ts`；Password/OTP legacy 同 Flutter |
+| 表单校验与 Flutter 文案/规则对齐 | P0 | ✅ | `authValidation` + slice 校验文案 |
+| 登录成功写入 session；登出清理 | P0 | ✅ | login/logout thunk 单测；Mine 退出 |
+| 隐私协议勾选/链接（若 Flutter 有） | P0 | ✅ | `AuthPrivacyRow`（占位链接同 Flutter） |
+| 不依赖其他 `@features/*` | P0 | ✅ | 仅 core + design-system |
+| auth standalone / AuthDevHome 处理为 Removed 或未暴露 | — | ✅ | manifest Removed；`acceptance-records/2026-07-19-auth-b1.md` |
 
 ### B2. `@features/home`
 

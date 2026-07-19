@@ -37,7 +37,7 @@
 
 | Flutter (`packages/features/`) | RN (`packages/features/`) | 备注 |
 |--------------------------------|---------------------------|------|
-| auth | auth | 登录/注册/会话 |
+| auth | auth | B1 已验收（Mock session）；真后端/记住凭据 Deferred |
 | home | home | B2 已验收；配音装饰已接线；Gallery/Invite 相对 Flutter 增量 |
 | settings | settings | 我的/设置/发票 demo |
 | chat | chat | 会话列表/详情 |

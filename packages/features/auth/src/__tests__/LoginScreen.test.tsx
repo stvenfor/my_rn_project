@@ -39,6 +39,10 @@ jest.mock('@ui/design-system', () => {
   };
 });
 
+jest.mock('../utils/authGreeting', () => ({
+  buildAuthGreeting: () => '下午好，欢迎使用i车商',
+}));
+
 describe('LoginScreen', () => {
   it('renders login greeting snapshot', () => {
     const navigation = {

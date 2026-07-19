@@ -43,7 +43,7 @@ exports[`LoginScreen renders login greeting snapshot 1`] = `
             }
           }
         >
-          晚上好，欢迎使用i车商
+          下午好，欢迎使用i车商
         </Text>
         <View
           style={
