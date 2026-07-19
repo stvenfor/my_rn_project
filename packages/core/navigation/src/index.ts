@@ -29,6 +29,7 @@ export const RoutePath = {
   dialogDemo: 'DialogDemo',
   dealInvoiceDemo: 'DealInvoiceDemo',
   dealInvoiceUpload: 'DealInvoiceUpload',
+  personalizedSettings: 'PersonalizedSettings',
   web: 'Web',
   friend: 'Friend',
   live: 'Live',
@@ -102,7 +103,25 @@ export type RootStackParamList = {
     | undefined;
   DialogDemo: undefined;
   DealInvoiceDemo: undefined;
-  DealInvoiceUpload: undefined;
+  PersonalizedSettings: undefined;
+  DealInvoiceUpload:
+    | {
+        scene?: 'create' | 'detail' | 'reupload';
+        item?: {
+          id: string;
+          phone: string;
+          customerName?: string | null;
+          status:
+            | 'pendingReview'
+            | 'approvedPendingRating'
+            | 'rated'
+            | 'rejected';
+          submittedAt: string;
+          rejectReason?: string | null;
+          ratingStars?: number | null;
+        };
+      }
+    | undefined;
   Web: {
     title?: string;
     url?: string;

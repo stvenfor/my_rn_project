@@ -61,11 +61,12 @@ export const PAGE_PARITY_ENTRIES: PageParityEntry[] = [
   {id: 'community-video-play', module: 'community', flutterPath: 'packages/features/community/lib/community/view/video_play_page.dart', rnRoute: 'CommunityVideoPlay', rnComponent: 'CommunityVideoPlayScreen', status: 'Migrated'},
 
   {id: 'settings-mine', module: 'settings', flutterPath: 'packages/features/settings/lib/mine/view/mine_page.dart', rnRoute: 'MineTab', rnComponent: 'MineScreen', status: 'Migrated'},
-  {id: 'settings-settings', module: 'settings', flutterPath: 'packages/features/settings/lib/settings/view/settings_page.dart', rnRoute: 'Settings', rnComponent: 'SettingsScreen', status: 'Migrated'},
+  {id: 'settings-settings', module: 'settings', flutterPath: 'packages/features/settings/lib/settings/view/settings_page.dart', rnRoute: 'Settings', rnComponent: 'SettingsScreen', status: 'Migrated', note: 'themeMode wired to NavigationContainer + Settings UI'},
   {id: 'settings-http-test', module: 'settings', flutterPath: 'packages/features/settings/lib/mine/view/mine_http_test_page.dart', rnRoute: 'MineHttpTest', rnComponent: 'MineHttpTestScreen', status: 'Migrated'},
-  {id: 'settings-dialog-demo', module: 'settings', flutterPath: 'packages/features/settings/lib/settings/view/dialog_demo_page.dart', rnRoute: 'DialogDemo', rnComponent: 'DialogDemoScreen', status: 'Migrated'},
-  {id: 'settings-invoice-demo', module: 'settings', flutterPath: 'packages/features/settings/lib/deal_invoice/view/deal_invoice_demo_page.dart', rnRoute: 'DealInvoiceDemo', rnComponent: 'DealInvoiceDemoScreen', status: 'Migrated'},
-  {id: 'settings-invoice-upload', module: 'settings', flutterPath: 'packages/features/settings/lib/deal_invoice/view/deal_invoice_upload_page.dart', rnRoute: 'DealInvoiceUpload', rnComponent: 'DealInvoiceUploadScreen', status: 'Migrated'},
+  {id: 'settings-dialog-demo', module: 'settings', flutterPath: 'packages/features/settings/lib/settings/view/dialog_demo_page.dart', rnRoute: 'DialogDemo', rnComponent: 'DialogDemoScreen', status: 'Migrated', note: 'AppDialogManager priority queue + styles/queue sections 1:1'},
+  {id: 'settings-invoice-demo', module: 'settings', flutterPath: 'packages/features/settings/lib/deal_invoice/view/deal_invoice_demo_page.dart', rnRoute: 'DealInvoiceDemo', rnComponent: 'DealInvoiceDemoScreen', status: 'Migrated', note: 'sticky tabs + pull refresh + load more + FAB; mock repo 1:1'},
+  {id: 'settings-invoice-upload', module: 'settings', flutterPath: 'packages/features/settings/lib/deal_invoice/view/deal_invoice_upload_page.dart', rnRoute: 'DealInvoiceUpload', rnComponent: 'DealInvoiceUploadScreen', status: 'Migrated', note: 'create/detail/reupload scenes + customer picker + submit flow'},
+  {id: 'settings-personalized', module: 'settings', flutterPath: 'packages/features/settings/lib/mine/personalized_settings/view/personalized_settings_page.dart', rnRoute: 'PersonalizedSettings', rnComponent: 'PersonalizedSettingsScreen', status: 'Migrated', note: 'Mine info entry; switches + eye-protection sheet + help/chevron assets'},
 
   {id: 'friend-page', module: 'friend', flutterPath: 'packages/features/friend/lib/friend/view/friend_page.dart', rnRoute: 'Friend', rnComponent: 'FriendScreen', status: 'Migrated'},
   {id: 'live-page', module: 'live', flutterPath: 'packages/features/live/lib/live/view/live_page.dart', rnRoute: 'Live', rnComponent: 'LiveScreen', status: 'Migrated', note: 'UI migrated; realtime core Deferred'},
@@ -218,6 +219,21 @@ export const ASSET_PARITY_ENTRIES: AssetParityEntry[] = [
     registryKey: key,
     note: 'Mine function card icon; Flutter uses Material Icons, RN uses dealership PNG set',
   })),
+  ...Object.entries({
+    help_circle:
+      'packages/features/settings/assets/personalized_settings/help_circle.png',
+    chevron_right:
+      'packages/features/settings/assets/personalized_settings/chevron_right.png',
+    chevron_right_alt:
+      'packages/features/settings/assets/personalized_settings/chevron_right_alt.png',
+  }).map(([key, rnPath]) => ({
+    id: `settings-personalized-${key}`,
+    module: 'settings',
+    flutterPath: `packages/features/settings/assets/personalized_settings/${key}.png`,
+    rnPath,
+    status: 'Migrated' as ParityStatus,
+    registryKey: key,
+  })),
   {id: 'music-lady', module: 'music', flutterPath: 'packages/features/music/assets/defaults/lady.jpeg', rnPath: 'packages/features/music/assets/defaults/lady.jpeg', status: 'Migrated', registryKey: 'lady'},
   {id: 'music-record', module: 'music', flutterPath: 'packages/features/music/assets/defaults/music_record.jpeg', rnPath: 'packages/features/music/assets/defaults/music_record.jpeg', status: 'Migrated', registryKey: 'musicRecord'},
   {id: 'toolkit-video-mock', module: 'toolkit', flutterPath: 'packages/commons/toolkit/assets/data/video_mock_sources.json', rnPath: 'packages/commons/toolkit/assets/data/video_mock_sources.json', status: 'Migrated', registryKey: 'video_mock_sources'},
@@ -274,5 +290,5 @@ export const ASSET_PARITY_ENTRIES: AssetParityEntry[] = [
 
 // BFUI assets appended programmatically in assetParity.test via BFUI_ASSET_MANIFEST
 
-export const EXPECTED_PAGE_COUNT = 71;
-export const EXPECTED_ASSET_COUNT = 183;
+export const EXPECTED_PAGE_COUNT = 72;
+export const EXPECTED_ASSET_COUNT = 186;

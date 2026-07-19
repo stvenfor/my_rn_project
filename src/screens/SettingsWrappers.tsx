@@ -76,14 +76,9 @@ export function SettingsScreenContainer(
       i18n.changeLanguage(nextLocale);
       dispatch(setLocale(nextLocale));
     },
-    onToggleTheme: () => {
-      const next =
-        themeMode === 'light'
-          ? 'dark'
-          : themeMode === 'dark'
-          ? 'light'
-          : 'dark';
-      dispatch(setThemeMode(next));
+    onToggleTheme: (enabled: boolean) => {
+      // Align Switch value with Flutter toggle: on → dark, off → light.
+      dispatch(setThemeMode(enabled ? 'dark' : 'light'));
     },
   };
 

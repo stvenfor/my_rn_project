@@ -19,6 +19,7 @@ export {
   DialogDemoScreen,
   DealInvoiceDemoScreen,
   DealInvoiceUploadScreen,
+  PersonalizedSettingsScreen,
 } from './screens/SettingsScreens';
 export type {MineScreenProps, SettingsScreenProps} from './types';
 export {registerSettingsFeature} from './registerSettingsFeature';

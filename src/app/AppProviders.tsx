@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 import {Provider} from 'react-redux';
-import {NavigationContainer} from '@react-navigation/native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {initI18n} from '@core/i18n';
@@ -10,14 +9,14 @@ import {configureLinkingService} from '@core/linking';
 import {bootstrapMediaPickerService} from '@core/media-picker';
 import {createApiClient} from '@core/api-client';
 import {ENV_CONFIGS} from '@core/config';
-import {LoadingPortal, ToastPortal} from '@ui/design-system';
+import {DialogHost, LoadingPortal, ToastPortal} from '@ui/design-system';
 import {registerHomeWebHandlers} from '@features/home';
 import {initMusicPlayer} from '@features/music';
 import {loadAuthSession} from '@features/auth';
 import {store} from '@app/store';
 import {loadEnv} from '@app/store/envSlice';
-import {RootNavigator} from '@app/navigation/RootNavigator';
 import {useAppDispatch} from '@app/store/hooks';
+import {ThemedNavigation} from './ThemedNavigation';
 
 function AppBootstrap({children}: {children: React.ReactNode}) {
   const dispatch = useAppDispatch();
@@ -45,9 +44,8 @@ export function AppProviders() {
           <AppBootstrap>
             <LoadingPortal />
             <ToastPortal />
-            <NavigationContainer>
-              <RootNavigator />
-            </NavigationContainer>
+            <DialogHost />
+            <ThemedNavigation />
           </AppBootstrap>
         </SafeAreaProvider>
       </Provider>

@@ -15,6 +15,22 @@ export {AppNavBar, APP_NAV_BAR_HEIGHT} from './AppNavBar';
 export type {AppNavBarProps, AppNavBarStyle} from './AppNavBar';
 export {AppPageScaffold} from './AppPageScaffold';
 export type {AppPageLayout, AppPageScaffoldProps} from './AppPageScaffold';
+export {
+  AppDialogManager,
+  ConfirmDialog,
+  DialogHost,
+  GeneralDialog,
+  DIALOG_PRIORITY_WEIGHT,
+  dialogPriorityLabel,
+} from './dialog';
+export type {
+  ConfirmDialogProps,
+  DialogBuilder,
+  DialogCloseHandler,
+  DialogManagerSnapshot,
+  DialogPriority,
+  GeneralDialogProps,
+} from './dialog';
 
 const deprecatedWarnings = new Set<string>();
 

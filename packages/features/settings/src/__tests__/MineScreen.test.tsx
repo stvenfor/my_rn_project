@@ -57,6 +57,7 @@ jest.mock('@core/navigation', () => ({
   RoutePath: {
     settings: 'Settings',
     mineHttpTest: 'MineHttpTest',
+    personalizedSettings: 'PersonalizedSettings',
     login: 'Login',
     shortVideo: 'ShortVideo',
   },

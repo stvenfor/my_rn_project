@@ -16,5 +16,5 @@ export interface SettingsScreenProps
   locale: 'zh' | 'en';
   onSetEnv: (env: AppEnv) => void;
   onSetLocale: (locale: 'zh' | 'en') => void;
-  onToggleTheme: () => void;
+  onToggleTheme: (enabled: boolean) => void;
 }

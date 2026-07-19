@@ -13,7 +13,18 @@ export const mineFunctionIcons = {
 
 export type MineFunctionIconKey = keyof typeof mineFunctionIcons;
 
-export const SETTINGS_ASSET_MANIFEST: Record<MineFunctionIconKey, string> = {
+export const personalizedSettingsIcons = {
+  help_circle: require('../../assets/personalized_settings/help_circle.png'),
+  chevron_right: require('../../assets/personalized_settings/chevron_right.png'),
+  chevron_right_alt: require('../../assets/personalized_settings/chevron_right_alt.png'),
+} as const satisfies Record<string, ImageSourcePropType>;
+
+export type PersonalizedSettingsIconKey = keyof typeof personalizedSettingsIcons;
+
+export const SETTINGS_ASSET_MANIFEST: Record<
+  MineFunctionIconKey | PersonalizedSettingsIconKey,
+  string
+> = {
   sms: 'packages/features/settings/assets/mine_functions/sms.png',
   calculator: 'packages/features/settings/assets/mine_functions/calculator.png',
   used_car: 'packages/features/settings/assets/mine_functions/used_car.png',
@@ -22,4 +33,10 @@ export const SETTINGS_ASSET_MANIFEST: Record<MineFunctionIconKey, string> = {
   qr_pay: 'packages/features/settings/assets/mine_functions/qr_pay.png',
   qa: 'packages/features/settings/assets/mine_functions/qa.png',
   poster: 'packages/features/settings/assets/mine_functions/poster.png',
+  help_circle:
+    'packages/features/settings/assets/personalized_settings/help_circle.png',
+  chevron_right:
+    'packages/features/settings/assets/personalized_settings/chevron_right.png',
+  chevron_right_alt:
+    'packages/features/settings/assets/personalized_settings/chevron_right_alt.png',
 };

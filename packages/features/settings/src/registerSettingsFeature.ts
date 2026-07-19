@@ -7,6 +7,7 @@ import {
   DialogDemoScreen,
   DealInvoiceDemoScreen,
   DealInvoiceUploadScreen,
+  PersonalizedSettingsScreen,
 } from './screens/SettingsScreens';
 
 export function registerSettingsFeature(): FeatureRegistration {
@@ -37,6 +38,10 @@ export function registerSettingsFeature(): FeatureRegistration {
       {
         name: RoutePath.dealInvoiceUpload,
         component: DealInvoiceUploadScreen as StackScreenComponent,
+      },
+      {
+        name: RoutePath.personalizedSettings,
+        component: PersonalizedSettingsScreen as StackScreenComponent,
       },
     ],
   };

@@ -142,7 +142,9 @@ export function MineScreen({
               data={profile}
               showBackButton={false}
               isLoggedIn={isLoggedIn}
-              onInfoTap={() => AppToast.show('关于我们')}
+              onInfoTap={() =>
+                navigation.navigate(RoutePath.personalizedSettings)
+              }
               onCalendarTap={() => AppToast.show('签到日历')}
               onSettingsTap={() => navigation.navigate(RoutePath.settings)}
               onAuthTap={handleAuthTap}
