@@ -28,6 +28,7 @@ description: >-
 |------|------|
 | [07-1to1-migration-guide.md](../../docs/flutter-to-rn-lego-migration/07-1to1-migration-guide.md) | **迁移执行指南** |
 | [08-acceptance-checklist.md](../../docs/flutter-to-rn-lego-migration/08-acceptance-checklist.md) | **验收权威清单**（按此验收） |
+| [09-agent-programming-playbook.md](../../docs/flutter-to-rn-lego-migration/09-agent-programming-playbook.md) | **Agent 编程方法**（拆解/上下文/测试闭环/边界/复盘/交互验证） |
 | [page-resource-parity-manifest.ts](../../docs/flutter-to-rn-lego-migration/page-resource-parity-manifest.ts) | 页面 + 资源 parity 真相源 |
 | [moduleManifest.ts](../../src/config/moduleManifest.ts) | feature 聚合与路由收集 |
 | [04-cursor-execution-spec.md](../../docs/flutter-to-rn-lego-migration/04-cursor-execution-spec.md) | 交付格式与边界规则 |

@@ -10,6 +10,7 @@
 |---|---|---|
 | **`07-1to1-migration-guide.md`** | **1:1 迁移执行指南（路径约定、步骤、parity）** | Cursor, Codex |
 | **`08-acceptance-checklist.md`** | **验收权威清单（后续按此验收）** | Codex, QA, Cursor |
+| **`09-agent-programming-playbook.md`** | **Agent 编程方法（拆解/上下文/测试闭环/边界/复盘/交互验证）** | Cursor, Codex, 人 |
 | `01-flutter-analysis-report.md` | Flutter 项目结构、包职责、路由、状态和依赖分析 | Cursor, Codex |
 | `02-lego-monorepo-architecture.md` | RN LEGO 目标架构、目录结构、依赖图和边界规则 | Cursor, Codex |
 | `03-module-migration-plan.md` | 每个模块的迁移清单、优先级、风险和 Cursor checklist | Cursor |
@@ -31,12 +32,13 @@
 ## Cursor 执行顺序
 
 1. 阅读 **`07-1to1-migration-guide.md`**，锁定源/目标路径与 1:1 规则。
-2. 阅读 `01-flutter-analysis-report.md`，确认迁移基于真实 Flutter 包结构。
-3. 阅读 `02-lego-monorepo-architecture.md`，确认 monorepo 与模块边界（路径以 `packages/features/*` 为准）。
-4. 按 `03-module-migration-plan.md` 的优先级执行；单模块流程跟 skill `flutter-to-rn-lego-module`。
-5. 每阶段按 `04-cursor-execution-spec.md` 产出 Delivery Report + UX 证据。
-6. 提交审查前按 **`08-acceptance-checklist.md`** 自检（权威）；`05-acceptance-and-qa-plan.md` 作补充说明。
-7. 如退回返工，按 `06-supervision-playbook.md` 补充证据。
+2. 阅读 **`09-agent-programming-playbook.md`**，按 Slice Brief → 审计 → 实现 → 测试闭环 → 交互验证组织每轮 Agent 工作。
+3. 阅读 `01-flutter-analysis-report.md`，确认迁移基于真实 Flutter 包结构。
+4. 阅读 `02-lego-monorepo-architecture.md`，确认 monorepo 与模块边界（路径以 `packages/features/*` 为准）。
+5. 按 `03-module-migration-plan.md` 的优先级执行；单模块流程跟 skill `flutter-to-rn-lego-module`。
+6. 每阶段按 `04-cursor-execution-spec.md` 产出 Delivery Report + UX 证据。
+7. 提交审查前按 **`08-acceptance-checklist.md`** 自检（权威）；`05-acceptance-and-qa-plan.md` 作补充说明。
+8. 如退回返工，按 `06-supervision-playbook.md` + `09` 失败复盘卡补充证据。
 
 ## Codex 监督职责
 
