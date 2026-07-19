@@ -46,27 +46,29 @@ npm run typecheck
 npm run test
 ```
 
-- [ ] `lint` 无 error  
-- [ ] `typecheck` 无 error  
-- [ ] `test` 通过（含 `pageParity` / `assetParity` / `routeRegistration`）  
-- [ ] 无 feature-to-feature import  
-- [ ] 无 core → feature import  
-- [ ] 新增 UI 使用 `@ui/design-system` tokens（无散落硬编码色值/间距）  
+> **本里程碑政策**（见 `plans/epics/a-gates-policy.md`）：`typecheck` **全仓零 error**；`lint` **改动路径零新增 error**（全仓清零 Deferred M2，基线约 40 error）；parity 三测必绿。
+
+- [x] `lint` 无 error — **本里程碑按路径政策**（全仓清零 Deferred M2；见 `acceptance-records/2026-07-19-a-gates.md`）  
+- [x] `typecheck` 无 error — `npm run typecheck` 绿（修 Mine logout root reset）  
+- [x] `test` 通过（含 `pageParity` / `assetParity` / `routeRegistration`） — 见 a-gates record  
+- [x] 无 feature-to-feature import — `npm run agent:check-boundary`  
+- [x] 无 core → feature import — 同上  
+- [ ] 新增 UI 使用 `@ui/design-system` tokens（无散落硬编码色值/间距） — 抽检未本轮做；Deferred 随 C 章  
 
 ### A2. Parity 完整性
 
-- [ ] 每个 Flutter 业务页在 manifest 中有条目与 `status`  
-- [ ] 每个一等公民资源在 manifest 中有条目与 `status`  
-- [ ] `Deferred` / `Degraded` 条目均有 `note`（建议含 owner / targetVersion）  
-- [ ] 未建包模块已登记为 `Deferred`/`Removed`；`classroom` 已 Migrated（视频播放 Degraded） 
+- [x] 每个 Flutter 业务页在 manifest 中有条目与 `status` — B10：51/51 `*_page.dart`  
+- [x] 每个一等公民资源在 manifest 中有条目与 `status` — `assetParity` + 既有模块 Accept  
+- [x] `Deferred` / `Degraded` 条目均有 `note` — `check-manifest` + B10  
+- [x] 未建包模块已登记为 `Deferred`/`Removed`；`classroom` 已 Migrated（视频播放 Degraded） — B10 record  
 
 ### A3. 壳与导航（P0）
 
-- [ ] 启动 → Splash → Main Tabs  
-- [ ] Tab 顺序与产品约定一致（Home / Chat / Community / Mine 等）  
-- [ ] 未登录访问受保护入口 → Login  
-- [ ] 登录成功返回主流程；登出后再次要求登录  
-- [ ] Deep link / 内部 `RoutePath` 跳转不产生 feature 互依赖  
+- [x] 启动 → Splash → Main Tabs — 既有壳 + routeRegistration  
+- [x] Tab 顺序与产品约定一致（Home / Chat / Community / Mine 等） — MainTabs  
+- [x] 未登录访问受保护入口 → Login — `authGuard` 测 + B1  
+- [x] 登录成功返回主流程；登出后再次要求登录 — B1 + Mine `CommonActions.reset`→Login  
+- [x] Deep link / 内部 `RoutePath` 跳转不产生 feature 互依赖 — All Services RoutePath-only + boundary  
 
 ---
 
@@ -173,13 +175,14 @@ npm run test
 
 对每个本轮声明 `Migrated` 的页面，抽检：
 
-- [ ] 与 Flutter 对照：首屏结构一致  
-- [ ] 至少一种非 success 态（empty 或 error 或 loading）有证据  
-- [ ] 至少一个主交互（按钮/Tab/Sheet/刷新）有证据  
-- [ ] SafeArea 正常（刘海/底栏不被遮挡）  
-- [ ] 表单页键盘不遮挡主输入（若适用）  
+- [x] 与 Flutter 对照：首屏结构一致 — 样本矩阵见 `acceptance-records/2026-07-19-c-ux-spotcheck.md`（Login / HomeTab / Feed / NowPlaying / BFUI）  
+- [x] 至少一种非 success 态（empty 或 error 或 loading）有证据 — home refresh error；community load/error/empty；auth 校验 toast；bfui Degraded 占位  
+- [x] 至少一个主交互（按钮/Tab/Sheet/刷新）有证据 — 各样本 Interaction script（B1/B2/B5/B6/B8 + C record）  
+- [x] SafeArea 正常（刘海/底栏不被遮挡） — auth/home/community `useSafeAreaInsets`；music/bfui `AppNavBar` insets  
+- [x] 表单页键盘不遮挡主输入（若适用） — auth `KeyboardAvoidingView`  
 
-抽检样本建议：auth Login、home HomeTab、community Feed、music NowPlaying、bfui 任一模板。
+抽检样本建议：auth Login、home HomeTab、community Feed、music NowPlaying、bfui 任一模板。  
+真机截图/录屏文件入库：Deferred（见 C record / §E）。
 
 ---
 

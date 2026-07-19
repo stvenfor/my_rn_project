@@ -1,4 +1,5 @@
 import React from 'react';
+import {CommonActions} from '@react-navigation/native';
 import {i18n} from '@core/i18n';
 import {RoutePath, type RootStackScreenProps} from '@core/navigation';
 import {
@@ -35,11 +36,18 @@ export function MineScreenContainer(
 
   const handleLogout = async () => {
     await dispatch(logoutThunk());
-    // Align Flutter Get.offAllNamed(Login): clear stack so back cannot return to Mine.
-    props.navigation.reset({
-      index: 0,
-      routes: [{name: RoutePath.login}],
-    });
+    // Align Flutter Get.offAllNamed(Login): reset root stack (Mine is under Main tabs).
+    const rootNavigation = props.navigation.getParent();
+    if (rootNavigation) {
+      rootNavigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{name: RoutePath.login}],
+        }),
+      );
+      return;
+    }
+    props.navigation.navigate(RoutePath.login as never);
   };
 
   const handleUpdateAvatar = (uri: string) => {
