@@ -166,6 +166,11 @@ const inviteFriend = item(
   RoutePath.bfuiTemplate,
   'invite_friend',
 );
+const rnLabLayout = item(
+  'RN学习·布局列表',
+  'intelligence_task',
+  RoutePath.homeRnLabLayout,
+);
 
 export const defaultFavoriteItems: AllServiceItem[] = [
   introductionAnimation,
@@ -217,6 +222,10 @@ export const catalogSections: AllServiceSection[] = [
       navigationDrawer,
       musicPlayer,
     ],
+  },
+  {
+    title: '学习演练',
+    items: [rnLabLayout],
   },
 ];
 

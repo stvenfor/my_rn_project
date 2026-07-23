@@ -20,6 +20,7 @@ export const RoutePath = {
   homeHotRankDetail: 'HomeHotRankDetail',
   homeUsedCarList: 'HomeUsedCarList',
   homeUsedCarDetail: 'HomeUsedCarDetail',
+  homeRnLabLayout: 'HomeRnLabLayout',
   chatDetail: 'ChatDetail',
   communityTab: 'CommunityTab',
   communityPublish: 'CommunityPublish',
@@ -82,6 +83,7 @@ export type RootStackParamList = {
   };
   HomeUsedCarList: undefined;
   HomeUsedCarDetail: {id: number};
+  HomeRnLabLayout: undefined;
   ChatDetail: {
     conversationId: string;
     title: string;

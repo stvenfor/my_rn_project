@@ -66,6 +66,9 @@ export function HomeAllServicesScreen({
       case RoutePath.bfuiGallery:
         navigation.navigate(RoutePath.bfuiGallery);
         break;
+      case RoutePath.homeRnLabLayout:
+        navigation.navigate(RoutePath.homeRnLabLayout);
+        break;
       default:
         break;
     }

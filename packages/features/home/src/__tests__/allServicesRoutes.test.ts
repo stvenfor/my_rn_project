@@ -43,4 +43,14 @@ describe('allServicesData routes', () => {
       ),
     ).toBeTruthy();
   });
+
+  it('keeps W1 RN lab entry in 学习演练', () => {
+    const lab = catalogSections.find(section => section.title === '学习演练');
+    expect(lab?.items.map(item => item.label)).toEqual(
+      expect.arrayContaining(['RN学习·布局列表']),
+    );
+    expect(
+      lab?.items.find(item => item.routePath === RoutePath.homeRnLabLayout),
+    ).toBeTruthy();
+  });
 });

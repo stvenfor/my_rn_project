@@ -12,6 +12,7 @@ import {HomeDubbingFeedScreen} from './screens/HomeDubbingFeedScreen';
 import {HomeHotRankDetailScreen} from './screens/HomeHotRankDetailScreen';
 import {HomeUsedCarListScreen} from './screens/HomeUsedCarListScreen';
 import {HomeUsedCarDetailScreen} from './screens/HomeUsedCarDetailScreen';
+import {HomeRnLabLayoutScreen} from './screens/HomeRnLabLayoutScreen';
 
 export function registerHomeFeature(): FeatureRegistration {
   return {
@@ -61,6 +62,10 @@ export function registerHomeFeature(): FeatureRegistration {
       {
         name: RoutePath.homeUsedCarDetail,
         component: HomeUsedCarDetailScreen as StackScreenComponent,
+      },
+      {
+        name: RoutePath.homeRnLabLayout,
+        component: HomeRnLabLayoutScreen as StackScreenComponent,
       },
     ],
   };

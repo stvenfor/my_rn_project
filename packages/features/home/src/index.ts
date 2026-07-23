@@ -56,3 +56,4 @@ export {HomeDubbingFeedScreen} from './screens/HomeDubbingFeedScreen';
 export {HomeHotRankDetailScreen} from './screens/HomeHotRankDetailScreen';
 export {HomeUsedCarListScreen} from './screens/HomeUsedCarListScreen';
 export {HomeUsedCarDetailScreen} from './screens/HomeUsedCarDetailScreen';
+export {HomeRnLabLayoutScreen} from './screens/HomeRnLabLayoutScreen';
