@@ -33,3 +33,5 @@ export const APP_BUNDLE_ID = 'com.example.myrnproject';
 export const ENV_STORAGE_KEY = 'core_app_env';
 
 export const USE_MOCK_AUTH = process.env.USE_MOCK_AUTH !== 'false';
+
+export {fallback as lanHostFallback} from './lanHost';
